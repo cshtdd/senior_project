@@ -40,6 +40,7 @@
 
 $route['browse'] = "welcome/browse";
 $route['login'] = "welcome/login";
+$route['about'] = "staticpages/about";
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
