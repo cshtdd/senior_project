@@ -37,8 +37,11 @@ class Welcome extends CI_Controller
 	
 	public function login()
 	{
+		//publish using this
+		//D:\Dropbox\Sites>xcopy /E /Y senior_project\* \\192.168.87.135\camilin\site1\
+	
 		$person_model = new Person_Model;
-		$person_model->first_name = 'lolo';
+		$person_model->first_name = 'loloing';
 		$person_model->last_name = 'glez';
 		$person_model->age = 15;
 		
