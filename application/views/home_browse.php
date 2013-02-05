@@ -1,10 +1,35 @@
 <?php $this->load->view("template_header"); ?>
 
-<ul>
-	<li>item 1</li>
-	<li>item 2</li>
-	<li>item 3</li>
-	<li>item 4</li>
-</ul>
+<?php
+	if ( count($model) > 0)
+	{
+?>
+		<ul>
+			<!--
+			<li><?= $model[0]->first_name ?></li>
+			-->
+			
+			<?php 
+				foreach ( $model as $iperson )
+				{
+			?>
+					<li>
+						First Name: <?= $iperson->first_name ?>
+						Last Name: <?= $iperson->last_name ?>
+						Age: <?= $iperson->age ?>
+					</li>
+			<?php
+				}
+			?>
+		</ul>
+<?php
+	}
+	else
+	{
+?>
+		<p>no items in the list</p>
+<?php	
+	}
+?>
 
 <?php $this->load->view("template_header"); ?>

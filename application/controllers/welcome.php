@@ -32,7 +32,35 @@ class Welcome extends CI_Controller
 	
 	public function browse()
 	{
-		$this->load->view('home_browse');
+		$person_1 = new Person_Model();
+		$person_1->first_name = 'phillip';
+		$person_1->last_name = 'degrandis';
+		
+		$person_2 = new Person_Model();
+		$person_2->first_name = 'eric';
+		$person_2->last_name = 'johnson';
+				
+		$person_3 = new Person_Model();
+		$person_3->first_name = 'erlang';
+		$person_3->last_name = 'eff';
+	
+		$person_4 = new Person_Model();
+		$person_4->first_name = 'chuck';
+		$person_4->last_name = 'dubois';
+	
+		$lPersons = array( 
+			$person_1,
+			$person_2,
+			$person_3,
+			$person_4
+		); 
+		
+		//this would clear the list
+		//$lPersons = NULL;
+		
+		$data['model'] = $lPersons;	
+		
+		$this->load->view('home_browse', $data);
 	}
 	
 	public function login()
@@ -40,7 +68,7 @@ class Welcome extends CI_Controller
 		//publish using this
 		//D:\Dropbox\Sites>xcopy /E /Y senior_project\* \\192.168.87.135\camilin\site1\
 	
-		$person_model = new Person_Model;
+		$person_model = new Person_Model();
 		$person_model->first_name = 'eric';
 		$person_model->last_name = 'cartman';
 		$person_model->age = 15;
