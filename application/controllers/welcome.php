@@ -41,8 +41,8 @@ class Welcome extends CI_Controller
 		//D:\Dropbox\Sites>xcopy /E /Y senior_project\* \\192.168.87.135\camilin\site1\
 	
 		$person_model = new Person_Model;
-		$person_model->first_name = 'loloing';
-		$person_model->last_name = 'glez';
+		$person_model->first_name = 'eric';
+		$person_model->last_name = 'cartman';
 		$person_model->age = 15;
 		
 		$data['model'] = $person_model;
