@@ -2,12 +2,13 @@
 
 class StaticPages extends CI_Controller 
 {
-	/*
+	
 	public function __construct()
 	{
         parent::__construct();
+		$this->output->cache(60);
 	}
-	*/
+	
 	
 	public function about()
 	{
