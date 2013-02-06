@@ -79,6 +79,20 @@ class Welcome extends CI_Controller
 		
 		$this->load->view('home_login', $data);
 	}
+	
+	public function search($search_param='')
+	{
+		if (isset($search_param) && strlen($search_param) > 0)
+		{
+			$search_query = urldecode($search_param);
+		
+			$this->output->set_output("search query: '$search_query'");
+		}
+		else
+		{
+			$this->output->set_output('no search query');
+		}
+	}	
 }
 
 /* End of file welcome.php */
