@@ -41,8 +41,8 @@
 $route['(?i)(browse)'] = 'welcome/browse';
 $route['(?i)(login)'] = 'welcome/login';
 $route['(?i)(about)'] = 'staticpages/about';
-$route['(?i)(search)'] = 'welcome/search/';
-$route['(?i)(search)/(:any)'] = 'welcome/search/$2';
+$route['(?i)(search)'] = 'searchcontroller/search/';
+$route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
