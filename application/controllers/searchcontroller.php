@@ -12,8 +12,8 @@ class SearchController extends CI_Controller
 
 		//$this->output->cache(60);
 	}
-	
-	
+
+
 	public function search($search_param='')
 	{
 		if (isset($search_param) && strlen($search_param) > 0)
