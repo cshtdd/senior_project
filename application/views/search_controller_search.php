@@ -6,7 +6,18 @@
 
 <?php } else { ?>
 
-	<p>yes data</p>
+	<div class='project_search_results'>
+		<ul>
+			<lh>Project Results</lh>
+			<?php foreach ($lProjects as $iProject) { ?>
+				<li>
+					<b><?= $iProject->project_title ?></b>
+					<?= $iProject->project_short_description ?>
+					<?= $iProject->project_close_date ?>
+				</li>
+			<?php } ?>
+		</ul>
+	</div>
 
 <?php }?>
 
