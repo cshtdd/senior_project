@@ -6,7 +6,7 @@
 ?>
 		<ul>
 			<!--
-			<li><?= $model[0]->first_name ?></li>
+			<li><?php echo $model[0]->first_name ?></li>
 			-->
 			
 			<?php 
@@ -14,9 +14,9 @@
 				{
 			?>
 					<li>
-						First Name: <?= $iperson->first_name ?>
-						Last Name: <?= $iperson->last_name ?>
-						Age: <?= $iperson->age ?>
+						First Name: <?php echo $iperson->first_name ?>
+						Last Name: <?php echo $iperson->last_name ?>
+						Age: <?php echo $iperson->age ?>
 					</li>
 			<?php
 				}
