@@ -8,7 +8,7 @@ class SearchController extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->load->model('Project_Summary_Model');
+		$this->load->model('SPW_Project_Model');
 
 		//$this->output->cache(60);
 	}
@@ -53,13 +53,13 @@ class SearchController extends CI_Controller
 	}
 	private function getProjectsWithSearchParamTest($search_query)
 	{
-		$project1 = new Project_Summary_Model();
+		$project1 = new SPW_Project_Model();
 		$project1->project_id = 1;
 		$project1->project_title = 'Free Music Sharing Platform';
 		$project1->project_short_description = 'Poor students need an easy way to access all the music in the world for free.';
 		$project1->project_close_date = '02-28-2013';
 
-		$project2 = new Project_Summary_Model();
+		$project2 = new SPW_Project_Model();
 		$project2->project_id = 2;
 		$project2->project_title = 'Moodle on Facebook';
 		$project2->project_short_description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';

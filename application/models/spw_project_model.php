@@ -1,6 +1,6 @@
 <?php
 
-class Project_Summary_Model extends CI_Model
+class SPW_Project_Model extends CI_Model
 {
 	public $project_id;
 	public $project_title;
@@ -13,4 +13,4 @@ class Project_Summary_Model extends CI_Model
 	}
 }
 	
-?>
+?> 
