@@ -4,10 +4,10 @@
 	please login now
 </p>
 
-<?= $first_name ?>
+<?php echo $first_name ?>
 
-<p>First Name: <?= $model->first_name ?> </p>
-<p>Last Name: <?= $model->last_name ?> </p>
-<p>Age: <?= $model->age ?> </p>
+<p>First Name: <?php echo $model->first_name ?> </p>
+<p>Last Name: <?php echo $model->last_name ?> </p>
+<p>Age: <?php echo $model->age ?> </p>
 	
 <?php $this->load->view("template_footer"); ?>
