@@ -3,6 +3,10 @@
 <h2>Coding Guidelines</h2>
 
 <p>
+  Single quotes unless extremely necessary
+</p>
+
+<p>
 No php short tags.
 Instead of <code> &#60;?= </code> we should use <code> &#60;?php echo </code>
 <br/>
