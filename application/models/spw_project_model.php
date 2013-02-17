@@ -14,9 +14,6 @@ class SPW_Project_Model extends CI_Model
 	//The id of the SPW_Project_Status
 	public $status;
 
-	//TODO: remove this later
-	public $project_close_date;
-	
 	public function __construct()
 	{
 		parent::__construct();

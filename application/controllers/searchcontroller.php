@@ -9,6 +9,7 @@ class SearchController extends CI_Controller
 		parent::__construct();
 
 		$this->load->model('SPW_Project_Model');
+		$this->load->model('SPW_Term_Model');
 		$this->load->model('SPW_Project_Summary_View_Model');
 		//$this->output->cache(60);
 	}
@@ -53,6 +54,15 @@ class SearchController extends CI_Controller
 	}
 	private function getProjectsWithSearchParamTest($search_query)
 	{
+		$term1 = new SPW_Term_Model();
+		$term1->id = 1;
+		$term1->name = 'Spring 2013';
+		$term1->description = 'Spring 2013';
+		$term1->start_date = '1-8-2013';
+		$term1->end_date = '4-26-2013';
+
+
+
 		$project1 = new SPW_Project_Model();
 		$project1->id = 1;
 		$project1->title = 'Free Music Sharing Platform';
@@ -61,6 +71,7 @@ class SearchController extends CI_Controller
 
 		$project_summ_vm1 = new SPW_Project_Summary_View_Model();
 		$project_summ_vm1->project = $project1;
+		$project_summ_vm1->term = $term1;
 
 		$project2 = new SPW_Project_Model();
 		$project2->id = 2;
@@ -70,6 +81,7 @@ class SearchController extends CI_Controller
 
 		$project_summ_vm2 = new SPW_Project_Summary_View_Model();
 		$project_summ_vm2->project = $project2;
+		$project_summ_vm2->term = $term1;
 
 		$lProjects = array(
 			$project_summ_vm1, 
