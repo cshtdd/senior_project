@@ -10,7 +10,7 @@ class SPW_Project_Model extends CI_Model
 	public $delivery_term;
 	public $status;
 
-	//remove this later
+	//TODO: remove this later
 	public $project_close_date;
 	
 	public function __construct()
