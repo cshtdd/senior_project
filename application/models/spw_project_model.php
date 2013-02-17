@@ -3,7 +3,7 @@
 class SPW_Project_Model extends CI_Model
 {
 	public $id;
-	public $project_title;
+	public $title;
 	public $project_short_description;
 	public $project_close_date;
 	
