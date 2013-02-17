@@ -11,9 +11,9 @@
 			<lh>Project Results</lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
-					<b><?php echo $iProject->title ?></b>
-					<?php echo $iProject->description ?>
-					<?php echo $iProject->project_close_date ?>
+					<b><?php echo $iProject->project->title ?></b>
+					<?php echo $iProject->project->description ?>
+					<?php echo $iProject->project->project_close_date ?>
 				</li>
 			<?php } ?>
 		</ul>

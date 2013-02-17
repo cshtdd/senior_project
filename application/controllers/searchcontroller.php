@@ -9,7 +9,7 @@ class SearchController extends CI_Controller
 		parent::__construct();
 
 		$this->load->model('SPW_Project_Model');
-
+		$this->load->model('SPW_Project_Summary_View_Model');
 		//$this->output->cache(60);
 	}
 
@@ -59,23 +59,29 @@ class SearchController extends CI_Controller
 		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
 		$project1->project_close_date = '02-28-2013';
 
+		$project_summ_vm1 = new SPW_Project_Summary_View_Model();
+		$project_summ_vm1->project = $project1;
+
 		$project2 = new SPW_Project_Model();
 		$project2->id = 2;
 		$project2->title = 'Moodle on Facebook';
 		$project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
 		$project2->project_close_date = '02-28-2013';
 
+		$project_summ_vm2 = new SPW_Project_Summary_View_Model();
+		$project_summ_vm2->project = $project2;
+
 		$lProjects = array(
-			$project1, 
-			$project2,
-			$project1, 
-			$project2,
-			$project1, 
-			$project2,
-			$project1, 
-			$project2,
-			$project1, 
-			$project2
+			$project_summ_vm1, 
+			$project_summ_vm2,
+			$project_summ_vm1, 
+			$project_summ_vm2,
+			$project_summ_vm1, 
+			$project_summ_vm2,
+			$project_summ_vm1, 
+			$project_summ_vm2,
+			$project_summ_vm1, 
+			$project_summ_vm2
 		);
 
 		return $lProjects;
