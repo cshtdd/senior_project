@@ -56,13 +56,13 @@ class SearchController extends CI_Controller
 		$project1 = new SPW_Project_Model();
 		$project1->id = 1;
 		$project1->title = 'Free Music Sharing Platform';
-		$project1->project_short_description = 'Poor students need an easy way to access all the music in the world for free.';
+		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
 		$project1->project_close_date = '02-28-2013';
 
 		$project2 = new SPW_Project_Model();
 		$project2->id = 2;
 		$project2->title = 'Moodle on Facebook';
-		$project2->project_short_description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
+		$project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
 		$project2->project_close_date = '02-28-2013';
 
 		$lProjects = array(

@@ -12,7 +12,7 @@
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
 					<b><?php echo $iProject->title ?></b>
-					<?php echo $iProject->project_short_description ?>
+					<?php echo $iProject->description ?>
 					<?php echo $iProject->project_close_date ?>
 				</li>
 			<?php } ?>
