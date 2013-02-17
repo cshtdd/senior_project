@@ -12,7 +12,8 @@
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
 					<b><?php echo $iProject->project->title ?></b>
-					<?php echo $iProject->project->description ?>
+					<!-- <?php echo $iProject->project->description ?> -->
+					<?php echo $iProject->getShortDescription() ?>
 					<?php echo $iProject->term->end_date ?>
 				</li>
 			<?php } ?>
