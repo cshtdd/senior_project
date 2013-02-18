@@ -15,6 +15,7 @@
 					<br/><?php echo $iProject->getShortDescription() ?>
 					<br/><?php echo $iProject->getlSkillNames() ?>
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
+					<br/>Project Status: <?php echo $iProject->project->status->name ?>
 					<br/>Team Leader: <a href="#"><?php echo $iProject->teamLeaderSummary->getFullName() ?></a>
 
 					<ul>

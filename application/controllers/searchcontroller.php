@@ -12,6 +12,7 @@ class SearchController extends CI_Controller
 		$this->load->model('SPW_Term_Model');
 		$this->load->model('SPW_Skill_Model');
 		$this->load->model('SPW_User_Model');
+		$this->load->model('SPW_Project_Status_Model');
 		$this->load->model('SPW_User_Summary_View_Model');
 		$this->load->model('SPW_Project_Summary_View_Model');
 		//$this->output->cache(60);
@@ -57,6 +58,10 @@ class SearchController extends CI_Controller
 	}
 	private function getProjectsWithSearchParamTest($search_query)
 	{
+		$projStatus = new SPW_Project_Status_Model();
+		$projStatus->id = 1;
+		$projStatus->name = 'Open';		
+	
 		$term1 = new SPW_Term_Model();
 		$term1->id = 1;
 		$term1->name = 'Spring 2013';
@@ -142,6 +147,7 @@ class SearchController extends CI_Controller
 		$project1->id = 1;
 		$project1->title = 'Free Music Sharing Platform';
 		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
+		$project1->status = $projStatus;
 
 		$project_summ_vm1 = new SPW_Project_Summary_View_Model();
 		$project_summ_vm1->project = $project1;
@@ -156,6 +162,7 @@ class SearchController extends CI_Controller
 		$project2->id = 2;
 		$project2->title = 'Moodle on Facebook';
 		$project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
+		$project2->status = $projStatus;
 
 		$project_summ_vm2 = new SPW_Project_Summary_View_Model();
 		$project_summ_vm2->project = $project2;
