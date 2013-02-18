@@ -47,6 +47,9 @@ $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 $route['(?i)(user)'] = 'usercontroller/profile/';
 $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
 
+$route['(?i)(project)'] = 'projectcontroller/details/';
+$route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
+
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
