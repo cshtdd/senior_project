@@ -12,9 +12,10 @@
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
 					<b><?php echo $iProject->project->title ?></b>
-					<!-- <?php echo $iProject->project->description ?> -->
-					<?php echo $iProject->getShortDescription() ?>
-					<?php echo $iProject->term->end_date ?>
+					<br/><?php echo $iProject->getShortDescription() ?>
+					<br/><?php echo $iProject->getlSkillNames() ?>
+					<br/><?php echo $iProject->term->end_date ?>
+					<hr/>
 				</li>
 			<?php } ?>
 		</ul>
