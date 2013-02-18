@@ -11,6 +11,15 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	//an array of SPW_Skill_Model objects
 	public $lSkills;
 
+	//an array of SPW_User_Summary_View_Model
+	public $lMentorSummaries;
+
+	//a SPW_User_Summary object
+	public $teamLeaderSummary;
+
+	//an array of SPW_User_Summary_View_Model
+	public $lTeamMemberSummaries;
+
 	public function __construct()
 	{
 		parent::__construct();

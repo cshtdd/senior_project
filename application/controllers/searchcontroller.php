@@ -11,6 +11,8 @@ class SearchController extends CI_Controller
 		$this->load->model('SPW_Project_Model');
 		$this->load->model('SPW_Term_Model');
 		$this->load->model('SPW_Skill_Model');
+		$this->load->model('SPW_User_Model');
+		$this->load->model('SPW_User_Summary_View_Model');
 		$this->load->model('SPW_Project_Summary_View_Model');
 		//$this->output->cache(60);
 	}
@@ -101,6 +103,41 @@ class SearchController extends CI_Controller
 		);
 
 
+		$user1 = new SPW_User_Model();
+		$user1->id = 0;
+		$user1->first_name = 'Steven';
+		$user1->last_name = 'Luis';
+
+		$user_summ_vm1 = new SPW_User_Summary_View_Model();
+		$user_summ_vm1->user = $user1;
+
+		$user2 = new SPW_User_Model();
+		$user2->id = 1;
+		$user2->first_name = 'Lolo';
+		$user2->last_name = 'Gonzalez';
+
+		$user_summ_vm2 = new SPW_User_Summary_View_Model();
+		$user_summ_vm2->user = $user2;
+
+		$user3 = new SPW_User_Model();
+		$user3->id = 2;
+		$user3->first_name = 'Karen';
+		$user3->last_name = 'Rodriguez';
+
+		$user_summ_vm3 = new SPW_User_Summary_View_Model();
+		$user_summ_vm3->user = $user3;
+
+		$user4 = new SPW_User_Model();
+		$user4->id = 3;
+		$user4->first_name = 'Gregory';
+		$user4->last_name = 'Zhao';
+
+		$user_summ_vm4 = new SPW_User_Summary_View_Model();
+		$user_summ_vm4->user = $user4;
+
+
+
+
 		$project1 = new SPW_Project_Model();
 		$project1->id = 1;
 		$project1->title = 'Free Music Sharing Platform';
@@ -110,6 +147,10 @@ class SearchController extends CI_Controller
 		$project_summ_vm1->project = $project1;
 		$project_summ_vm1->term = $term1;
 		$project_summ_vm1->lSkills = $lSkills1;
+		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
+		$project_summ_vm1->teamLeaderSummary = $user_summ_vm3;
+
+
 
 		$project2 = new SPW_Project_Model();
 		$project2->id = 2;
@@ -120,6 +161,10 @@ class SearchController extends CI_Controller
 		$project_summ_vm2->project = $project2;
 		$project_summ_vm2->term = $term1;
 		$project_summ_vm2->lSkills = $lSkills2;
+		$project_summ_vm2->lMentorSummaries = array($user_summ_vm1);
+		$project_summ_vm2->lTeamMemberSummaries = array($user_summ_vm4);
+		$project_summ_vm2->teamLeaderSummary = $user_summ_vm2;
+
 
 		$lProjects = array(
 			$project_summ_vm1, 
