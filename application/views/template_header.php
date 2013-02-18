@@ -8,8 +8,21 @@
     <!-- Bootstrap -->
 
     <link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
-
-    <?php  ?>
+    <link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+    
+    <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 </head>	
 <body>
-	<div id="mainBody">
+	<div class="container-narrow">
+		<div class="masthead">
+			<ul class="nav nav-pills pull-right">
+				<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
+				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
+				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Contact</a></li>
+			</ul>
+			<h3 class="muted">Project name</h3>
+		</div>
+
+		<hr>
+
+		<div id="main-content">
