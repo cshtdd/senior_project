@@ -1,4 +1,5 @@
 <?php $this->load->view("template_header"); ?>
+<?php $this->load->helper('url'); ?>
 
 <?php if ($no_results) { ?>
 
@@ -13,6 +14,8 @@
 				<li>
 					<b><?php echo $iProject->project->title ?></b>
 					<br/><?php echo $iProject->getShortDescription() ?>
+					<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
+
 					<br/><?php echo $iProject->getlSkillNames() ?>
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
 					<br/>Project Status: <?php echo $iProject->project->status->name ?>
