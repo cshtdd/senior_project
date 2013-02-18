@@ -4,13 +4,15 @@
 	<meta charset="utf-8">
 	<title>CASH Productions</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
 
-    <link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    
-    <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
+	<!-- Bootstrap -->
+
+	<link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+	
+	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 </head>	
 <body>
 	<div class="container-narrow">
@@ -20,7 +22,7 @@
 				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
 				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Contact</a></li>
 			</ul>
-			<h3 class="muted">Project name</h3>
+			<h3 class="muted">Senior Project Website</h3>
 		</div>
 
 		<hr>
