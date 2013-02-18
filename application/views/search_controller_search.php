@@ -1,5 +1,4 @@
 <?php $this->load->view("template_header"); ?>
-<?php $this->load->helper('url'); ?>
 
 <?php if ($no_results) { ?>
 
@@ -17,7 +16,7 @@
 					<br/><?php echo $iProject->getlSkillNames() ?>
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
 					<br/>Project Status: <?php echo $iProject->project->status->name ?>
-					<br/>Team Leader: <?php echo anchor('user/'.$iProject->teamLeaderSummary->user->id, $iProject->teamLeaderSummary->getFullName()) ?>
+					<br/>Team Leader: <?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
 
 					<ul>
 						<lh><b>Team Mentors:</b></lh>
@@ -25,9 +24,9 @@
 						<?php if (isset($iProject->lMentorSummaries) && count($iProject->lMentorSummaries) > 0) { ?>
 							
 							<?php foreach ($iProject->lMentorSummaries as $iMentorSumm) { ?>
-								<li><a href="#">
-									<?php echo $iMentorSumm->getFullName() ?>
-								</a></li>
+								<li>
+									<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMentorSumm) )?>
+								</li>
 							<?php } ?>
 
 						<?php } else { ?>
