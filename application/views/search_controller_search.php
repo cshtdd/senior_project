@@ -1,5 +1,4 @@
 <?php $this->load->view("template_header"); ?>
-<?php $this->load->helper('url'); ?>
 
 <?php if ($no_results) { ?>
 

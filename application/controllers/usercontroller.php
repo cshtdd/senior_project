@@ -18,8 +18,6 @@ class UserController extends CI_Controller
 		$this->load->model('SPW_Project_Summary_View_Model');
 		*/
 		//$this->output->cache(60);
-
-		$this->load->helper('url');
 	}
 
 
