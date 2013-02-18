@@ -44,9 +44,9 @@
 						<?php if (isset($iProject->lTeamMemberSummaries) && count($iProject->lTeamMemberSummaries) > 0) { ?>
 
 							<?php foreach ($iProject->lTeamMemberSummaries as $iMemberSumm) { ?>
-								<li><a href="#">
-									<?php echo $iMemberSumm->getFullName() ?>
-								</a></li>
+								<li>
+									<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMemberSumm) )?>
+								</li>
 							<?php } ?>
 
 						<?php } else { ?>
