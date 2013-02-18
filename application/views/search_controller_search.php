@@ -1,4 +1,5 @@
 <?php $this->load->view("template_header"); ?>
+<?php $this->load->helper('url'); ?>
 
 <?php if ($no_results) { ?>
 
@@ -16,7 +17,7 @@
 					<br/><?php echo $iProject->getlSkillNames() ?>
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
 					<br/>Project Status: <?php echo $iProject->project->status->name ?>
-					<br/>Team Leader: <a href="#"><?php echo $iProject->teamLeaderSummary->getFullName() ?></a>
+					<br/>Team Leader: <?php echo anchor('user/'.$iProject->teamLeaderSummary->user->id, $iProject->teamLeaderSummary->getFullName()) ?>
 
 					<ul>
 						<lh><b>Team Mentors:</b></lh>
