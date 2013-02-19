@@ -27,7 +27,7 @@
 				<li><a href="<?php echo base_url() ?>me">My Profile</a></li>
 				<li><a href="#">Logout</a></li>
 			</ul>
-			<h1 class="muted">Senior Project Website</h1>
+			<h1 class="muted"><a href="<?php echo base_url() ?>">Senior Project Website</a></h1>
 		</div>
 
 		<hr>
