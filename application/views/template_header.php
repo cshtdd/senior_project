@@ -22,7 +22,7 @@
 				<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
 				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
 				-->
-				<li><a href="/user/0">My Profile</a></li>
+				<li><a href="<?php echo base_url() ?>user/0">My Profile</a></li>
 			</ul>
 			<h3 class="muted">Senior Project Website</h3>
 		</div>
