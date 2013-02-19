@@ -24,6 +24,8 @@
 						<?php echo $iProject->getShortDescription() ?>
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
 					</p>
+					
+					<button class="btn btn-large btn-primary pull-right" type="button">Join</button>
 
 					<ul class="unstyled inline">
 						<lh>Team Leader:</lh>
