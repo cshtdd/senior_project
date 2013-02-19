@@ -7,7 +7,7 @@
 <?php } else { ?>
 
 	<div class='project_search_results'>
-		<ul>
+		<ul class="project_list">
 			<lh><h2>Project Results</h2></lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
@@ -19,14 +19,14 @@
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
 					</p>
 
-					<ul class="hor_list">
+					<ul class="unstyled inline">
 						<lh>Team Leader:</lh>
 						<li>
 							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
 						</li>
 					</ul>
 
-					<ul class="hor_list">
+					<ul class="unstyled inline">
 						<lh>Team Mentors:</lh>
 
 						<?php if (isset($iProject->lMentorSummaries) && count($iProject->lMentorSummaries) > 0) { ?>
@@ -45,7 +45,7 @@
 					</ul>
 
 
-					<ul class="hor_list">
+					<ul class="unstyled inline">
 						<lh>Team Members:</lh>
 
 						<?php if (isset($iProject->lTeamMemberSummaries) && count($iProject->lTeamMemberSummaries) > 0) { ?>

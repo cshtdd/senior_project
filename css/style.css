@@ -18,14 +18,18 @@ ul {
   list-style: none;  
 }
 
+/*
 .hor_list {
   margin: 0;
 }
+*/
 
+/*
 .hor_list > li
 {
     display: inline;
 }
+*/
 
 .left{
   float: left;
