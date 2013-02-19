@@ -24,7 +24,7 @@
 				-->
 				<li><a href="#">Past Projects</a></li>
 				<li><a href="<?php echo base_url() ?>project">My Project</a></li>
-				<li><a href="<?php echo base_url() ?>user/0">My Profile</a></li>
+				<li><a href="<?php echo base_url() ?>me">My Profile</a></li>
 				<li><a href="#">Logout</a></li>
 			</ul>
 			<h3 class="muted">Senior Project Website</h3>
