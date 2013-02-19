@@ -58,9 +58,11 @@ h4 a:visited
 .search-form
 {
   text-align: right;
-  margin: 0;
+  /* margin: 0; */
 }
+/*
 .search-form input[type="text"]
 {
   margin-bottom: 0;
 }
+*/

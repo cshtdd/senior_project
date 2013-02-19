@@ -19,9 +19,11 @@
 
 
 
-		<form class="search-form">
-			<input type="text" placeholder="search just about anything…">
-			<button type="submit" class="btn">Search</button>
+		<form class="search-form form-inline">
+			<div class="input-append">
+				<input type="text" class="span2" placeholder="just search...">
+				<button type="submit" class="btn" >Search</button>
+			</div>
 		</form>
 
 		<ul class="nav nav-pills pull-right">
