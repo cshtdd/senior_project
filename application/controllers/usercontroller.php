@@ -23,10 +23,27 @@ class UserController extends CI_Controller
 
 	public function profile($user_id='')
 	{
-		//$this->output->set_output('test output');
+		$this->output->set_output('user profile '.$user_id);
 
 
-		$this->output->set_output(base_url());
+		//$this->output->set_output(base_url());
 	}
-		
+
+	public function current_user()
+	{
+		$current_user_id = $this->getCurrentUserId();
+		$this->profile($current_user_id);
+	} 
+
+	private function getCurrentUserId()
+	{
+		if ($this->is_test)
+		{
+			return 101;
+		}
+		else
+		{
+			throw new Exception('not implemented');
+		}
+	}
 }
