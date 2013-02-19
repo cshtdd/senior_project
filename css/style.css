@@ -43,3 +43,11 @@ ul {
 .clear: {
    clear: both;
 }
+
+h4 a,
+h4 a:hover,
+h4 a:visited
+{
+    text-decoration: none;
+    color: inherit;
+}

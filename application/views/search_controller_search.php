@@ -13,7 +13,11 @@
 				<li>
 					<div class="project_summary">
 						<div class="right"> <?php echo $iProject->getlSkillNames() ?> </div>
-						<h4><?php echo $iProject->project->title ?></h4>
+						<h4>
+							<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">
+								<?php echo $iProject->project->title ?>
+							</a>
+						</h4>
 
 						<p>
 							<?php echo $iProject->getShortDescription() ?>
