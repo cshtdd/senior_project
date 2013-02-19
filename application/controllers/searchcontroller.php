@@ -18,6 +18,12 @@ class SearchController extends CI_Controller
 		//$this->output->cache(60);
 	}
 
+	public function search_string()
+	{
+		$search_param = $this->input->get('q', TRUE);
+		$redirectUrl = base_url().'search/'.$search_param;
+		redirect($redirectUrl);
+	}  
 
 	public function search($search_param='')
 	{

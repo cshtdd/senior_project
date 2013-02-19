@@ -19,9 +19,9 @@
 
 
 
-		<form class="search-form form-inline">
+		<form class="search-form form-inline" action="<?php echo base_url().'searchcontroller/search_string' ?>">
 			<div class="input-append">
-				<input type="text" class="span2" placeholder="just search...">
+				<input id="text-search-top" name="q" type="text" class="span2" placeholder="just search...">
 				<button type="submit" class="btn" >Search</button>
 			</div>
 		</form>
