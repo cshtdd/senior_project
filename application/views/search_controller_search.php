@@ -8,12 +8,10 @@
 
 	<div class='project_search_results'>
 		<ul>
-			<lh>Project Results</lh>
+			<lh><h2>Project Results</h2></lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
-					<p>
-
-						<b><?php echo $iProject->project->title ?></b>
+						<h4><?php echo $iProject->project->title ?></h4>
 						<br/><?php echo $iProject->getShortDescription() ?>
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
 
@@ -23,7 +21,7 @@
 						<br/>Team Leader: <?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
 
 						<ul>
-							<lh><b>Team Mentors:</b></lh>
+							<lh><h5>Team Mentors:</h5></lh>
 
 							<?php if (isset($iProject->lMentorSummaries) && count($iProject->lMentorSummaries) > 0) { ?>
 								
@@ -43,7 +41,7 @@
 
 
 						<ul>
-							<lh><b>Team Members:</b></lh>
+							<lh><h5>Team Members:</h5></lh>
 
 							<?php if (isset($iProject->lTeamMemberSummaries) && count($iProject->lTeamMemberSummaries) > 0) { ?>
 
@@ -59,8 +57,6 @@
 
 							<?php }?>
 						</ul>
-
-					</p>
 				</li>
 			<?php } ?>
 		</ul>
