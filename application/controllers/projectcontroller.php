@@ -36,7 +36,7 @@ class ProjectController extends CI_Controller
 	{
 		if ($this->is_test)
 		{
-			return 0;
+			return 100;
 		}
 		else
 		{
