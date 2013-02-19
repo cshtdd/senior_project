@@ -18,7 +18,13 @@
 					<br/><?php echo $iProject->getlSkillNames() ?>
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
 					<br/>Project Status: <?php echo $iProject->project->status->name ?>
-					<br/>Team Leader: <?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
+
+					<ul class="hor_list">
+						<lh>Team Leader:</lh>
+						<li>
+							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
+						</li>
+					</ul>
 
 					<ul class="hor_list">
 						<lh>Team Mentors:</lh>
