@@ -25,8 +25,14 @@
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
 					</p>
 					
-					<button class="btn btn-large btn-primary pull-right" type="button">Join</button>
-
+					<?php if ($iProject->displayJoin) { ?>
+						<button class="btn btn-primary pull-right" type="button">Join</button>
+					<?php } ?>
+					
+					<?php if ($iProject->displayLeave) { ?>
+						<button class="btn btn-warning pull-right" type="button">Leave</button>
+					<?php } ?>
+					
 					<ul class="unstyled inline">
 						<lh>Team Leader:</lh>
 						<li>

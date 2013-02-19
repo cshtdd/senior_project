@@ -161,7 +161,8 @@ class SearchController extends CI_Controller
 		$project_summ_vm1->lSkills = $lSkills1;
 		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
 		$project_summ_vm1->teamLeaderSummary = $user_summ_vm3;
-
+		$project_summ_vm1->displayJoin = true;
+		$project_summ_vm1->displayLeave = false;
 
 
 		$project2 = new SPW_Project_Model();
@@ -177,7 +178,8 @@ class SearchController extends CI_Controller
 		$project_summ_vm2->lMentorSummaries = array($user_summ_vm1);
 		$project_summ_vm2->lTeamMemberSummaries = array($user_summ_vm4);
 		$project_summ_vm2->teamLeaderSummary = $user_summ_vm2;
-
+		$project_summ_vm2->displayJoin = false;
+		$project_summ_vm2->displayLeave = true;
 
 		$lProjects = array(
 			$project_summ_vm1, 
