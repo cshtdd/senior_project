@@ -32,6 +32,10 @@ ul {
   font-weight: bold;
 }
 
+.project_list h4
+{
+  margin-top: 0;
+}
 
 h1 a,
 h1 a:hover,

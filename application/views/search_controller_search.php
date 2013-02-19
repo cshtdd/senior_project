@@ -11,7 +11,9 @@
 			<lh><h2>Project Results</h2></lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li class="well">
+					
 					<div class="pull-right"> <?php echo $iProject->getlSkillNames() ?> </div>
+
 					<h4>
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">
 							<?php echo $iProject->project->title ?>
