@@ -18,9 +18,11 @@
 	<div class="container-narrow">
 		<div class="masthead">
 			<ul class="nav nav-pills pull-right">
+				<!--
 				<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
 				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
-				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Contact</a></li>
+				-->
+				<li><a href="/user/0">My Profile</a></li>
 			</ul>
 			<h3 class="muted">Senior Project Website</h3>
 		</div>
