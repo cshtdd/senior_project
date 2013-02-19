@@ -11,11 +11,14 @@
 			<lh><h2>Project Results</h2></lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
+					<div class="right"> <?php echo $iProject->getlSkillNames() ?> </div>
 					<h4><?php echo $iProject->project->title ?></h4>
-					<br/><?php echo $iProject->getShortDescription() ?>
-					<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
 
-					<br/><?php echo $iProject->getlSkillNames() ?>
+					<p>
+						<?php echo $iProject->getShortDescription() ?>
+						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
+					</p>					
+
 					<br/>Close Date: <?php echo $iProject->term->end_date ?>
 					<br/>Project Status: <?php echo $iProject->project->status->name ?>
 
