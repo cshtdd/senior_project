@@ -17,10 +17,7 @@
 					<p>
 						<?php echo $iProject->getShortDescription() ?>
 						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
-					</p>					
-
-					<br/>Close Date: <?php echo $iProject->term->end_date ?>
-					<br/>Project Status: <?php echo $iProject->project->status->name ?>
+					</p>
 
 					<ul class="hor_list">
 						<lh>Team Leader:</lh>
@@ -65,6 +62,9 @@
 
 						<?php }?>
 					</ul>
+
+					Close Date: <?php echo $iProject->term->end_date ?>
+					Project Status: <?php echo $iProject->project->status->name ?>
 				</li>
 			<?php } ?>
 		</ul>
