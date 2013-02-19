@@ -18,18 +18,19 @@ ul {
   list-style: none;  
 }
 
-/*
-.hor_list {
-  margin: 0;
-}
-*/
 
-/*
-.hor_list > li
-{
-    display: inline;
+
+.project_summary {
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
-*/
+
+/* .project_list > li > */ .project_summary > ul > lh
+{
+  font-weight: bold;
+}
+
+
 
 .left{
   float: left;
