@@ -1,9 +1,9 @@
 	</div>
 	<hr>
 	<div class="footer">
-		<p>© CASH Productions 2013 
+		<p><a href="http://www.cash-productions.com"> © CASH Productions 2013 </a>
 
-			<strong>{elapsed_time}</strong>
+			<span class="right">Rendered in <strong>{elapsed_time}</strong> seconds</span>
 		</p>
 	</div>
 </div>
