@@ -16,19 +16,26 @@
 </head>	
 <body>
 	<div class="container-narrow">
-		<div class="masthead">
-			<ul class="nav nav-pills pull-right">
-				<!--
-				<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
-				<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
-				-->
-				<li><a href="#">Past Projects</a></li>
-				<li><a href="<?php echo base_url() ?>project">My Project</a></li>
-				<li><a href="<?php echo base_url() ?>me">My Profile</a></li>
-				<li><a href="#">Logout</a></li>
-			</ul>
-			<h1 class="muted"><a href="<?php echo base_url() ?>">Senior Project Website</a></h1>
-		</div>
+
+
+
+		<form class="search-form">
+			<input type="text" placeholder="search just about anything…">
+			<button type="submit" class="btn">Search</button>
+		</form>
+
+		<ul class="nav nav-pills pull-right">
+			<!--
+			<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
+			<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
+			-->
+			<li><a href="#">Past Projects</a></li>
+			<li><a href="<?php echo base_url() ?>project">My Project</a></li>
+			<li><a href="<?php echo base_url() ?>me">My Profile</a></li>
+			<li><a href="#">Logout</a></li>
+		</ul>
+		<h1 class="muted"><a href="<?php echo base_url() ?>">Senior Project Website</a></h1>
+
 
 		<hr>
 
