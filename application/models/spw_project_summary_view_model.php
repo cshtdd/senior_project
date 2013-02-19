@@ -19,6 +19,9 @@ class SPW_Project_Summary_View_Model extends CI_Model
 
 	//an array of SPW_User_Summary_View_Model
 	public $lTeamMemberSummaries;
+	
+	public $displayJoin;
+	public $displayLeave;
 
 	public function __construct()
 	{
