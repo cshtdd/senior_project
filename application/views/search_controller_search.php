@@ -6,8 +6,8 @@
 
 <?php } else { ?>
 
-	<div class='project_search_results'>
-		<ul class="project_list">
+	<!-- <div class='project_search_results'> -->
+		<ul class="project_list unstyled">
 			<lh><h2>Project Results</h2></lh>
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li class="well">
@@ -74,7 +74,7 @@
 				</li>
 			<?php } ?>
 		</ul>
-	</div>
+	<!-- </div> -->
 
 <?php }?>
 
