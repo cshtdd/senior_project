@@ -31,19 +31,6 @@ ul {
 }
 
 
-
-.left{
-  float: left;
-}
-
-.right {
-  float: right;
-}
-
-.clear {
-   clear: both;
-}
-
 h1 a,
 h1 a:hover,
 h1 a:visited,

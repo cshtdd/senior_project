@@ -12,7 +12,7 @@
 			<?php foreach ($lProjects as $iProject) { ?>
 				<li>
 					<div class="project_summary well">
-						<div class="right"> <?php echo $iProject->getlSkillNames() ?> </div>
+						<div class="pull-right"> <?php echo $iProject->getlSkillNames() ?> </div>
 						<h4>
 							<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">
 								<?php echo $iProject->project->title ?>

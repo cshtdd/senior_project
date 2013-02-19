@@ -3,7 +3,7 @@
 	<div class="footer">
 		<p><a href="http://www.cash-productions.com"> © CASH Productions 2013 </a>
 
-			<span class="right">Rendered in <strong>{elapsed_time}</strong> seconds</span>
+			<span class="pull-right">Rendered in <strong>{elapsed_time}</strong> seconds</span>
 		</p>
 	</div>
 </div>
