@@ -20,12 +20,14 @@ ul {
 
 
 
+/*
 .project_summary {
   padding-bottom: 20px;
   padding-top: 10px;
 }
+*/
 
-/* .project_list > li > */ .project_summary > ul > lh
+.project_list > li > /*.project_summary > */ ul > lh
 {
   font-weight: bold;
 }
