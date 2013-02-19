@@ -44,7 +44,8 @@ $route['(?i)(about)'] = 'staticpages/about';
 $route['(?i)(search)'] = 'searchcontroller/search/';
 $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 
-$route['(?i)(user)'] = 'usercontroller/profile/';
+$route['(?i)(me)'] = 'usercontroller/current_user';
+$route['(?i)(user)'] = 'usercontroller/current_user';
 $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
 
 $route['(?i)(project)'] = 'projectcontroller/current_project';
