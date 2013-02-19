@@ -23,7 +23,24 @@ class ProjectController extends CI_Controller
 
 	public function details($project_id='')
 	{
-		$this->output->set_output('project details');
+		$this->output->set_output('project details '.$project_id);
 	}
-		
+
+	public function current_project()
+	{
+		$current_project_id = $this->getCurrentProjectId();
+		$this->details($current_project_id);
+	}
+
+	private function getCurrentProjectId()
+	{
+		if ($this->is_test)
+		{
+			return 0;
+		}
+		else
+		{
+			throw new Exception('not implemented');
+		}
+	}
 }
