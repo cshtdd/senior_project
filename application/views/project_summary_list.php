@@ -32,14 +32,14 @@
 			</p>
 
 			<ul class="unstyled inline">
-				<lh>Team Leader:</lh>
+				<lh class="muted">Team Leader:</lh>
 				<li>
 					<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
 				</li>
 			</ul>
 
 			<ul class="unstyled inline">
-				<lh>Team Mentors:</lh>
+				<lh class="muted">Team Mentors:</lh>
 
 				<?php if (isset($iProject->lMentorSummaries) && count($iProject->lMentorSummaries) > 0) { ?>
 					
@@ -58,7 +58,7 @@
 
 
 			<ul class="unstyled inline">
-				<lh>Team Members:</lh>
+				<lh class="muted">Team Members:</lh>
 
 				<?php if (isset($iProject->lTeamMemberSummaries) && count($iProject->lTeamMemberSummaries) > 0) { ?>
 
