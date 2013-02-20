@@ -5,8 +5,22 @@
 
 	<?php foreach ($lProjects as $iProject) { ?>
 		<li class="well">
-			
-			<div class="pull-right"> <?php echo $iProject->getlSkillNames() ?> </div>
+
+			<div class="pull-right right-text">
+				<p>
+					<?php echo $iProject->getlSkillNames() ?>
+				</p>
+
+				<p>
+					<?php if ($iProject->displayJoin) { ?>
+						<button class="btn btn-primary" type="button">Join</button>
+					<?php } ?>
+					
+					<?php if ($iProject->displayLeave) { ?>
+						<button class="btn btn-warning" type="button">Leave</button>
+					<?php } ?>
+				</p>
+			</div>
 
 			<h4>
 				<?php echo anchor('project/'.$iProject->project->id, $iProject->project->title) ?>
@@ -16,15 +30,7 @@
 				<?php echo $iProject->getShortDescription() ?>
 				<?php echo anchor('project/'.$iProject->project->id, 'More Info...') ?>
 			</p>
-			
-			<?php if ($iProject->displayJoin) { ?>
-				<button class="btn btn-primary pull-right" type="button">Join</button>
-			<?php } ?>
-			
-			<?php if ($iProject->displayLeave) { ?>
-				<button class="btn btn-warning pull-right" type="button">Leave</button>
-			<?php } ?>
-			
+
 			<ul class="unstyled inline">
 				<lh>Team Leader:</lh>
 				<li>

@@ -59,3 +59,8 @@ h4 a:visited
   margin-bottom: 0;
 }
 */
+
+.right-text
+{
+  text-align: right;
+}
