@@ -32,11 +32,17 @@
 			<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
 			-->
 			<li><a href="#">Past Projects</a></li>
-			<li><a href="<?php echo base_url() ?>project">My Project</a></li>
-			<li><a href="<?php echo base_url() ?>me">My Profile</a></li>
+			<li>
+				<?php echo anchor('project', 'My Projects') ?>
+			</li>
+			<li>
+				<?php echo anchor('me', 'My Profile') ?>
+			</li>
 			<li><a href="#">Logout</a></li>
 		</ul>
-		<h1 class="muted"><a href="<?php echo base_url() ?>">Senior Project Website</a></h1>
+		<h1 class="muted">
+			<?php echo anchor('/', 'Senior Project Website') ?>
+		</h1>
 
 
 		<hr>
