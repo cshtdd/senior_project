@@ -32,6 +32,12 @@ class ProjectController extends CI_Controller
 		$this->details($current_project_id);
 	}
 
+	public function past_projects()
+	{
+		$this->output->set_output('past projects');	
+	}
+
+
 	private function getCurrentProjectId()
 	{
 		if ($this->is_test)
