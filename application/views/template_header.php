@@ -61,13 +61,9 @@
 			<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
 			<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
 			-->
-			<li><a href="#">Past Projects</a></li>
-			<li>
-				<?php echo anchor('project', 'My Project') ?>
-			</li>
-			<li>
-				<?php echo anchor('me', 'My Profile') ?>
-			</li>
+			<li><?php echo anchor('past-projects', 'Past Projects') ?></li>
+			<li><?php echo anchor('project', 'My Project') ?></li>
+			<li><?php echo anchor('me', 'My Profile') ?></li>
 			<li><a href="#">Logout</a></li>
 		</ul>
 		<h1 class="muted">
