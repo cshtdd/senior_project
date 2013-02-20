@@ -11,9 +11,10 @@
 
 	<link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-	
+
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
-</head>	
+
+</head>
 <body>
 	<div class="container-narrow">
 
@@ -25,6 +26,36 @@
 				<button type="submit" class="btn" >Search</button>
 			</div>
 		</form>
+
+
+	<!--
+		<?php $this->load->helper('form') ?>
+		<?php echo form_open('searchcontroller/search_string', array(
+			'class' => 'search-form form-inline', 
+			'id' => 'search-form-top',
+			'method' => 'GET')) ?>
+			<div class="input-append">
+				<?php 
+					echo form_input(array(
+						'id' => 'text-search-top',
+						'name' => 'q',
+						'type' => 'text',
+						'class' => 'span2',
+						'placeholder' => 'just search...'
+					));
+
+					echo form_button(array(
+						'id' => 'btn-search-top',
+						'type' => 'Submit',
+						'class' => 'btn',
+						'content' => 'Search'
+					));
+
+				?>
+			</div>
+		<?php echo form_close() ?>
+	-->
+
 
 		<ul class="nav nav-pills pull-right">
 			<!--
