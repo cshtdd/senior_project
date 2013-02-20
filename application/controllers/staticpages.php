@@ -16,7 +16,8 @@ class StaticPages extends CI_Controller
 		// $this->load->view('static_pages_about');
 		// $this->load->view('template_footer');
 
-		$this->load->view('static_pages_about');
+		$data['title'] = 'About';
+		$this->load->view('static_pages_about', $data);
 	}
 	
 	
