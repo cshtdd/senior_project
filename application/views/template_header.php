@@ -84,6 +84,7 @@
 			<?php echo get_nav_item('past-projects', 'Past Projects') ?>
 			<?php echo get_nav_item('project', 'My Project') ?>
 			<?php echo get_nav_item('me', 'My Profile') ?>
+			<?php echo get_nav_item('about', 'About') ?>
 			<?php echo get_nav_item('#', 'Logout') ?>
 		</ul>
 
