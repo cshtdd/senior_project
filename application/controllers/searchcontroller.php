@@ -8,13 +8,9 @@ class SearchController extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->load->model('SPW_Project_Model');
-		$this->load->model('SPW_Term_Model');
-		$this->load->model('SPW_Skill_Model');
-		$this->load->model('SPW_User_Model');
-		$this->load->model('SPW_Project_Status_Model');
-		$this->load->model('SPW_User_Summary_View_Model');
-		$this->load->model('SPW_Project_Summary_View_Model');
+		$this->load->helper('project_summary_view_model');
+		load_project_summary_models($this);
+
 		//$this->output->cache(60);
 	}
 
