@@ -33,7 +33,7 @@
 			-->
 			<li><a href="#">Past Projects</a></li>
 			<li>
-				<?php echo anchor('project', 'My Projects') ?>
+				<?php echo anchor('project', 'My Project') ?>
 			</li>
 			<li>
 				<?php echo anchor('me', 'My Profile') ?>
