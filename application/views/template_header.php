@@ -55,21 +55,31 @@
 		<?php echo form_close() ?>
 
 
+		<?php
+			function get_nav_item($targetUrl, $displayText)
+			{
+				$li_class_str = '';
+
+				if( trim(strtolower(uri_string())) == trim(strtolower($targetUrl)) )
+				{
+					$li_class_str = 'class="active"';
+				}
+
+				return '<li '.$li_class_str.'>'.anchor($targetUrl, $displayText).'</li>';
+			}
+		?>
 
 		<ul class="nav nav-pills pull-right">
-			<!--
-			<li class="active"><a href="./Template · Bootstrap_files/Template · Bootstrap.html">Home</a></li>
-			<li><a href="./Template · Bootstrap_files/Template · Bootstrap.html">About</a></li>
-			-->
-			<li><?php echo anchor('past-projects', 'Past Projects') ?></li>
-			<li><?php echo anchor('project', 'My Project') ?></li>
-			<li><?php echo anchor('me', 'My Profile') ?></li>
-			<li><a href="#">Logout</a></li>
+			<?php echo get_nav_item('past-projects', 'Past Projects') ?>
+			<?php echo get_nav_item('project', 'My Project') ?>
+			<?php echo get_nav_item('me', 'My Profile') ?>
+			<?php echo get_nav_item('#', 'Logout') ?>
 		</ul>
+
+
 		<h1 class="muted">
 			<?php echo anchor('/', 'Senior Project Website') ?>
 		</h1>
-
 
 		<hr>
 
