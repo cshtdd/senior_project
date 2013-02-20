@@ -38,9 +38,8 @@
 |
 */
 
-$route['(?i)(browse)'] = 'welcome/browse';
-$route['(?i)(login)'] = 'welcome/login';
 $route['(?i)(about)'] = 'staticpages/about';
+
 $route['(?i)(search)'] = 'searchcontroller/search/';
 $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 
