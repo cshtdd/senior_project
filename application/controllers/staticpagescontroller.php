@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class StaticPages extends CI_Controller 
+class StaticPagesController extends CI_Controller 
 {
 	
 	public function __construct()
