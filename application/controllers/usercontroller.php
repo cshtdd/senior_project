@@ -31,19 +31,7 @@ class UserController extends CI_Controller
 
 	public function current_user()
 	{
-		$current_user_id = $this->getCurrentUserId();
+		$current_user_id = getCurrentUserId($this);
 		$this->profile($current_user_id);
 	} 
-
-	private function getCurrentUserId()
-	{
-		if ($this->is_test)
-		{
-			return 101;
-		}
-		else
-		{
-			throw new Exception('not implemented');
-		}
-	}
 }
