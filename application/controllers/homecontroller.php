@@ -1,8 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends CI_Controller 
+class HomeController extends CI_Controller 
 {
-	
 	public function __construct()
 	{
 		parent::__construct();
@@ -13,6 +12,3 @@ class Welcome extends CI_Controller
 		$this->load->view('home_index');
 	}
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */

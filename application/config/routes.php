@@ -51,7 +51,7 @@ $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
 
 
-$route['default_controller'] = "welcome";
+$route['default_controller'] = "homecontroller";
 $route['404_override'] = '';
 
 /* End of file routes.php */
