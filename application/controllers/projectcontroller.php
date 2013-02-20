@@ -84,19 +84,19 @@ class ProjectController extends CI_Controller
 
 		$skill1 = new SPW_Skill_Model();
 		$skill1->id = 0;
-		$skill1->name = 'Ruby on Rails';
+		$skill1->name = 'Cobol';
 
 		$skill2 = new SPW_Skill_Model();
 		$skill2->id = 1;
-		$skill2->name = 'jQuery';
+		$skill2->name = 'Matlab';
 
 		$skill3 = new SPW_Skill_Model();
 		$skill3->id = 2;
-		$skill3->name = 'HTML';
+		$skill3->name = 'Gopher';
 
 		$skill4 = new SPW_Skill_Model();
 		$skill4->id = 3;
-		$skill4->name = 'CSS';
+		$skill4->name = 'bash';
 
 		$lSkills1 = array(
 			$skill1,
@@ -108,11 +108,11 @@ class ProjectController extends CI_Controller
 
 		$skill5 = new SPW_Skill_Model();
 		$skill5->id = 4;
-		$skill5->name = 'PHP';
+		$skill5->name = 'Modem At commands';
 
 		$skill6 = new SPW_Skill_Model();
 		$skill6->id = 5;
-		$skill6->name = 'Moodle';
+		$skill6->name = 'ISAPI';
 
 		$lSkills2 = array(
 			$skill5,
@@ -123,7 +123,7 @@ class ProjectController extends CI_Controller
 		$user1 = new SPW_User_Model();
 		$user1->id = 0;
 		$user1->first_name = 'Steven';
-		$user1->last_name = 'Luis';
+		$user1->last_name = 'Luis Sr.';
 
 		$user_summ_vm1 = new SPW_User_Summary_View_Model();
 		$user_summ_vm1->user = $user1;
@@ -131,7 +131,7 @@ class ProjectController extends CI_Controller
 		$user2 = new SPW_User_Model();
 		$user2->id = 1;
 		$user2->first_name = 'Lolo';
-		$user2->last_name = 'Gonzalez';
+		$user2->last_name = 'Gonzalez Sr.';
 
 		$user_summ_vm2 = new SPW_User_Summary_View_Model();
 		$user_summ_vm2->user = $user2;
@@ -139,7 +139,7 @@ class ProjectController extends CI_Controller
 		$user3 = new SPW_User_Model();
 		$user3->id = 2;
 		$user3->first_name = 'Karen';
-		$user3->last_name = 'Rodriguez';
+		$user3->last_name = 'Rodriguez Sr.';
 
 		$user_summ_vm3 = new SPW_User_Summary_View_Model();
 		$user_summ_vm3->user = $user3;
@@ -147,7 +147,7 @@ class ProjectController extends CI_Controller
 		$user4 = new SPW_User_Model();
 		$user4->id = 3;
 		$user4->first_name = 'Gregory';
-		$user4->last_name = 'Zhao';
+		$user4->last_name = 'Zhao Sr.';
 
 		$user_summ_vm4 = new SPW_User_Summary_View_Model();
 		$user_summ_vm4->user = $user4;
@@ -157,7 +157,7 @@ class ProjectController extends CI_Controller
 
 		$project1 = new SPW_Project_Model();
 		$project1->id = 1;
-		$project1->title = 'Free Music Sharing Platform';
+		$project1->title = 'Cobol Free Music Sharing Platform';
 		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
 		$project1->status = $projStatus;
 
@@ -171,7 +171,7 @@ class ProjectController extends CI_Controller
 
 		$project2 = new SPW_Project_Model();
 		$project2->id = 2;
-		$project2->title = 'Moodle on Facebook';
+		$project2->title = 'Dialup Moodle on Facebook';
 		$project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
 		$project2->status = $projStatus;
 
@@ -185,8 +185,7 @@ class ProjectController extends CI_Controller
 
 		$lProjects = array(
 			$project_summ_vm1,
-			$project_summ_vm2,
-			$project_summ_vm1
+			$project_summ_vm2
 		);
 
 		return $lProjects;
