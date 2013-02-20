@@ -19,17 +19,16 @@
 	<div class="container-narrow">
 
 
-
+<!-- very nice html, but apparently the form-helper is more secure -->
+<!--
 		<form class="search-form form-inline" action="<?php echo site_url('searchcontroller/search_string') ?>">
 			<div class="input-append">
 				<input id="text-search-top" name="q" type="text" class="span2" placeholder="just search...">
 				<button type="submit" class="btn" >Search</button>
 			</div>
 		</form>
+-->
 
-
-	<!--
-		<?php $this->load->helper('form') ?>
 		<?php echo form_open('searchcontroller/search_string', array(
 			'class' => 'search-form form-inline', 
 			'id' => 'search-form-top',
@@ -54,7 +53,7 @@
 				?>
 			</div>
 		<?php echo form_close() ?>
-	-->
+
 
 
 		<ul class="nav nav-pills pull-right">
