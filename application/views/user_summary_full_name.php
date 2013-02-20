@@ -1,3 +1,1 @@
-<a href="<?php echo base_url().'user/'.$user_summary->user->id ?>">
-	<?php echo $user_summary->getFullName() ?>
-</a>
+<?php echo anchor('user/'.$user_summary->user->id, $user_summary->getFullName()) ?>

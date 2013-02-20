@@ -15,14 +15,12 @@
 					<div class="pull-right"> <?php echo $iProject->getlSkillNames() ?> </div>
 
 					<h4>
-						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">
-							<?php echo $iProject->project->title ?>
-						</a>
+						<?php echo anchor('project/'.$iProject->project->id, $iProject->project->title) ?>
 					</h4>
 
 					<p>
 						<?php echo $iProject->getShortDescription() ?>
-						<a href="<?php echo base_url().'project/'.$iProject->project->id ?>">More Info...</a>
+						<?php echo anchor('project/'.$iProject->project->id, 'More Info...') ?>
 					</p>
 					
 					<?php if ($iProject->displayJoin) { ?>
