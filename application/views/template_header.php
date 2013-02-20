@@ -2,7 +2,18 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>CASH Productions</title>
+	<title>
+		<?php 
+			if (isset($title) && strlen($title) > 0)
+			{
+				echo $title.' - Senior Project';
+			}
+			else
+			{
+				echo 'Senior Project';
+			}
+		?>
+	</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	

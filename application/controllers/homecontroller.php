@@ -29,7 +29,7 @@ class HomeController extends CI_Controller
 			$no_results = false;
 		}
 
-
+		$data['title'] = 'Project Suggestions';
 		$data['no_results'] = $no_results;
 		$data['lSuggestedProjects'] = $lSuggestedProjects;
 		$data['lRegularProjects'] = $lRegularProjects;

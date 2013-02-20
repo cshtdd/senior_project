@@ -38,6 +38,7 @@ class ProjectController extends CI_Controller
 			$no_results = false;
 		}
 
+		$data['title'] = 'Past Projects';
 		$data['no_results'] = $no_results;
 		$data['lProjects'] = $lProjects;
 
