@@ -23,6 +23,9 @@ class SearchController extends CI_Controller
 
 	public function search($search_param='')
 	{
+		$data['title'] = 'Search';
+		$data['no_results'] = true;
+
 		if (isset($search_param) && strlen($search_param) > 0)
 		{
 			$search_query = urldecode($search_param);
@@ -34,14 +37,6 @@ class SearchController extends CI_Controller
 				$data['lProjects'] = $lProjects;
 				$data['no_results'] = false;
 			}
-			else
-			{
-				$data['no_results'] = true;
-			}
-		}
-		else
-		{
-			$data['no_results'] = true;
 		}
 
 		$this->load->view('search_controller_search', $data);
