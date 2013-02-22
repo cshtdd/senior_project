@@ -17,37 +17,37 @@ class HomeController extends CI_Controller
 
 	public function index()
 	{
-            if($this->session->userdata('logged_in'))
-            {
-                $session_data = $this->session->userdata('logged_in');
+        if($this->session->userdata('logged_in'))
+        {
+            $session_data = $this->session->userdata('logged_in');
 	        $data['user_id'] = $session_data['id'];
 
-		$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
-		$lRegularProjects = $this->getRegularProjectsForCurrentUser();
+			$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
+			$lRegularProjects = $this->getRegularProjectsForCurrentUser();
 
-		if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
-			(!isset($lRegularProjects) || count($lRegularProjects) == 0))
-		{
-			$no_results = true;
-		}
-		else
-		{
-			$no_results = false;
-		}
+			if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
+				(!isset($lRegularProjects) || count($lRegularProjects) == 0))
+			{
+				$no_results = true;
+			}
+			else
+			{
+				$no_results = false;
+			}
 
-		$data['title'] = 'Project Suggestions';
-		$data['no_results'] = $no_results;
-		$data['lSuggestedProjects'] = $lSuggestedProjects;
-		$data['lRegularProjects'] = $lRegularProjects;
+			$data['title'] = 'Project Suggestions';
+			$data['no_results'] = $no_results;
+			$data['lSuggestedProjects'] = $lSuggestedProjects;
+			$data['lRegularProjects'] = $lRegularProjects;
 
-		$this->load->view('home_index', $data);
+			$this->load->view('home_index', $data);
 
-		//$this->output->set_output('home ');
-            }
-            else
-            {
-	        redirect('login','refresh');
-            }
+			//$this->output->set_output('home ');
+        }
+        else
+        {
+        	redirect('login','refresh');
+        }
 	}
 
 	public function logout()
