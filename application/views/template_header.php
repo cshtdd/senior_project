@@ -38,7 +38,9 @@
 			<li>
 				<?php echo anchor('me', 'My Profile') ?>
 			</li>
-			<li><a href="#">Logout</a></li>
+			<li>
+				<a href="<?php echo base_url('home/logout')?>">Logout</a>
+			</li>
 		</ul>
 		<h1 class="muted">
 			<?php echo anchor('/', 'Senior Project Website') ?>
