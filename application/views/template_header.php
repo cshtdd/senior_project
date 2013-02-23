@@ -85,7 +85,7 @@
 			<?php echo get_nav_item('project', 'My Project') ?>
 			<?php echo get_nav_item('me', 'My Profile') ?>
 			<?php echo get_nav_item('about', 'About') ?>
-			<?php echo get_nav_item('#', 'Logout') ?>
+			<?php echo get_nav_item('home/logout', 'Logout') ?>
 		</ul>
 
 

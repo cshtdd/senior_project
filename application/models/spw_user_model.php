@@ -23,6 +23,24 @@ class SPW_User_Model extends CI_Model
 	{
 		parent::__construct();
 	}
+
+	public function verify_user($email_address, $pwd)
+	{
+	    $query = $this->db
+					  ->where('email', $email_address)
+					  ->where('hash_pwd', sha1( $pwd))
+					  ->limit(1)
+					  ->get('spw_user');
+		if($query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+		else
+		{
+			return false; 
+		}
+	}
+	
 }
 	
 ?>

@@ -53,14 +53,13 @@ h4 a:visited
   text-align: right;
   /* margin: 0; */
 }
-/*
-.search-form input[type="text"]
-{
-  margin-bottom: 0;
-}
-*/
 
 .right-text
 {
   text-align: right;
+}
+
+.errors
+{
+  color:red;
 }

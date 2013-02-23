@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+session_start();
 
 class HomeController extends CI_Controller 
 {
@@ -16,28 +17,45 @@ class HomeController extends CI_Controller
 
 	public function index()
 	{
-		$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
-		$lRegularProjects = $this->getRegularProjectsForCurrentUser();
+        if($this->session->userdata('logged_in'))
+        {
+            $session_data = $this->session->userdata('logged_in');
+	        $data['user_id'] = $session_data['id'];
 
-		if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
-			(!isset($lRegularProjects) || count($lRegularProjects) == 0))
-		{
-			$no_results = true;
-		}
-		else
-		{
-			$no_results = false;
-		}
+			$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
+			$lRegularProjects = $this->getRegularProjectsForCurrentUser();
 
-		$data['title'] = 'Project Suggestions';
-		$data['no_results'] = $no_results;
-		$data['lSuggestedProjects'] = $lSuggestedProjects;
-		$data['lRegularProjects'] = $lRegularProjects;
+			if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
+				(!isset($lRegularProjects) || count($lRegularProjects) == 0))
+			{
+				$no_results = true;
+			}
+			else
+			{
+				$no_results = false;
+			}
 
-		$this->load->view('home_index', $data);
+			$data['title'] = 'Project Suggestions';
+			$data['no_results'] = $no_results;
+			$data['lSuggestedProjects'] = $lSuggestedProjects;
+			$data['lRegularProjects'] = $lRegularProjects;
 
-		//$this->output->set_output('home ');
+			$this->load->view('home_index', $data);
+
+			//$this->output->set_output('home ');
+        }
+        else
+        {
+        	redirect('login','refresh');
+        }
 	}
+
+	public function logout()
+	{
+		$this->session->unset_userdata('logged_in');
+	    session_destroy();
+	    redirect('login', 'refresh');
+	}	
 
 	private function getSuggestedProjectsForCurrentUser()
 	{
