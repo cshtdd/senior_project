@@ -4,14 +4,15 @@ if ( !function_exists('getCurrentUserId'))
 {
 	function getCurrentUserId($sender_controller)
 	{
-		$is_test = true;
-		if ($is_test)
+		if($sender_controller->session->userdata('logged_in'))
 		{
-			return 101;
+			$session_data = $sender_controller->session->userdata('logged_in');
+	        $user_id = $session_data['id'];
+			return $user_id;
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			throw new Exception('Non-logged in user...');
 		}
 	}
 }
@@ -20,14 +21,13 @@ if ( !function_exists('isUserLoggedIn'))
 {
 	function isUserLoggedIn($sender_controller)
 	{
-		$is_test = true;
-		if ($is_test)
+		if($sender_controller->session->userdata('logged_in'))
 		{
 			return true;
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			return false;
 		}
 	}
 }
