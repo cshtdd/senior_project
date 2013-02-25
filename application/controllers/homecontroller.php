@@ -19,11 +19,17 @@ class HomeController extends CI_Controller
 	{
         if($this->session->userdata('logged_in'))
         {
-            $session_data = $this->session->userdata('logged_in');
-	        $data['user_id'] = $session_data['id'];
+            //$session_data = $this->session->userdata('logged_in');
+	        //$data['user_id'] = $session_data['id'];
 
-			$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
-			$lRegularProjects = $this->getRegularProjectsForCurrentUser();
+			$lSuggestedProjectIds = $this->getSuggestedProjectsForCurrentUser();
+
+			$lRegularProjectsIds =  $this->getRegularProjectsForCurrentUser($lSuggestedProjectIds);
+
+
+			$lSuggestedProjects = prepareProjectsToShow($lsuggestedProjectIds);
+
+			$lRegularProjects = prepareProjectsToShow($lRegularProjectsIds);
 
 			if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
 				(!isset($lRegularProjects) || count($lRegularProjects) == 0))
@@ -57,16 +63,23 @@ class HomeController extends CI_Controller
 	    redirect('login', 'refresh');
 	}	
 
+
 	private function getSuggestedProjectsForCurrentUser()
 	{
-		return $this->getSuggestedProjectsForUserInternal(getCurrentUserId($this));
-	}
-	private function getRegularProjectsForCurrentUser()
-	{
-		return $this->getRegularProjectsForUserInternal(getCurrentUserId($this));
+		return $this->SPW_User_Model->getSuggestedProjectsGivenCurrentUser(getCurrentUserId($this));
 	}
 
-	private function getSuggestedProjectsForUserInternal($userId)
+	private function getRegularProjectsForCurrentUser($lSuggProjectIds)
+	{
+		return $this->SPW_Project_Model->getRegularProjectIds($lSuggProjectIds);
+	}
+
+	private function prepareProjectsToShow(lProjectsIds)
+	{
+
+	}
+
+	/*private function getSuggestedProjectsForUserInternal($userId)
 	{
 		if ($this->is_test)
 		{
@@ -87,7 +100,7 @@ class HomeController extends CI_Controller
 		{
 			throw new Exception('not implemented');
 		}
-	}
+	}*/
 
 	private function getSuggestedProjectsForUserInternalTest()
 	{
