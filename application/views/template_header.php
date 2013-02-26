@@ -24,13 +24,15 @@
 	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
 
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
+	
+	<script src="<?php echo base_url() ?>js/jquery-1.9.1.min.js"></script>
 
 </head>
 <body>
 	<div class="container-narrow">
 
 
-<!-- very nice html, but apparently the form-helper is more secure -->
+<!-- very nice html, but apparently the form-helper is more secure--> 
 <!--
 		<form class="search-form form-inline" action="<?php echo site_url('searchcontroller/search_string') ?>">
 			<div class="input-append">

@@ -34,4 +34,13 @@
 
 ?>
 </div>
+
+<p>
+<div id="affiliate-registration-group">
+	<p>If you don’t already have an account on any of the above</p>
+	<b style="font-size: 130%">
+		<?php echo anchor('register/', 'click here to sign up', 'style="color: #0077CC; cursor:pointer; text-decoration:none"'); ?>
+    </b>
+</div>
+</p>
 <?php $this->load->view("template_footer"); ?>

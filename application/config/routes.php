@@ -56,6 +56,9 @@ $route['(?i)(login)'] = 'logincontroller/index';
 
 $route['(?i)(admin)'] = 'admincontroller/index';
 
+$route['(?i)(register)'] = 'registercontroller/index';
+$route['(?i)(register)/(:any)'] = 'registercontroller/$2';
+
 $route['(?i)(home)'] = 'homecontroller/index';
 $route['(?i)(home)/(:any)'] = 'homecontroller/$2';
 

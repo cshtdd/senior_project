@@ -62,4 +62,5 @@ h4 a:visited
 .errors
 {
   color:red;
+  font-weight: bold;
 }
