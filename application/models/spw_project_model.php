@@ -23,43 +23,29 @@ class SPW_Project_Model extends CI_Model
 
 	public function getRegularProjectIds($lSuggestedProjectIds)
 	{
-		$lenght = count($lSuggestedProjectIds);
-
-		$count = 0;
-
 		$sql = 'select spw_project.id
 	         	from spw_project, spw_term
 	         	where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
-	                   and (spw_term.closed_requests > NOW())
+	                   and (spw_term.end_date > NOW())
              	order by id ASC';
 
         $query = $this->db->query($sql);
 
         sort($lSuggestedProjectIds);
 
-        $res = array();
+        $lValidProjects = array();
 
         foreach ($query->result() as $row)
 		{
-			while ($lSuggestedProjectIds[$count] < $row->id)
-			{
-				count++;
-			}
-
-			if ()
-			{
-
-			}
-			else
-			{
-				
-			}
-
+			$lValidProjects[] = $row->id;
 		}
+
+		$res = array_diff($lValidProjects, $lSuggestedProjectIds);
+
+		$res = array_values($res);
 
 		return $res;
 	}
-
 }
 	
 ?>
