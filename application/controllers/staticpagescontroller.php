@@ -25,7 +25,7 @@ class StaticPagesController extends CI_Controller
 			$data['title'] = 'About';
 		}
 
-		$this->load->view('static_pages_about', $data);
+		$this->load->view('staticpages_about', $data);
 	}
 	
 	

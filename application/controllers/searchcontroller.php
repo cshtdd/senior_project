@@ -37,7 +37,7 @@ class SearchController extends CI_Controller
 			}
 		}
 
-		$this->load->view('search_controller_search', $data);
+		$this->load->view('search_search', $data);
 	}
 
 	private function getProjectsWithSearchParam($search_query)
