@@ -2,8 +2,6 @@
 
 class SearchController extends CI_Controller 
 {
-	private $is_test = true;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -44,7 +42,7 @@ class SearchController extends CI_Controller
 
 	private function getProjectsWithSearchParam($search_query)
 	{
-		if ($this->is_test)
+		if (is_test($this))
 		{
 			return $this->getProjectsWithSearchParamTest($search_query);
 		}

@@ -2,8 +2,6 @@
 
 class UserController extends CI_Controller 
 {
-	private $is_test = true;
-
 	public function __construct()
 	{
 		parent::__construct();
