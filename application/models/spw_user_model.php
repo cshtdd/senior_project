@@ -48,13 +48,23 @@ class SPW_User_Model extends CI_Model
 	{	
 		$param[0] = $user_id;
 
+		$sq = 'select spw_term.end_date
+		       from spw_user, spw_term
+		       where (spw_user.id = ?) and (spw_user.graduation_term = spw_term.id)';
+		$qry = $this->db->query($sq, $param);
+
+		$row = $qry->row(0);
+
+		$param[1] = $row->end_date;
+
 		$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
 		   		  from spw_project, (select skill
                			   	         from spw_skill_user
                			   	         where user = ?) as skills, (select spw_project.id, skill
                                           			             from spw_project, spw_skill_project, spw_term
                                           			             where (spw_project.id = project) and (spw_project.status = 3) and
-                                                                       (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())) as project_skills
+                                                                       (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
+                                                                       and (spw_term.end_date >= ?)) as project_skills
 		   		  where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
 				  group by spw_project.id
 				  order by nSkillMatch DESC';
