@@ -5,11 +5,11 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     
     #the following line works when the site is hosted on the root of the virtual host
-    RewriteRule . /index.php [L]
+    #RewriteRule . /index.php [L]
 
     #the following line works when the site is hosted on a subfolder of the virtual host 
     #this is what should be used on the production server
-    #RewriteRule . /senior-projects/index.php [L]
+    RewriteRule . /senior-projects/index.php [L]
 
     #this didn't work
     #RewriteRule ^(.*)$ index.php?/$1 [L] 
