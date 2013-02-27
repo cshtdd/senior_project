@@ -1,12 +1,11 @@
-
 <IfModule mod_rewrite.c>
-    #RewriteEngine On
-    #RewriteBase /
-    #RewriteCond %{REQUEST_FILENAME} !-f
-    #RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
     
     #the following line works when the site is hosted on the root of the virtual host
-    #RewriteRule . /index.php [L]
+    RewriteRule . /index.php [L]
 
     #the following line works when the site is hosted on a subfolder of the virtual host 
     #this is what should be used on the production server
@@ -14,8 +13,4 @@
 
     #this didn't work
     #RewriteRule ^(.*)$ index.php?/$1 [L] 
-
-    RewriteEngine on
-    RewriteCond $1 !^(index\.php|img|js|css|robots\.txt)
-    RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>

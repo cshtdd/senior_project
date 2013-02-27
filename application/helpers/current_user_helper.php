@@ -10,7 +10,16 @@ if ( !function_exists('getCurrentUserId'))
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			if($sender_controller->session->userdata('logged_in'))
+			{
+				$session_data = $sender_controller->session->userdata('logged_in');
+			        $user_id = $session_data['id'];
+				return $user_id;
+			}
+			else
+			{
+				throw new Exception('Non-logged in user...');
+			}
 		}
 	}
 }
@@ -25,7 +34,14 @@ if ( !function_exists('isUserLoggedIn'))
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			if($sender_controller->session->userdata('logged_in'))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 }

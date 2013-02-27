@@ -3,6 +3,8 @@ session_start();
 
 class HomeController extends CI_Controller 
 {
+	private $is_test = true;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -15,13 +17,23 @@ class HomeController extends CI_Controller
 
 	public function index()
 	{
-        if($this->session->userdata('logged_in'))
-        {
-            $session_data = $this->session->userdata('logged_in');
-	        $data['user_id'] = $session_data['id'];
+		if(isUserLoggedIn($this))
+		{
 
-			$lSuggestedProjects = $this->getSuggestedProjectsForCurrentUser();
-			$lRegularProjects = $this->getRegularProjectsForCurrentUser();
+			if (is_test($this))
+			{
+				$lSuggestedProjects = $this->getSuggestedProjectsForUserInternalTest();
+				$lRegularProjects = $this->getRegularProjectsForUserInternalTest();
+			}
+			else
+			{
+				$lSuggestedProjectIds = $this->getSuggestedProjectsForCurrentUser();
+				$lRegularProjectsIds =  $this->getRegularProjectsForCurrentUser($lSuggestedProjectIds);
+
+				$lSuggestedProjects = $this->prepareProjectsToShow($lSuggestedProjectIds);
+				$lRegularProjects = $this->prepareProjectsToShow($lRegularProjectsIds);
+			}
+
 
 			if ( (!isset($lSuggestedProjects) || count($lSuggestedProjects) == 0) &&
 				(!isset($lRegularProjects) || count($lRegularProjects) == 0))
@@ -55,44 +67,29 @@ class HomeController extends CI_Controller
 	    redirect('login', 'refresh');
 	}	
 
+
 	private function getSuggestedProjectsForCurrentUser()
 	{
-		return $this->getSuggestedProjectsForUserInternal(getCurrentUserId($this));
-	}
-	private function getRegularProjectsForCurrentUser()
-	{
-		return $this->getRegularProjectsForUserInternal(getCurrentUserId($this));
+		return $this->SPW_User_Model->getSuggestedProjectsGivenCurrentUser(getCurrentUserId($this));
 	}
 
-	private function getSuggestedProjectsForUserInternal($userId)
+	private function getRegularProjectsForCurrentUser($lSuggProjectIds)
 	{
-		if (is_test($this))
-		{
-			return $this->getSuggestedProjectsForUserInternalTest();
-		}
-		else
-		{
-			throw new Exception('not implemented');
-		}
+		return $this->SPW_Project_Model->getRegularProjectIds($lSuggProjectIds, getCurrentUserId($this));
 	}
-	private function getRegularProjectsForUserInternal($userId)
+
+	private function prepareProjectsToShow($lProjectsIds)
 	{
-		if (is_test($this))
-		{
-			return $this->getRegularProjectsForUserInternalTest();
-		}
-		else
-		{
-			throw new Exception('not implemented');
-		}
+		$projectId = $this->SPW_User_Model->userHaveProject(getCurrentUserId($this));
+		return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectsIds, $projectId);
 	}
 
 	private function getSuggestedProjectsForUserInternalTest()
 	{
 		$projStatus = new SPW_Project_Status_Model();
 		$projStatus->id = 1;
-		$projStatus->name = 'Open';		
-	
+		$projStatus->name = 'Open';
+
 		$term1 = new SPW_Term_Model();
 		$term1->id = 1;
 		$term1->name = 'Spring 2013';
@@ -218,4 +215,5 @@ class HomeController extends CI_Controller
 	{
 		return $this->getSuggestedProjectsForUserInternalTest();
 	}
+
 }
