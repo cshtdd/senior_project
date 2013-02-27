@@ -40,8 +40,6 @@ class SPW_User_Model extends CI_Model
 			return false; 
 		}
 	}
-<<<<<<< HEAD
-	
 
 	/* return the list of suggested projects IDs with the highest matches having in
 	   count that the project is valid for the current term, is not yet the closed_requests
@@ -140,8 +138,6 @@ class SPW_User_Model extends CI_Model
 		return $lSuggestedProjectIds;
 	}
 
-=======
-
 	public function check_already_registered($email_address)
 	{
 		$query = $this->db
@@ -169,7 +165,6 @@ class SPW_User_Model extends CI_Model
 		$this->db->insert('spw_user', $data);
 		return $this->db->insert_id();
 	}
->>>>>>> origin/master
 }
 	
 ?>
