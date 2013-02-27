@@ -4,8 +4,7 @@ if ( !function_exists('getCurrentUserId'))
 {
 	function getCurrentUserId($sender_controller)
 	{
-		$is_test = true;
-		if ($is_test)
+		if (is_test($sender_controller))
 		{
 			return 101;
 		}
@@ -20,8 +19,7 @@ if ( !function_exists('isUserLoggedIn'))
 {
 	function isUserLoggedIn($sender_controller)
 	{
-		$is_test = true;
-		if ($is_test)
+		if (is_test($sender_controller))
 		{
 			return true;
 		}
