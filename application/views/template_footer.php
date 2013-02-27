@@ -1,6 +1,4 @@
 	</div>
-</div>
-<div style="clear:both">
 	<hr>
 	<div class="footer">
 		<p><a href="http://www.cash-productions.com"> © CASH Productions 2013 </a>
