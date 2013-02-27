@@ -13,6 +13,9 @@ Instead of <code> &#60;?= </code> we should use <code> &#60;?php echo </code>
 <a href="http://stackoverflow.com/questions/1386620/php-echo-vs-php-short-tags/">http://stackoverflow.com/questions/1386620/php-echo-vs-php-short-tags/</a>
 <p/>
 
+<p>No inline css styles</p>
+<p>Do not change the template_header or template_footer files</p>
+
 <h2>Current User Helper</h2>
 <p>
   I created the current_user helper. It has a <code>getCurrentUserId($controller)</code> and a <code>isUserLoggedIn($controller)</code>.
