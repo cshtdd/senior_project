@@ -15,6 +15,9 @@ Instead of <code> &#60;?= </code> we should use <code> &#60;?php echo </code>
 
 <p>No inline css styles</p>
 <p>Do not change the template_header or template_footer files</p>
+<p>Views returned by controllers should be named as 
+  <code>ControllerNameWithouthTheControllerWord_MethodName</code>
+</p>
 
 <h2>Current User Helper</h2>
 <p>
