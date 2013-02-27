@@ -62,7 +62,7 @@ class SPW_User_Model extends CI_Model
 
 		$query = $this->db->query($sql, $param);
 
-		$sql1 = 'select count(id)
+		$sql1 = 'select id
 				 from spw_project';
 
 	    $query1 = $this->db->query($sql1);
@@ -74,6 +74,8 @@ class SPW_User_Model extends CI_Model
 		return $res;
 	}
 
+
+	/* return the id of the project the user belong or false if does not have a project */
 	public function userHaveProject($user_id)
 	{
 		$param[0] = $user_id;
@@ -84,7 +86,15 @@ class SPW_User_Model extends CI_Model
 
 		$query = $this->db->query($sql, $param);
 
-		return $query;
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+			return $row->project;
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 
 	/* given the full list of projects with at least one match, determines which can
@@ -95,13 +105,34 @@ class SPW_User_Model extends CI_Model
 		$ratio = 3;
 		$lSuggestedProjectIds = array();
 		$ratioProjects = round($totalValidProjects / $ratio);
+		$flag = true;
 
 		foreach ($allSuggestedProjects->result() as $row)
 		{
-			if (($row->nSkillMatch >= 2) && ($count < $ratioProjects))
+			if ($flag)
 			{
-				$lSuggestedProjectIds[$count] = $row->id;
-				$count++;
+				if (($row->nSkillMatch == 1) && ($count == 0))
+				{
+					$flag = false;
+					$lSuggestedProjectIds[$count] = $row->id;
+					$count++;
+				}
+				else
+				{
+					if (($row->nSkillMatch >= 2) && ($count < $ratioProjects))
+					{
+						$lSuggestedProjectIds[$count] = $row->id;
+						$count++;
+					}
+				}
+			}
+			else
+			{
+				if ($count < $ratioProjects)
+				{
+					$lSuggestedProjectIds[$count] = $row->id;
+					$count++;
+				}
 			}
 		}
 

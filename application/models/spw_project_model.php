@@ -21,6 +21,7 @@ class SPW_Project_Model extends CI_Model
 		parent::__construct();
 	}
 
+	/* Given the suggested projects this function returns the regular projects */
 	public function getRegularProjectIds($lSuggestedProjectIds)
 	{
 		$sql = 'select spw_project.id
