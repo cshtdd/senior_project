@@ -53,8 +53,12 @@ $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
 
 $route['(?i)(login)'] = 'logincontroller/index';
+$route['(?i)(login)/(:any)'] = 'logincontroller/$2';
 
 $route['(?i)(admin)'] = 'admincontroller/index';
+
+$route['(?i)(register)'] = 'registercontroller/index';
+$route['(?i)(register)/(:any)'] = 'registercontroller/$2';
 
 $route['(?i)(home)'] = 'homecontroller/index';
 $route['(?i)(home)/(:any)'] = 'homecontroller/$2';

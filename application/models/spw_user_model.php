@@ -40,6 +40,7 @@ class SPW_User_Model extends CI_Model
 			return false; 
 		}
 	}
+<<<<<<< HEAD
 	
 
 	/* return the list of suggested projects IDs with the highest matches having in
@@ -139,6 +140,36 @@ class SPW_User_Model extends CI_Model
 		return $lSuggestedProjectIds;
 	}
 
+=======
+
+	public function check_already_registered($email_address)
+	{
+		$query = $this->db
+					  //->where('google_id','NULL')
+					  //->where('linkedin_id','NULL')
+					  ->where('email',$email_address)
+					  ->get('spw_user');
+		if($query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function create_new_user($email_address, $password)
+	{
+		$data = array(
+		   'email' =>  $email_address ,
+		   'hash_pwd' =>  sha1($password),
+		);
+
+		$this->db->insert('spw_user', $data);
+		return $this->db->insert_id();
+	}
+>>>>>>> origin/master
 }
 	
 ?>
