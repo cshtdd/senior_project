@@ -3,8 +3,6 @@ session_start();
 
 class HomeController extends CI_Controller 
 {
-	private $is_test = true;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -68,7 +66,7 @@ class HomeController extends CI_Controller
 
 	private function getSuggestedProjectsForUserInternal($userId)
 	{
-		if ($this->is_test)
+		if (is_test($this))
 		{
 			return $this->getSuggestedProjectsForUserInternalTest();
 		}
@@ -79,7 +77,7 @@ class HomeController extends CI_Controller
 	}
 	private function getRegularProjectsForUserInternal($userId)
 	{
-		if ($this->is_test)
+		if (is_test($this))
 		{
 			return $this->getRegularProjectsForUserInternalTest();
 		}

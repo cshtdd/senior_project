@@ -16,7 +16,7 @@ class StaticPagesController extends CI_Controller
 		// $this->load->view('static_pages_about');
 		// $this->load->view('template_footer');
 
-		if ($this->config->item('IS_TEST'))
+		if (is_test($this))
 		{
 			$data['title'] = 'TEST';
 		}
