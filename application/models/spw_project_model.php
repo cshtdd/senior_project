@@ -26,38 +26,98 @@ class SPW_Project_Model extends CI_Model
 	{
 		$param[0] = $user_id;
 
-		$sq = 'select spw_term.end_date
-		       from spw_user, spw_term
-		       where (spw_user.id = ?) and (spw_user.graduation_term = spw_term.id)';
+		$sq = 'select graduation_term
+		       from spw_user
+		       where (id = ?)';
 		$qry = $this->db->query($sq, $param);
 
-		$row = $qry->row(0);
-
-		$param[0] = $row->end_date;
-
-		$sql = 'select spw_project.id
-	         	from spw_project, spw_term
-	         	where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
-	                   and (spw_term.end_date > NOW()) and (spw_term.end_date >= ?)
-             	order by id ASC';
-
-        $query = $this->db->query($sql, $param);
-
-        sort($lSuggestedProjectIds);
-
-        $lValidProjects = array();
-
-        foreach ($query->result() as $row)
+		if ($qry->num_rows() > 0)
 		{
-			$lValidProjects[] = $row->id;
+			$row = $qry->row(0);
+
+			$param[0] = $row->graduation_term;
+
+			$sql = 'select spw_project.id
+	         		from spw_project, spw_term
+	         		where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	                   	  and (spw_term.end_date > NOW()) and (spw_term.id = ?)
+             		order by id ASC';
+
+        	$query = $this->db->query($sql, $param);
+
+        	sort($lSuggestedProjectIds);
+
+        	$lValidProjects = array();
+
+        	foreach ($query->result() as $row)
+			{
+				$lValidProjects[] = $row->id;
+			}
+
+			$res = array_diff($lValidProjects, $lSuggestedProjectIds);
+
+			$res = array_values($res);
+
+			return $res;
 		}
 
-		$res = array_diff($lValidProjects, $lSuggestedProjectIds);
-
-		$res = array_values($res);
-
-		return $res;
+		return NULL;
 	}
+
+	/* return the list of suggested user IDs with the highest matches having in
+	   count that the user is going to graduate in the same term as the project,
+	   is not yet the closed_requests date and the project have been aproved */
+	/*public function getSuggestedUsersGivenMyProject($project_id)
+	{	
+		$param[0] = $project_id;
+
+
+
+
+
+
+		$sq = 'select graduation_term
+		       from spw_user
+		       where (id = ?)';
+		$qry = $this->db->query($sq, $param);
+
+		if ($qry->num_rows() > 0)
+		{
+			$row = $qry->row(0);
+
+			$param[1] = $row->graduation_term;
+
+			$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
+		   		  	from spw_project, (select skill
+               			   	           from spw_skill_user
+               			   	           where user = ?) as skills, (select spw_project.id, skill
+                                          			               from spw_project, spw_skill_project, spw_term
+                                          			               where (spw_project.id = project) and (spw_project.status = 3) and
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
+                                                                         and (spw_term.id = ?)) as project_skills
+		   		  	where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
+				  	group by spw_project.id
+				  	order by nSkillMatch DESC';
+
+			$query = $this->db->query($sql, $param);
+
+			$param1[0] = $param[1];
+
+			$sql1 = 'select id
+				 	 from spw_project
+				 	 where (delivery_term = ?) and (status = 3)';
+
+	    	$query1 = $this->db->query($sql1, $param1);
+
+			$totValidProjects = $query1->num_rows();
+
+			$res = $this->chooseRelevantProjects($query, $totValidProjects);
+
+			return $res;
+		}
+
+		return NULL;
+	}*/
 }
 	
 ?>
