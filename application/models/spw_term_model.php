@@ -15,6 +15,24 @@ class SPW_Term_Model extends CI_Model
 	{
 		parent::__construct();
 	}
+
+	/* get the current term information */
+	public function getCurrentTermInfo()
+	{
+		$sql = 'select *
+				from spw_term
+				where (start_date <= NOW()) and (end_date > NOW())';
+		$query = $this->db->query($sql);
+
+		if ($query->num_rows() > 0)
+		{
+			$res = $query->row(0, 'SPW_Term_Model');
+
+			return $res;
+		}
+
+		return NULL;
+	}
 }
 	
 ?>

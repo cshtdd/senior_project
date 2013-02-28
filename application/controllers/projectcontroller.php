@@ -16,7 +16,14 @@ class ProjectController extends CI_Controller
 
 	public function details($project_id='')
 	{
-		$this->output->set_output('project details '.$project_id);
+		if (isset($project_id))
+		{
+			$this->output->set_output('project details '.$project_id);
+		}
+		else
+		{
+			$this->output->set_output('You have not joined to a project yet...');
+		}
 	}
 
 	public function current_project()
@@ -53,7 +60,7 @@ class ProjectController extends CI_Controller
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			return $this->SPW_User_Model->userHaveProject(getCurrentUserId($this));
 		}
 	}
 

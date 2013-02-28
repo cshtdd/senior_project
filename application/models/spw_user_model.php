@@ -42,45 +42,53 @@ class SPW_User_Model extends CI_Model
 	}
 
 	/* return the list of suggested projects IDs with the highest matches having in
-	   count that the project is valid for the current term, is not yet the closed_requests
-	   date and the project have been aproved */
+	   count that the project delivery_term is the same as the user, is not yet the 
+	   closed_requests date and the project have been aproved */
 	public function getSuggestedProjectsGivenCurrentUser($user_id)
 	{	
 		$param[0] = $user_id;
 
-		$sq = 'select spw_term.end_date
-		       from spw_user, spw_term
-		       where (spw_user.id = ?) and (spw_user.graduation_term = spw_term.id)';
+		$sq = 'select graduation_term
+		       from spw_user
+		       where (id = ?)';
 		$qry = $this->db->query($sq, $param);
 
-		$row = $qry->row(0);
+		if ($qry->num_rows() > 0)
+		{
+			$row = $qry->row(0);
 
-		$param[1] = $row->end_date;
+			$param[1] = $row->graduation_term;
 
-		$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
-		   		  from spw_project, (select skill
-               			   	         from spw_skill_user
-               			   	         where user = ?) as skills, (select spw_project.id, skill
-                                          			             from spw_project, spw_skill_project, spw_term
-                                          			             where (spw_project.id = project) and (spw_project.status = 3) and
-                                                                       (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
-                                                                       and (spw_term.end_date >= ?)) as project_skills
-		   		  where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
-				  group by spw_project.id
-				  order by nSkillMatch DESC';
+			$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
+		   		  	from spw_project, (select skill
+               			   	           from spw_skill_user
+               			   	           where user = ?) as skills, (select spw_project.id, skill
+                                          			               from spw_project, spw_skill_project, spw_term
+                                          			               where (spw_project.id = project) and (spw_project.status = 3) and
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
+                                                                         and (spw_term.id = ?)) as project_skills
+		   		  	where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
+				  	group by spw_project.id
+				  	order by nSkillMatch DESC';
 
-		$query = $this->db->query($sql, $param);
+			$query = $this->db->query($sql, $param);
 
-		$sql1 = 'select id
-				 from spw_project';
+			$param1[0] = $param[1];
 
-	    $query1 = $this->db->query($sql1);
+			$sql1 = 'select id
+				 	 from spw_project
+				 	 where (delivery_term = ?) and (status = 3)';
 
-		$totValidProjects = $query1->num_rows();
+	    	$query1 = $this->db->query($sql1, $param1);
 
-		$res = $this->chooseRelevantProjects($query, $totValidProjects);
+			$totValidProjects = $query1->num_rows();
 
-		return $res;
+			$res = $this->chooseRelevantProjects($query, $totValidProjects);
+
+			return $res;
+		}
+
+		return NULL;
 	}
 
 
@@ -99,6 +107,37 @@ class SPW_User_Model extends CI_Model
 		{
 			$row = $query->row(0);
 			return $row->project;
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	/* checks if the user is going to graduate on the current term */
+	public function isUserGraduating($user_id)
+	{
+		$sql = 'select id
+				from spw_term
+				where (start_date <= NOW()) and (end_date > NOW())';
+		$query = $this->db->query($sql);
+		if ($query->num_rows() > 0)
+		{
+			$param[0] = $user_id;
+			$row = $query->row(0);
+			$param[1] = $row->id;
+			$sql1 = 'select id
+					 from spw_user
+					 where (id = ?) and (graduation_term = ?)';
+			$query1 = $this->db->query($sql1, $param);
+			if ($query1->num_rows() > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
