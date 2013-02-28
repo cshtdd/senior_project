@@ -19,7 +19,6 @@ class HomeController extends CI_Controller
 	{
 		if(isUserLoggedIn($this))
 		{
-
 			if (is_test($this))
 			{
 				$lSuggestedProjects = $this->getSuggestedProjectsForUserInternalTest();
