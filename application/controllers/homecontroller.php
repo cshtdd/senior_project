@@ -53,19 +53,19 @@ class HomeController extends CI_Controller
 			$this->load->view('home_index', $data);
 
 			//$this->output->set_output('home ');
-        }
-        else
-        {
-        	redirect('login','refresh');
-        }
+		}
+		else
+		{
+			redirect('login','refresh');
+		}
 	}
 
 	public function logout()
 	{
 		$this->session->unset_userdata('logged_in');
-	    session_destroy();
-	    redirect('login', 'refresh');
-	}	
+		session_destroy();
+		redirect('login', 'refresh');
+	}
 
 
 	private function getSuggestedProjectsForCurrentUser()

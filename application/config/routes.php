@@ -52,6 +52,7 @@ $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
 $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
 
+$route['(?i)(logout)'] = 'homecontroller/logout';
 $route['(?i)(login)'] = 'logincontroller/index';
 $route['(?i)(login)/(:any)'] = 'logincontroller/$2';
 
