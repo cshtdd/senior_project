@@ -11,7 +11,6 @@ require_once("application/libraries/OAuth2/Service.php");
 
 class LoginController extends CI_Controller 
 {
-	
 	public function __construct()
 	{
 		parent::__construct();

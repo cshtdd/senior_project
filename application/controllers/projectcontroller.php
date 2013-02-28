@@ -2,7 +2,6 @@
 
 class ProjectController extends CI_Controller 
 {
-	private $is_test = true;
 
 	public function __construct()
 	{
@@ -42,13 +41,13 @@ class ProjectController extends CI_Controller
 		$data['no_results'] = $no_results;
 		$data['lProjects'] = $lProjects;
 
-		$this->load->view('past_projects', $data);
+		$this->load->view('project_past_projects', $data);
 	}
 
 
 	private function getCurrentProjectId()
 	{
-		if ($this->is_test)
+		if (is_test($this))
 		{
 			return 100;
 		}
@@ -60,7 +59,7 @@ class ProjectController extends CI_Controller
 
 	private function getPastProjectsInternal()
 	{
-		if ($this->is_test)
+		if (is_test($this))
 		{
 			return $this->getPastProjectsInternalTest();
 		}

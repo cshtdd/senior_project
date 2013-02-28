@@ -52,6 +52,7 @@ $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
 $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
 
+$route['(?i)(logout)'] = 'homecontroller/logout';
 $route['(?i)(login)'] = 'logincontroller/index';
 $route['(?i)(login)/(:any)'] = 'logincontroller/$2';
 
@@ -63,7 +64,8 @@ $route['(?i)(register)/(:any)'] = 'registercontroller/$2';
 $route['(?i)(home)'] = 'homecontroller/index';
 $route['(?i)(home)/(:any)'] = 'homecontroller/$2';
 
-$route['default_controller'] = "logincontroller";
+//this is the default controller
+$route['default_controller'] = "homecontroller";
 $route['404_override'] = '';
 
 /* End of file routes.php */

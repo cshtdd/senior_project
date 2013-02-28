@@ -24,8 +24,9 @@
 	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
 
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
-	
-	<script src="<?php echo base_url() ?>js/jquery-1.9.1.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -87,7 +88,7 @@
 			<?php echo get_nav_item('project', 'My Project') ?>
 			<?php echo get_nav_item('me', 'My Profile') ?>
 			<?php echo get_nav_item('about', 'About') ?>
-			<?php echo get_nav_item('home/logout', 'Logout') ?>
+			<?php echo get_nav_item('logout', 'Logout') ?>
 		</ul>
 
 
