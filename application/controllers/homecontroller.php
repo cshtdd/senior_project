@@ -74,7 +74,7 @@ class HomeController extends CI_Controller
 
 	private function getRegularProjectsForCurrentUser($lSuggProjectIds)
 	{
-		return $this->SPW_Project_Model->getRegularProjectIds($lSuggProjectIds, getCurrentUserId($this));
+		return $this->SPW_User_Model->getRegularProjectIds($lSuggProjectIds, getCurrentUserId($this));
 	}
 
 	private function prepareProjectsToShow($lProjectsIds)

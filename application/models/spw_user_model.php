@@ -61,23 +61,7 @@ class SPW_User_Model extends CI_Model
 		}
 	}
 
-	public function is_google_registered($google_id)
-	{
-		$query = $this->db
-					   ->where('google_id',$google_id)
-					   ->get('spw_user');
-
-		if($query->num_rows() > 0)
-		{
-			return $query->result();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	public function create_new_own_user($email_address, $password)
+	public function create_new_user($email_address, $password)
 	{
 		$data = array(
 		   'email' =>  $email_address ,
@@ -88,39 +72,34 @@ class SPW_User_Model extends CI_Model
 		return $this->db->insert_id();
 	}
 
-	public function create_new_google_user($email_address, $given_name, $family_name,$google_id)
+	public function getUserGraduationTerm($user_id)
 	{
-	
-		$data = array(
-		   'email' =>  $email_address ,
-		   'first_name' => $given_name, 
-		   'last_name' => $family_name,
-		   'google_id' => $google_id,
-		);
-
-		$this->db->insert('spw_user', $data);
-		return $this->db->insert_id();
+		$param[0] = $user_id;
+		$sql = 'select graduation_term
+		        from spw_user
+		        where (id = ?)';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row(0);
+			return $row->graduation_term;
+		}
+		
+		return NULL;
 	}
-
-
 
 	/* return the list of suggested projects IDs with the highest matches having in
 	   count that the project delivery_term is the same as the user, is not yet the 
 	   closed_requests date and the project have been aproved */
 	public function getSuggestedProjectsGivenCurrentUser($user_id)
 	{	
-		$param[0] = $user_id;
+		$term_id = $this->getUserGraduationTerm($user_id);
 
-		$sq = 'select graduation_term
-		       from spw_user
-		       where (id = ?)';
-		$qry = $this->db->query($sq, $param);
-
-		if ($qry->num_rows() > 0)
+		if (isset($term_id))
 		{
-			$row = $qry->row(0);
+			$param[0] = $user_id;
 
-			$param[1] = $row->graduation_term;
+			$param[1] = $term_id;
 
 			$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
 		   		  	from spw_project, (select skill
@@ -154,6 +133,41 @@ class SPW_User_Model extends CI_Model
 		return NULL;
 	}
 
+	/* Given the suggested projects this function returns the regular projects */
+	public function getRegularProjectIds($lSuggestedProjectIds, $user_id)
+	{
+		$term_id = $this->getUserGraduationTerm($user_id);
+
+		if (isset($term_id))
+		{
+			$param[0] = $term_id;
+
+			$sql = 'select spw_project.id
+	         		from spw_project, spw_term
+	         		where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	                   	  and (spw_term.end_date > NOW()) and (spw_term.id = ?)
+             		order by id ASC';
+
+        	$query = $this->db->query($sql, $param);
+
+        	sort($lSuggestedProjectIds);
+
+        	$lValidProjects = array();
+
+        	foreach ($query->result() as $row)
+			{
+				$lValidProjects[] = $row->id;
+			}
+
+			$res = array_diff($lValidProjects, $lSuggestedProjectIds);
+
+			$res = array_values($res);
+
+			return $res;
+		}
+
+		return NULL;
+	}
 
 	/* return the id of the project the user belong or false if does not have a project */
 	public function userHaveProject($user_id)
