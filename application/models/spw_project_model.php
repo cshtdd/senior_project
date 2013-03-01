@@ -21,49 +21,6 @@ class SPW_Project_Model extends CI_Model
 		parent::__construct();
 	}
 
-	/* Given the suggested projects this function returns the regular projects */
-	public function getRegularProjectIds($lSuggestedProjectIds, $user_id)
-	{
-		$param[0] = $user_id;
-
-		$sq = 'select graduation_term
-		       from spw_user
-		       where (id = ?)';
-		$qry = $this->db->query($sq, $param);
-
-		if ($qry->num_rows() > 0)
-		{
-			$row = $qry->row(0);
-
-			$param[0] = $row->graduation_term;
-
-			$sql = 'select spw_project.id
-	         		from spw_project, spw_term
-	         		where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
-	                   	  and (spw_term.end_date > NOW()) and (spw_term.id = ?)
-             		order by id ASC';
-
-        	$query = $this->db->query($sql, $param);
-
-        	sort($lSuggestedProjectIds);
-
-        	$lValidProjects = array();
-
-        	foreach ($query->result() as $row)
-			{
-				$lValidProjects[] = $row->id;
-			}
-
-			$res = array_diff($lValidProjects, $lSuggestedProjectIds);
-
-			$res = array_values($res);
-
-			return $res;
-		}
-
-		return NULL;
-	}
-
 	/* return the list of suggested user IDs with the highest matches having in
 	   count that the user is going to graduate in the same term as the project,
 	   is not yet the closed_requests date and the project have been aproved */
