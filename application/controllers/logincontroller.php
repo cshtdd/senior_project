@@ -88,7 +88,7 @@ class LoginController extends CI_Controller
 
 		preg_match_all("/\"id\": \"(\d+)\"/", $userinfo, $matches);
 
-		$id = intval($matches[1][0]); 
+		$id = $matches[1][0]; 
 
 		$matches = array(); 
 
@@ -104,14 +104,14 @@ class LoginController extends CI_Controller
 
 		$matches = array(); 
 
-		preg_match_all("/\"family_name\": \"([a-zA-Z\s]+)\"/", $userinfo, $matches);
+		preg_match_all("/\"family_name\": \"([a-zA-Z\s-]+)\"/", $userinfo, $matches);
 
 		$family_name = $matches[1][0]; 
 
 		$is_google_registered = true; 
 
 		$this->load->model('spw_user_model');
-
+		
 		if(!$this->spw_user_model->is_google_registered($id)){
 				$this->spw_user_model->create_new_google_user($email, $given_name, $family_name, $id);
 				$is_google_registered = false;
