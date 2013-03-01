@@ -18,7 +18,11 @@ ul {
   list-style: none;  
 }
 
-
+.error
+{
+  color: red;
+  font-weight: bold;
+}
 
 /*
 .project_summary {

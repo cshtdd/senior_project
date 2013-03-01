@@ -27,7 +27,7 @@ class RegisterController extends CI_Controller
 		{
 			$this->load->model('spw_user_model');
 
-			$res = $this->spw_user_model->check_already_registered($this->input->post('email_address'));
+			$res = $this->spw_user_model->is_owned_registered($this->input->post('email_address'));
 			if($res == false)
 			{
 				$new_user_id = $this->spw_user_model->create_new_user($this->input->post('email_address'), $this->input->post('password_1'));

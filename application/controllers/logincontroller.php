@@ -71,6 +71,8 @@ class LoginController extends CI_Controller
 		$token = $dataStore->retrieveAccessToken();
 
 		$userinfo = $service->callApiEndpoint('https://www.googleapis.com/oauth2/v1/userinfo');
+
+		
 		echo $userinfo;
 	}
 }
