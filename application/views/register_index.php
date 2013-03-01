@@ -52,31 +52,30 @@
 ?>
 </div>
 
-<?php $this->load->view("template_footer"); ?>
-
- <script>                                         
+<script>                                         
 
 	$( document ).ready(function() {
 
-	  $("#btn").click(function() {
-  		mismatch();
-	  });
-
+	  	$("#btn").on("click", function(e) {
+	  		var 
+	  			fields = {
+	  				email: $.trim($("#email_address").val()),
+	  				password1: $.trim($('#password_1').val()),
+	  				password2: $.trim($('#password_2').val())
+	  			};
+			if( !fields.email.length ){
+				e.preventDefault();
+				$(".errors").html("Email address required");
+			}else if( !fields.password1.length && !fields.password2.length ){
+				e.preventDefault();
+				$(".errors").html("Password fields required");
+			}else if( fields.password1 !== fields.password2){
+				e.preventDefault();
+				$(".errors").html("Passwords did not match.");
+			}
+	  	});
 	});
-	
-   	function mismatch(){
-   		if( $.trim($("#email_address").val())  == ""){
-   			$("#registration_form").on("submit", function(e){return false;});
-   			$(".errors").html("Email address required");
-   		}else if( $.trim($('#password_1').val())  == "" &&  $.trim($('#password_2').val()) == ""){
-   			$("#registration_form").on("submit", function(e){return false;});
-   			$(".errors").html("Password fields required");
-   		}else if( $('#password_1').val() != $('#password_2').val()){
-   			$("#registration_form").on("submit", function(e){return false;});
-   			$(".errors").html("Passwords did not match.");
-   		}else{
-   			return;
-   		}
-   	}
 
  </script> 
+
+ <?php $this->load->view("template_footer"); ?>
