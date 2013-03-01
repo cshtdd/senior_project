@@ -75,7 +75,7 @@
 				<?php }?>
 			</ul>
 
-			Close Date: <?php echo $iProject->term->end_date ?>
+			Delivery Date: <?php echo $iProject->term->end_date ?>
 			<!--Project Status: <?php echo $iProject->project->status->name ?> -->
 		</li>
 	<?php } ?>

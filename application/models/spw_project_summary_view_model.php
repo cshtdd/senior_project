@@ -19,6 +19,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
 
 	//an array of SPW_User_Summary_View_Model
 	public $lTeamMemberSummaries;
+
+	public $justList;
 	
 	public $displayJoin;
 	public $displayLeave;
@@ -46,6 +48,27 @@ class SPW_Project_Summary_View_Model extends CI_Model
 		return $resultStr;
 	}
 
+	/* obtaining the term info for a list of projects with the same delivery_term to determine
+	   if the closed_requests date passed so the users will be able to see the projects but not
+	   able to join any of them */
+	public function getProjectTermInfo($project_Id)
+	{
+		$param[0] = $project_Id;
+		$sql = 'select spw_term.*
+		        from spw_term, spw_project
+		        where (spw_project.id = ?) and (spw_project.delivery_term = spw_term.id)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+		{
+			$res = $query->row(0, 'SPW_Term_Model');
+
+			return $res;
+		}
+
+		return NULL;
+	}
+
 	/* this function fills a list of projects with their data */
 	public function prepareProjectsDataToShow($lProjectIds, $projectId)
 	{
@@ -70,15 +93,20 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$project = $row;
 				$project_summ_vm->project = $project;
 
-				$param[0] = $project->delivery_term;
-				//get term info for the project
-				$sql1 = 'select *
-						 from spw_term
-						 where (id = ?)';
-				$query1 = $this->db->query($sql1, $param);
-				$row = $query1->row(0, 'SPW_Term_Model');
-				$term = $row;
-				$project_summ_vm->term = $term;
+				$project_summ_vm->justList = true;
+
+				$term = $this->getProjectTermInfo($project->id);
+
+				if (isset($term))
+				{
+					$currentDate = date('Y-m-d');
+					if ($term->closed_requests > $currentDate)
+					{
+						$project_summ_vm->justList = false;
+					}
+
+					$project_summ_vm->term = $term;
+				}
 
 				$param[0] = $project->id;
 				//get list of skills info of the project
@@ -156,16 +184,19 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				}
 				$project_summ_vm->lTeamMemberSummaries = $lStudentsSumm;
 
-				if ($projectId == $lProjectIds[$i])
+				if (!($project_summ_vm->justList))
 				{
-					$project_summ_vm->displayLeave = TRUE;
-					$project_summ_vm->displayJoin = FALSE;
-				}
-				else
-				{
-					$project_summ_vm->displayLeave = FALSE;
-					$project_summ_vm->displayJoin = TRUE;
-				}	 
+					if ($projectId == $lProjectIds[$i])
+					{
+						$project_summ_vm->displayLeave = TRUE;
+						$project_summ_vm->displayJoin = FALSE;
+					}
+					else
+					{
+						$project_summ_vm->displayLeave = FALSE;
+						$project_summ_vm->displayJoin = TRUE;
+					}	
+				} 
 			}
 			else
 			{
