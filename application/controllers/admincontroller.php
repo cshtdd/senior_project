@@ -28,7 +28,8 @@ class AdminController extends CI_Controller
 
 					$sess_array = array(
 						'id' => $row->id, 
-						'email' => $row->email, 
+						'email' => $row->email,
+						'using' => 'fiu_senior_project' 
 					);
 					$this->session->set_userdata('logged_in', $sess_array);
 				}

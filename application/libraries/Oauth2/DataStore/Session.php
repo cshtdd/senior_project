@@ -34,7 +34,7 @@ use OAuth2\Token;
 class Session implements DataStore
 {
     public function __construct() {
-        session_start();
+        //session_start();
     }
 
     /**
@@ -53,6 +53,6 @@ class Session implements DataStore
     }
 
     public function  __destruct() {
-        session_write_close();
+       // session_write_close();
     }
 }
