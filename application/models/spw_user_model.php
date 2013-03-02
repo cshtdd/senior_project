@@ -53,7 +53,23 @@ class SPW_User_Model extends CI_Model
 
 		if($query->num_rows() > 0)
 		{
-			return $query->result();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function is_google_registered($id)
+	{
+		$query = $this->db
+					   ->where('google_id',$id)
+					   ->get('spw_user');
+
+		if($query->num_rows() > 0)
+		{
+			return true;
 		}
 		else
 		{
@@ -71,6 +87,22 @@ class SPW_User_Model extends CI_Model
 		$this->db->insert('spw_user', $data);
 		return $this->db->insert_id();
 	}
+
+	public function create_new_google_user($email_address, $given_name, $family_name,$google_id)
+ 	{
+ 	
+ 		$data = array(
+ 		   'email' =>  $email_address ,
+ 		   'first_name' => $given_name, 
+ 		   'last_name' => $family_name,
+ 		   'google_id' => $google_id,
+ 		);
+ 
+ 		$this->db->insert('spw_user', $data);
+ 		return $this->db->insert_id();
+ 	}
+ 
+ 
 
 	public function getUserGraduationTerm($user_id)
 	{

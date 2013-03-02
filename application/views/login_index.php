@@ -1,12 +1,13 @@
 <?php $this->load->view("template_header"); ?>
-
 <div>
 	<div>
 		 Do you already have an account on one of these sites? 
 	</div>
 
 	<div style="float:left; height: 250px; margin: 15px 50px 0px 0px">
-		<img src="<?php echo base_url("img/LogInGoogle.png")?>" />
+		<a href="<?php echo base_url('/login/oauth2')?>">
+			<img src="<?php echo base_url("img/LogInGoogle.png")?>" />
+		</a>
 	</div>
 
 	<div style="height: 250px">
