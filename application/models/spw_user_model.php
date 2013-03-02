@@ -17,6 +17,8 @@ class SPW_User_Model extends CI_Model
 	public $graduation_term;
 	//the id of the SPW_Project
 	public $project;
+	public $google_id;
+	public $linkedin_id;
 
 
 	public function __construct()
@@ -125,13 +127,42 @@ class SPW_User_Model extends CI_Model
 	   closed_requests date and the project have been aproved */
 	public function getSuggestedProjectsGivenCurrentUser($user_id)
 	{	
-		$term_id = $this->getUserGraduationTerm($user_id);
+		if ($this->isUserAStudent($user_id))
+		{
+			$term_id = $this->getUserGraduationTerm($user_id);
 
-		if (isset($term_id))
+			if (isset($term_id))
+			{
+				$param[0] = $user_id;
+
+				$param[1] = $term_id;
+
+				$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
+		   		  		from spw_project, (select skill
+               			   	           	   from spw_skill_user
+               			   	           	   where user = ?) as skills, (select spw_project.id, skill
+                                          			               	   from spw_project, spw_skill_project, spw_term
+                                          			               	   where (spw_project.id = project) and (spw_project.status = 3) and
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
+                                                                         and (spw_term.id = ?)) as project_skills
+		   		  		where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
+				  		group by spw_project.id
+				  		order by nSkillMatch DESC';
+
+				$query = $this->db->query($sql, $param);
+
+				$param1[0] = $param[1];
+
+				$sql1 = 'select id
+				 	 	 from spw_project
+				 	 	 where (delivery_term = ?) and (status = 3)';
+
+	    		$query1 = $this->db->query($sql1, $param1);
+			}
+		}
+		elseif ($this->isUserPossibleMentor($user_id))
 		{
 			$param[0] = $user_id;
-
-			$param[1] = $term_id;
 
 			$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
 		   		  	from spw_project, (select skill
@@ -139,22 +170,24 @@ class SPW_User_Model extends CI_Model
                			   	           where user = ?) as skills, (select spw_project.id, skill
                                           			               from spw_project, spw_skill_project, spw_term
                                           			               where (spw_project.id = project) and (spw_project.status = 3) and
-                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
-                                                                         and (spw_term.id = ?)) as project_skills
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())) 
+																		 as project_skills
 		   		  	where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
 				  	group by spw_project.id
 				  	order by nSkillMatch DESC';
 
 			$query = $this->db->query($sql, $param);
 
-			$param1[0] = $param[1];
+			$sql1 = 'select spw_project.id
+	         		 from spw_project, spw_term
+	         		 where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	                   	    and (spw_term.end_date > NOW())';
 
-			$sql1 = 'select id
-				 	 from spw_project
-				 	 where (delivery_term = ?) and (status = 3)';
+	    	$query1 = $this->db->query($sql1);
+		}
 
-	    	$query1 = $this->db->query($sql1, $param1);
-
+		if (isset($query))
+		{
 			$totValidProjects = $query1->num_rows();
 
 			$res = $this->chooseRelevantProjects($query, $totValidProjects);
@@ -168,21 +201,37 @@ class SPW_User_Model extends CI_Model
 	/* Given the suggested projects this function returns the regular projects */
 	public function getRegularProjectIds($lSuggestedProjectIds, $user_id)
 	{
-		$term_id = $this->getUserGraduationTerm($user_id);
-
-		if (isset($term_id))
+		if ($this->isUserAStudent($user_id))
 		{
-			$param[0] = $term_id;
+			$term_id = $this->getUserGraduationTerm($user_id);
 
+			if (isset($term_id))
+			{
+				$param[0] = $term_id;
+
+				$sql = 'select spw_project.id
+	         			from spw_project, spw_term
+	         			where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	                   	  	and (spw_term.end_date > NOW()) and (spw_term.id = ?)
+             			order by id ASC';
+
+        		$query = $this->db->query($sql, $param);
+			}
+		}
+		elseif ($this->isUserPossibleMentor($user_id))
+		{
 			$sql = 'select spw_project.id
 	         		from spw_project, spw_term
 	         		where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
-	                   	  and (spw_term.end_date > NOW()) and (spw_term.id = ?)
+	                   	  and (spw_term.end_date > NOW())
              		order by id ASC';
 
-        	$query = $this->db->query($sql, $param);
+             $query = $this->db->query($sql);
+		}
 
-        	sort($lSuggestedProjectIds);
+		if (isset($query))
+		{
+			sort($lSuggestedProjectIds);
 
         	$lValidProjects = array();
 
@@ -201,21 +250,94 @@ class SPW_User_Model extends CI_Model
 		return NULL;
 	}
 
+	public function isUserAStudent($user_id)
+	{
+		$param[0] = $user_id;
+		$sql = 'select id
+				from spw_role_user
+				where (user = ?) and (role = 5)';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			return true;
+		}
+		return NULL;
+	}
+
+	public function isUserAdmin($user_id)
+	{
+		$param[0] = $user_id;
+		$sql = 'select id
+				from spw_role_user
+				where (user = ?) and (role = 1)';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			return true;
+		}
+		return NULL;
+	}
+
+	public function isUserHeadProfessor($user_id)
+	{
+		$param[0] = $user_id;
+		$sql = 'select id
+				from spw_role_user
+				where (user = ?) and (role = 2)';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			return true;
+		}
+		return NULL;
+	}
+
+	public function isUserPossibleMentor($user_id)
+	{
+		$param[0] = $user_id;
+		$sql = 'select id
+				from spw_role_user
+				where (user = ?) and ((role = 2) or (role = 3) or (role = 4))';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			return true;
+		}
+		return NULL;
+	}
+
 	/* return the id of the project the user belong or false if does not have a project */
-	public function userHaveProject($user_id)
+	public function userHaveProjects($user_id)
 	{
 		$param[0] = $user_id;
 
-		$sql = 'select project
-				from spw_user
-				where (id = ?) and (project is not null)';
+		if ($this->isUserAStudent($user_id))
+		{
+			$sql = 'select project
+					from spw_user
+					where (id = ?) and (project is not null)';
 
-		$query = $this->db->query($sql, $param);
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$sql = 'select project
+					from spw_mentor_project
+					where (mentor = ?)';
+
+			$query = $this->db->query($sql, $param);
+		}
 
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row(0);
-			return $row->project;
+			$res = array();
+
+			foreach ($query->result() as $row)
+			{
+				$res[] = $row->project;
+			}
+
+			return $res;
 		}
 		else
 		{

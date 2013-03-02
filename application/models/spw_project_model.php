@@ -8,7 +8,7 @@ class SPW_Project_Model extends CI_Model
 	public $max_students;
 
 	//the id of the SPW_User
-	public $team_leader;
+	public $proposed_by;
 
 	//the id of the SPW_Term
 	public $delivery_term;
