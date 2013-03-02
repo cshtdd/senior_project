@@ -45,7 +45,8 @@ $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 
 $route['(?i)(me)'] = 'usercontroller/current_user';
 $route['(?i)(user)'] = 'usercontroller/current_user';
-$route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
+//$route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
+$route['(?i)(user)/(:any)'] = 'usercontroller/$2';
 
 
 $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
