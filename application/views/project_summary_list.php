@@ -32,9 +32,9 @@
 			</p>
 
 			<ul class="unstyled inline">
-				<lh class="muted">Team Leader:</lh>
+				<lh class="muted">Proposed By:</lh>
 				<li>
-					<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->teamLeaderSummary) )?>
+					<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->proposedBySummary) )?>
 				</li>
 			</ul>
 
@@ -75,7 +75,7 @@
 				<?php }?>
 			</ul>
 
-			Delivery Date: <?php echo $iProject->term->end_date ?>
+			Delivery Term: <?php echo strtoupper($iProject->term->name) ?>
 			<!--Project Status: <?php echo $iProject->project->status->name ?> -->
 		</li>
 	<?php } ?>

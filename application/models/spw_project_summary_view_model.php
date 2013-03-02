@@ -15,7 +15,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	public $lMentorSummaries;
 
 	//a SPW_User_Summary object
-	public $teamLeaderSummary;
+	public $proposedBySummary;
 
 	//an array of SPW_User_Summary_View_Model
 	public $lTeamMemberSummaries;
@@ -70,7 +70,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	}
 
 	/* this function fills a list of projects with their data */
-	public function prepareProjectsDataToShow($lProjectIds, $projectId)
+	public function prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList)
 	{
 		$length = count($lProjectIds);
 
@@ -130,12 +130,9 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$project_summ_vm->lSkills = $lSkills;
 
 				//get the users that belong to the project as mentors
-				$sql3 = 'select allUsersBelong.*
-						 from spw_role_user, (select *
-						 					  from spw_user
-						 					  where (project = ?)) as allUsersBelong
-						 where (spw_role_user.user = allUsersBelong.id) and 
-						 	   ((spw_role_user.role = 3) or (spw_role_user.role = 4))';
+				$sql3 = 'select spw_user.*
+						 from spw_user, spw_mentor_project
+						 where (spw_mentor_project.project = ?) and (spw_mentor_project.mentor = spw_user.id)';
 				$query3 = $this->db->query($sql3, $param);
 				$mentorsNum = $query3->num_rows();
 				$lMentorsSumm = array();
@@ -151,17 +148,17 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				}
 				$project_summ_vm->lMentorSummaries = $lMentorsSumm;
 
-				//get the team member info of the project
+				//get the proposed_by user info of the project
 				$sql4 = 'select spw_user.*
-						 from spw_user, (select team_leader
+						 from spw_user, (select proposed_by
 						 	             from spw_project
 						 	             where (id = ?)) as uId
-						 where (spw_user.id = uId.team_leader)';
+						 where (spw_user.id = uId.proposed_by)';
 				$query4 = $this->db->query($sql4, $param);
 				$row = $query4->row(0, 'SPW_User_Model');
-				$tLeaderSumm = new SPW_User_Summary_View_Model();
-				$tLeaderSumm->user = $row;
-				$project_summ_vm->teamLeaderSummary = $tLeaderSumm;
+				$proposedBySumm = new SPW_User_Summary_View_Model();
+				$proposedBySumm->user = $row;
+				$project_summ_vm->proposedBySummary = $proposedBySumm;
 
 				//get the students info that belong to the project
 				$sql5 = 'select allUsersBelong.*
@@ -186,7 +183,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 
 				if (!($project_summ_vm->justList))
 				{
-					if ($projectId == $lProjectIds[$i])
+					if ($this->isProjectInList($belongProjectIdsList, $lProjectIds[$i]))
 					{
 						$project_summ_vm->displayLeave = TRUE;
 						$project_summ_vm->displayJoin = FALSE;
@@ -206,6 +203,19 @@ class SPW_Project_Summary_View_Model extends CI_Model
 			$lProjects[] = $project_summ_vm;
 		}
 		return $lProjects;
+	}
+
+	private function isProjectInList($belongProjIdsList, $project_Id)
+	{
+		$length = count($belongProjIdsList);
+
+		for ($i = 0; $i < $length; $i++)
+		{
+			if ($belongProjIdsList[$i] == $project_Id)
+				return true;
+		}
+
+		return NULL;
 	}
 
 }
