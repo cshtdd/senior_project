@@ -39,7 +39,7 @@
 			</ul>
 
 			<ul class="unstyled inline">
-				<lh class="muted">Team Mentors:</lh>
+				<lh class="muted">Mentors:</lh>
 
 				<?php if (isset($iProject->lMentorSummaries) && count($iProject->lMentorSummaries) > 0) { ?>
 					

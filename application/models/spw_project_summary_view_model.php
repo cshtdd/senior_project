@@ -70,7 +70,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	}
 
 	/* this function fills a list of projects with their data */
-	public function prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList)
+	public function prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, $pastProjects)
 	{
 		$length = count($lProjectIds);
 
@@ -183,16 +183,19 @@ class SPW_Project_Summary_View_Model extends CI_Model
 
 				if (!($project_summ_vm->justList))
 				{
-					if ($this->isProjectInList($belongProjectIdsList, $lProjectIds[$i]))
+					if (!$pastProjects)
 					{
-						$project_summ_vm->displayLeave = TRUE;
-						$project_summ_vm->displayJoin = FALSE;
+						if ($this->isProjectInList($belongProjectIdsList, $lProjectIds[$i]))
+						{
+							$project_summ_vm->displayLeave = TRUE;
+							$project_summ_vm->displayJoin = FALSE;
+						}
+						else
+						{
+							$project_summ_vm->displayLeave = FALSE;
+							$project_summ_vm->displayJoin = TRUE;
+						}	
 					}
-					else
-					{
-						$project_summ_vm->displayLeave = FALSE;
-						$project_summ_vm->displayJoin = TRUE;
-					}	
 				} 
 			}
 			else

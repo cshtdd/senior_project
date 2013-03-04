@@ -11,7 +11,11 @@ class SPW_User_Model extends CI_Model
 	//didn't we talk about a separate table... ahhh I remember,
 	//this field will be blank fro google users 
 	public $hash_pwd;
-	public $summary;
+	public $summary_spw;
+
+	public $headline_linkedIn;
+	public $summary_linkedIn;
+	public $positions_linkedIn;
 
 	//the id of the SPW_Term
 	public $graduation_term;
@@ -19,7 +23,6 @@ class SPW_User_Model extends CI_Model
 	public $project;
 	public $google_id;
 	public $linkedin_id;
-
 
 	public function __construct()
 	{

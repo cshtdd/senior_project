@@ -34,7 +34,8 @@ class ProjectController extends CI_Controller
 
 	public function past_projects()
 	{
-		$lProjects = $this->getPastProjectsInternal();
+		$lProjectIds = $this->SPW_Project_Model->getPastProjects();
+		$lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, NULL, TRUE);
 		if ( (!isset($lProjects) || count($lProjects) == 0) )
 		{
 			$no_results = true;
