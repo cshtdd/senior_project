@@ -21,6 +21,32 @@ class SPW_Project_Model extends CI_Model
 		parent::__construct();
 	}
 
+	/* obtain past projects */
+	public function getPastProjects()
+	{
+		$sql = 'select spw_project.id
+	         	from spw_project, spw_term
+	         	where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	                   	and (spw_term.end_date < NOW())
+             	order by id ASC';
+
+        $query = $this->db->query($sql);
+
+		if (isset($query))
+		{
+        	$lPastProjects = array();
+
+        	foreach ($query->result() as $row)
+			{
+				$lPastProjects[] = $row->id;
+			}
+
+			return $lPastProjects;
+		}
+
+		return NULL;
+	}
+
 	/* return the list of suggested user IDs with the highest matches having in
 	   count that the user is going to graduate in the same term as the project,
 	   is not yet the closed_requests date and the project have been aproved */
