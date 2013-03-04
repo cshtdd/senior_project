@@ -30,7 +30,73 @@ class UserController extends CI_Controller
 		$this->profile($current_user_id);
 	} 
 
-	public function linkedIn_initiate()
+    public function parse_positions($positions)
+    {
+
+    	$positions = $positions->values; 
+    	$result =  array();
+
+    	for($i = 0; $i < count($positions); $i++)
+    	{
+    		$current_position = $positions[$i];
+
+    		$end_date;
+    		if($current_position->isCurrent) 
+    		{
+    			$end_date = (object)array();
+    		}else{
+    			$end_date =  $current_position->endDate;
+    		}
+
+    		$result[$i] = (object) array( 
+										'company_name' 		=> $current_position->company->name,
+										'company_industry' 	=> $current_position->company->industry,
+										'start_date'        => $current_position->startDate,
+										'end_date'	        => $end_date,
+										'title'				=> $current_position->title,
+										'summary'			=> $current_position->summary,
+										);
+    	}
+
+    	return $result;
+    }
+
+    public function parse_skills($skills)
+    {
+		
+    	$skills = $skills->values; 
+    	$result =  array();
+
+    	for($i = 0; $i < count($skills); $i++)
+    	{
+    		$current_skill = $skills[$i];
+
+    		$result[$i] = (object) array( 
+										'name' => $current_skill->skill->name,
+										);
+    	}
+
+    	return $result;
+    }
+
+    public function parse_languages($languages)
+    {
+    	$languages = $languages->values; 
+    	$result =  array();
+
+    	for($i = 0; $i < count($languages); $i++)
+    	{
+    		$current_language = $languages[$i];
+
+    		$result[$i] = (object) array( 
+										'name' => $current_language->language->name,
+										);
+    	}
+
+    	return $result;
+    }
+
+    public function linkedIn_initiate()
 	{
 	 	// setup before redirecting to Linkedin for authentication.
          $linkedin_config = array(
@@ -73,44 +139,36 @@ class UserController extends CI_Controller
 
         $response = $this->linkedin->retrieveTokenAccess($oauth_token, $oauth_token_secret, $oauth_verifier);
         
-        // ok if we are good then proceed to retrieve the data from Linkedin
+        
         if($response['success'] === TRUE) {
-            
-        // From this part onward it is up to you on how you want to store/manipulate the data 
-        $oauth_expires_in = $response['linkedin']['oauth_expires_in'];
-        $oauth_authorization_expires_in = $response['linkedin']['oauth_authorization_expires_in'];
-        
-        $response = $this->linkedin->setTokenAccess($response['linkedin']);
-        $profile = $this->linkedin->profile('~:(id,first-name,last-name,picture-url)');
-        $profile_connections = $this->linkedin->profile('~/connections:(id,first-name,last-name,picture-url,industry)');
-        $user = json_decode($profile['linkedin']);
-        $user_array = array('linkedin_id' => $user->id , 'second_name' => $user->lastName , 'profile_picture' => $user->pictureUrl , 'first_name' => $user->firstName);
-        
-        // For example, print out user data
-        echo 'User data:';
-        print '<pre>';
-        print_r($user_array);
-        print '</pre>';
+        	
+	        $oauth_expires_in = $response['linkedin']['oauth_expires_in'];
+	        $oauth_authorization_expires_in = $response['linkedin']['oauth_authorization_expires_in'];
+	        
+	        $response = $this->linkedin->setTokenAccess($response['linkedin']);
+	        $profile = $this->linkedin->profile('~:(id,first-name,last-name,picture-url,headline,email-address,summary,skills,languages,positions)');
 
-        echo '<br><br>';
-            
-        // Example of company data
-        $company = $this->linkedin->company('1337:(id,name,ticker,description,logo-url,locations:(address,is-headquarters))');
-        echo 'Company data:';
-        print '<pre>';
-        print_r($company);
-        print '</pre>';
-        
-        echo '<br><br>';
-        
-        echo 'Logout';
-        echo '<form id="linkedin_connect_form" action="../logout" method="post">';
-        echo '<input type="submit" value="Logout from LinkedIn" />';
-        echo '</form>';
-        
+	        $user = json_decode($profile['linkedin']);
+
+	        $user_profile = (object)array(
+		        					'first_name' 			=> $user->firstName,
+		        					'last_name' 			=> $user->lastName,
+		        					'picture' 				=> $user->pictureUrl,
+		        					'headline_linkedIn' 	=> $user->headline,
+		        					'summary_linkedIn'      => $user->summary,
+		        					'positions_linkedIn'    => $this->parse_positions($user->positions),
+		        					'skills' 				=> $this->parse_skills($user->skills),
+		        					'languages' 			=> $this->parse_languages($user->languages),
+		        				);
+
+	        var_dump($user_profile) ; 				
+	        die();
+
         } else {
           // bad token request, display diagnostic information
           echo "Request token retrieval failed:<br /><br />RESPONSE:<br /><br />" . print_r($response, TRUE);
         }                  
     }
+
+  
 }
