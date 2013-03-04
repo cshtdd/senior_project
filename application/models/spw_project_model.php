@@ -21,6 +21,12 @@ class SPW_Project_Model extends CI_Model
 		parent::__construct();
 	}
 
+	/* obtain past projects */
+	public function getPastProjects()
+	{
+
+	}
+
 	/* return the list of suggested user IDs with the highest matches having in
 	   count that the user is going to graduate in the same term as the project,
 	   is not yet the closed_requests date and the project have been aproved */
