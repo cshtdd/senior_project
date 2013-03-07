@@ -208,7 +208,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 		return $lProjects;
 	}
 
-	private function isProjectInList($belongProjIdsList, $project_Id)
+	public function isProjectInList($belongProjIdsList, $project_Id)
 	{
 		$length = count($belongProjIdsList);
 

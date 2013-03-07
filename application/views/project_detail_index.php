@@ -1,19 +1,15 @@
 <?php $this->load->view("template_header"); ?>
 
-<?php if ($my_project) { ?>
+<?php if ($no_results) { ?>
 
-	<p>We could not match you with anything</p>
+	<p><?php echo $message?></p>
 
 <?php } else { ?>
 
-
-	<?php if (isset($lSuggestedProjects) && count($lSuggestedProjects) > 0) { ?>
-		<?php $this->load->view('project_summary_list', array('lProjects' => $lSuggestedProjects, 'list_title' => 'Suggested Projects') ) ?>
+	<?php if (isset($lProjects) && count($lProjects) > 0) { ?>
+		<?php $this->load->view('project_detail_list', array('lProjects' => $lProjects, 'list_title' => $title,
+		                        'lAlikeStudents' => $lAlikeStudents, 'lAlikeMentors' => $lAlikeMentors, 'lEditable' => $lEditable) ) ?>
 		<hr>
-	<?php } ?>
-
-	<?php if (isset($lRegularProjects) && count($lRegularProjects) > 0) { ?>
-		<?php $this->load->view('project_summary_list', array('lProjects' => $lRegularProjects, 'list_title' => '') )?>
 	<?php } ?>
 
 <?php }?>
