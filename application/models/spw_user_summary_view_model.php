@@ -14,6 +14,7 @@ class SPW_User_Summary_View_Model extends CI_Model
 	{
 		return ucwords($this->user->first_name.' '.$this->user->last_name);
 	}
+
 }
 	
 ?>

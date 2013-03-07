@@ -108,20 +108,37 @@ class SPW_User_Model extends CI_Model
  	}
  
  
-
+ 	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
 	{
 		$param[0] = $user_id;
-		$sql = 'select graduation_term
-		        from spw_user
-		        where (id = ?)';
+		$sql = 'select spw_term.*
+		        from spw_user, spw_term
+		        where (spw_user.id = ?) and (spw_user.graduation_term = spw_term.id)';
 		$query = $this->db->query($sql, $param);
 		if ($query->num_rows() > 0)
 		{
-			$row = $query->row(0);
-			return $row->graduation_term;
+			$row = $query->row(0, 'SPW_Term_Model');
+			return $row;
 		}
 		
+		return NULL;
+	}
+
+	/* return a SPW_User_Model info corresponding to the user id */
+	public function getUserInfo($user_id)
+	{
+		$param[0] = $user_id;
+		$sql = 'select *
+		        from spw_user
+		        where id = ?';
+		$query = $this->db->query($sql, $param);
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row(0, 'SPW_User_Model');
+			return $row;
+		}
+
 		return NULL;
 	}
 
@@ -132,13 +149,13 @@ class SPW_User_Model extends CI_Model
 	{	
 		if ($this->isUserAStudent($user_id))
 		{
-			$term_id = $this->getUserGraduationTerm($user_id);
+			$term = $this->getUserGraduationTerm($user_id);
 
-			if (isset($term_id))
+			if (isset($term))
 			{
 				$param[0] = $user_id;
 
-				$param[1] = $term_id;
+				$param[1] = $term->id;
 
 				$sql = 'select spw_project.id, count(project_skills.skill) as nSkillMatch
 		   		  		from spw_project, (select skill
@@ -193,7 +210,7 @@ class SPW_User_Model extends CI_Model
 		{
 			$totValidProjects = $query1->num_rows();
 
-			$res = $this->chooseRelevantProjects($query, $totValidProjects);
+			$res = $this->chooseRelevantIds($query, $totValidProjects);
 
 			return $res;
 		}
@@ -206,11 +223,11 @@ class SPW_User_Model extends CI_Model
 	{
 		if ($this->isUserAStudent($user_id))
 		{
-			$term_id = $this->getUserGraduationTerm($user_id);
+			$term = $this->getUserGraduationTerm($user_id);
 
-			if (isset($term_id))
+			if (isset($term))
 			{
-				$param[0] = $term_id;
+				$param[0] = $term->id;
 
 				$sql = 'select spw_project.id
 	         			from spw_project, spw_term
@@ -309,7 +326,7 @@ class SPW_User_Model extends CI_Model
 		return NULL;
 	}
 
-	/* return the id of the project the user belong or false if does not have a project */
+	/* return the id of the projects the user belong or false if does not have a project */
 	public function userHaveProjects($user_id)
 	{
 		$param[0] = $user_id;
@@ -317,19 +334,19 @@ class SPW_User_Model extends CI_Model
 		if ($this->isUserAStudent($user_id))
 		{
 			$sql = 'select project
-					from spw_user
-					where (id = ?) and (project is not null)';
-
-			$query = $this->db->query($sql, $param);
+					from spw_user, spw_project
+					where (spw_user.id = ?) and (project = spw_project.id) 
+					       and (spw_project.status = 3)';
 		}
 		else
 		{
 			$sql = 'select project
-					from spw_mentor_project
-					where (mentor = ?)';
-
-			$query = $this->db->query($sql, $param);
+					from spw_mentor_project, spw_project
+					where (mentor = ?) and (spw_project.id = spw_mentor_project.project) 
+					       and (spw_project.status = 3)';
 		}
+
+		$query = $this->db->query($sql, $param);
 
 		if ($query->num_rows() > 0)
 		{
@@ -379,46 +396,46 @@ class SPW_User_Model extends CI_Model
 		}
 	}
 
-	/* given the full list of projects with at least one match, determines which can
-	   actually be suggested to the user*/
-	private function chooseRelevantProjects($allSuggestedProjects, $totalValidProjects)
+	/* given the full list of Ids with at least one match, determines which can
+	   actually be suggested to */
+	private function chooseRelevantIds($allSuggestedIds, $totalValidIds)
 	{
 		$count = 0;
 		$ratio = 3;
-		$lSuggestedProjectIds = array();
-		$ratioProjects = round($totalValidProjects / $ratio);
+		$lSuggestedIds = array();
+		$ratioIds = round($totalValidIds / $ratio);
 		$flag = true;
 
-		foreach ($allSuggestedProjects->result() as $row)
+		foreach ($allSuggestedIds->result() as $row)
 		{
 			if ($flag)
 			{
 				if (($row->nSkillMatch == 1) && ($count == 0))
 				{
 					$flag = false;
-					$lSuggestedProjectIds[$count] = $row->id;
+					$lSuggestedIds[$count] = $row->id;
 					$count++;
 				}
 				else
 				{
-					if (($row->nSkillMatch >= 2) && ($count < $ratioProjects))
+					if (($row->nSkillMatch >= 2) && ($count < $ratioIds))
 					{
-						$lSuggestedProjectIds[$count] = $row->id;
+						$lSuggestedIds[$count] = $row->id;
 						$count++;
 					}
 				}
 			}
 			else
 			{
-				if ($count < $ratioProjects)
+				if ($count < $ratioIds)
 				{
-					$lSuggestedProjectIds[$count] = $row->id;
+					$lSuggestedIds[$count] = $row->id;
 					$count++;
 				}
 			}
 		}
 
-		return $lSuggestedProjectIds;
+		return $lSuggestedIds;
 	}
 
 }
