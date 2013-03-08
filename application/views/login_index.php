@@ -1,33 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>
-		<?php 
-			if (isset($title) && strlen($title) > 0)
-			{
-				echo $title.' - Senior Project';
-			}
-			else
-			{
-				echo 'Senior Project';
-			}
-		?>
-	</title>
+<?php $this->load->view("template_header"); ?>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-
-	<!-- Bootstrap -->
-
-	<link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-
-	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-</head>
 <div>
 	<div>
 		 Do you already have an account on one of these sites? 
