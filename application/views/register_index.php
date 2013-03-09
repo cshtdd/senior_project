@@ -44,7 +44,7 @@
 		echo form_input(array(
 						'id' => 'email_address',
 						'name' => 'email_address',
-						'type' => 'text',
+						'type' => 'email',
 						'class' => 'input-block-level input-large',
 						'placeholder' => 'email@example.com',
 						'value' => set_value('email_address')
