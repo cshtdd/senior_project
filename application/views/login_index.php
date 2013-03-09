@@ -55,7 +55,9 @@
 								'name' => 'email_address',
 								'type' => 'email',
 								'class' => 'input-block-level input-large',
-								'placeholder' => 'Email address'
+								'placeholder' => 'Email address',
+								'required' => '',
+								'title' => 'Email address'
 							));
 
 				//<input type="password" class="input-block-level" placeholder="Password">
@@ -64,7 +66,9 @@
 								'id' => 'password',
 								'name' => 'password',
 								'class' => 'input-block-level input-large',
-								'placeholder' => 'Password'
+								'placeholder' => 'Password',
+								'required' => '',
+								'title' => 'Password'
 							));
 
 				//<button class="btn btn-large btn-primary" type="submit">Sign in</button>
