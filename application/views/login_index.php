@@ -1,6 +1,29 @@
 <?php $this->load->view("template_header"); ?>
 <h2>Log In</h2>
 
+<!-- START displaying validation errors -->
+<?php 
+	$fullErrorText = validation_errors();
+	if(isset($credentials_error))
+	{
+		$fullErrorText = $fullErrorText.$credentials_error; 
+	}
+
+	if (strlen($fullErrorText) > 0)
+	{ 
+?>
+		<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+
+<?php 
+		echo $fullErrorText;
+?>
+		</div>
+<?php
+	}
+?>
+<!-- END displaying validation errors -->
+
 <p>
 	Do you already have an account on one of these sites? 
 </p>
@@ -58,17 +81,6 @@
 
 	</div>
 
-	<div class="text-error">
-		<?php echo validation_errors(); ?>
-		<?php
-
-			if(isset($credentials_error))
-			{
-				 echo $credentials_error; 
-			}
-
-		?>
-	</div>
 </div>
 
 
@@ -81,6 +93,8 @@
 		<?php echo anchor('register/', 'click here to sign up') ?>    
 	</h3>
 </div>
+
+
 
 
 <script type="text/javascript"> 
