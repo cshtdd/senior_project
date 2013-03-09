@@ -1,6 +1,6 @@
 <?php $this->load->view("template_header"); ?>
 
-<!-- START displaying validation errors -->
+<!-- START displaying server-side validation errors -->
 <?php
 	$fullErrorText = validation_errors();
 
@@ -23,7 +23,7 @@
 <?php
 	}
 ?>
-<!-- END displaying validation errors -->
+<!-- END displaying server-side validation errors -->
 
 <p>
 	If you don’t already have an account with us
@@ -47,7 +47,9 @@
 						'type' => 'email',
 						'class' => 'input-block-level input-large',
 						'placeholder' => 'email@example.com',
-						'value' => set_value('email_address')
+						'value' => set_value('email_address'),
+						'required' => '',
+						'title' => 'Email address'
 					));
 
 		//echo form_password('password_1','','id="password_1"');
@@ -55,7 +57,9 @@
 						'id' => 'password_1',
 						'name' => 'password_1',
 						'class' => 'input-block-level input-large',
-						'placeholder' => 'Password'
+						'placeholder' => 'Password',
+						'required' => '',
+						'title' => 'Password'
 					));
 
 		//echo form_password('password_2','','id="password_2"');
@@ -63,7 +67,9 @@
 						'id' => 'password_2',
 						'name' => 'password_2',
 						'class' => 'input-block-level input-large',
-						'placeholder' => 'Confirm Password'
+						'placeholder' => 'Confirm Password',
+						'required' => '',
+						'title' => 'Password Confirmation'
 					));
 
 		/* $data = array(
