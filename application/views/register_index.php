@@ -96,6 +96,12 @@
 	</h3>
 </div>
 
+<!--
+	there are thousands of ways of doing this, 
+	none of which involve actual programming it
+	I'll implement this correctly
+-->
+<!--
 <script type="text/javascript">
 
 	$( document ).ready(function() {
@@ -121,5 +127,6 @@
 	});
 
  </script> 
+-->
 
  <?php $this->load->view("template_footer"); ?>
