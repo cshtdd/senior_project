@@ -3,7 +3,7 @@ session_start();
 
 class HomeController extends CI_Controller 
 {
-	private $is_test = true;
+	private $is_test = false;
 
 	public function __construct()
 	{
@@ -74,13 +74,22 @@ class HomeController extends CI_Controller
 
 	private function getRegularProjectsForCurrentUser($lSuggProjectIds)
 	{
-		return $this->SPW_Project_Model->getRegularProjectIds($lSuggProjectIds, getCurrentUserId($this));
+		return $this->SPW_User_Model->getRegularProjectIds($lSuggProjectIds, getCurrentUserId($this));
 	}
 
 	private function prepareProjectsToShow($lProjectsIds)
 	{
-		$projectId = $this->SPW_User_Model->userHaveProject(getCurrentUserId($this));
-		return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectsIds, $projectId);
+		$user_id = getCurrentUserId($this);
+
+		if ($this->SPW_User_Model->isUserAdmin($user_id))
+		{
+			//do nothing for now
+		}
+		else
+		{
+			$belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+			return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectsIds, $belongProjectIdsList, FALSE);
+		}
 	}
 
 	private function getSuggestedProjectsForUserInternalTest()

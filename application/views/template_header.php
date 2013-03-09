@@ -26,7 +26,6 @@
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -84,8 +83,9 @@
 		?>
 
 		<ul class="nav nav-pills pull-right">
+			<?php echo get_nav_item('home', 'Home') ?>
 			<?php echo get_nav_item('past-projects', 'Past Projects') ?>
-			<?php echo get_nav_item('project', 'My Project') ?>
+			<?php echo get_nav_item('project', 'My Project(s)') ?>
 			<?php echo get_nav_item('me', 'My Profile') ?>
 			<?php echo get_nav_item('about', 'About') ?>
 			<?php echo get_nav_item('logout', 'Logout') ?>

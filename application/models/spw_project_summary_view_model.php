@@ -15,10 +15,12 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	public $lMentorSummaries;
 
 	//a SPW_User_Summary object
-	public $teamLeaderSummary;
+	public $proposedBySummary;
 
 	//an array of SPW_User_Summary_View_Model
 	public $lTeamMemberSummaries;
+
+	public $justList;
 	
 	public $displayJoin;
 	public $displayLeave;
@@ -46,8 +48,29 @@ class SPW_Project_Summary_View_Model extends CI_Model
 		return $resultStr;
 	}
 
+	/* obtaining the term info for a list of projects with the same delivery_term to determine
+	   if the closed_requests date passed so the users will be able to see the projects but not
+	   able to join any of them */
+	public function getProjectTermInfo($project_Id)
+	{
+		$param[0] = $project_Id;
+		$sql = 'select spw_term.*
+		        from spw_term, spw_project
+		        where (spw_project.id = ?) and (spw_project.delivery_term = spw_term.id)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+		{
+			$res = $query->row(0, 'SPW_Term_Model');
+
+			return $res;
+		}
+
+		return NULL;
+	}
+
 	/* this function fills a list of projects with their data */
-	public function prepareProjectsDataToShow($lProjectIds, $projectId)
+	public function prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, $pastProjects)
 	{
 		$length = count($lProjectIds);
 
@@ -70,15 +93,20 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$project = $row;
 				$project_summ_vm->project = $project;
 
-				$param[0] = $project->delivery_term;
-				//get term info for the project
-				$sql1 = 'select *
-						 from spw_term
-						 where (id = ?)';
-				$query1 = $this->db->query($sql1, $param);
-				$row = $query1->row(0, 'SPW_Term_Model');
-				$term = $row;
-				$project_summ_vm->term = $term;
+				$project_summ_vm->justList = true;
+
+				$term = $this->getProjectTermInfo($project->id);
+
+				if (isset($term))
+				{
+					$currentDate = date('Y-m-d');
+					if ($term->closed_requests > $currentDate)
+					{
+						$project_summ_vm->justList = false;
+					}
+
+					$project_summ_vm->term = $term;
+				}
 
 				$param[0] = $project->id;
 				//get list of skills info of the project
@@ -102,12 +130,9 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$project_summ_vm->lSkills = $lSkills;
 
 				//get the users that belong to the project as mentors
-				$sql3 = 'select allUsersBelong.*
-						 from spw_role_user, (select *
-						 					  from spw_user
-						 					  where (project = ?)) as allUsersBelong
-						 where (spw_role_user.user = allUsersBelong.id) and 
-						 	   ((spw_role_user.role = 3) or (spw_role_user.role = 4))';
+				$sql3 = 'select spw_user.*
+						 from spw_user, spw_mentor_project
+						 where (spw_mentor_project.project = ?) and (spw_mentor_project.mentor = spw_user.id)';
 				$query3 = $this->db->query($sql3, $param);
 				$mentorsNum = $query3->num_rows();
 				$lMentorsSumm = array();
@@ -123,17 +148,17 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				}
 				$project_summ_vm->lMentorSummaries = $lMentorsSumm;
 
-				//get the team member info of the project
+				//get the proposed_by user info of the project
 				$sql4 = 'select spw_user.*
-						 from spw_user, (select team_leader
+						 from spw_user, (select proposed_by
 						 	             from spw_project
 						 	             where (id = ?)) as uId
-						 where (spw_user.id = uId.team_leader)';
+						 where (spw_user.id = uId.proposed_by)';
 				$query4 = $this->db->query($sql4, $param);
 				$row = $query4->row(0, 'SPW_User_Model');
-				$tLeaderSumm = new SPW_User_Summary_View_Model();
-				$tLeaderSumm->user = $row;
-				$project_summ_vm->teamLeaderSummary = $tLeaderSumm;
+				$proposedBySumm = new SPW_User_Summary_View_Model();
+				$proposedBySumm->user = $row;
+				$project_summ_vm->proposedBySummary = $proposedBySumm;
 
 				//get the students info that belong to the project
 				$sql5 = 'select allUsersBelong.*
@@ -156,16 +181,22 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				}
 				$project_summ_vm->lTeamMemberSummaries = $lStudentsSumm;
 
-				if ($projectId == $lProjectIds[$i])
+				if (!($project_summ_vm->justList))
 				{
-					$project_summ_vm->displayLeave = TRUE;
-					$project_summ_vm->displayJoin = FALSE;
-				}
-				else
-				{
-					$project_summ_vm->displayLeave = FALSE;
-					$project_summ_vm->displayJoin = TRUE;
-				}	 
+					if (!$pastProjects)
+					{
+						if ($this->isProjectInList($belongProjectIdsList, $lProjectIds[$i]))
+						{
+							$project_summ_vm->displayLeave = TRUE;
+							$project_summ_vm->displayJoin = FALSE;
+						}
+						else
+						{
+							$project_summ_vm->displayLeave = FALSE;
+							$project_summ_vm->displayJoin = TRUE;
+						}	
+					}
+				} 
 			}
 			else
 			{
@@ -175,6 +206,19 @@ class SPW_Project_Summary_View_Model extends CI_Model
 			$lProjects[] = $project_summ_vm;
 		}
 		return $lProjects;
+	}
+
+	public function isProjectInList($belongProjIdsList, $project_Id)
+	{
+		$length = count($belongProjIdsList);
+
+		for ($i = 0; $i < $length; $i++)
+		{
+			if ($belongProjIdsList[$i] == $project_Id)
+				return true;
+		}
+
+		return NULL;
 	}
 
 }

@@ -14,20 +14,184 @@ class ProjectController extends CI_Controller
 	}
 
 
-	public function details($project_id='')
+	public function details($project_ids, $belongProject=false)
 	{
-		$this->output->set_output('project details '.$project_id);
+		$lProjects = array();
+		$lAlikeStudents = array();
+		$lAlikeMentors = array();
+		$lEditable = array();
+		$message = '';
+
+		$no_results = false;
+
+		if ($belongProject)
+		{
+			$lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $project_ids, FALSE);
+
+			$title = 'My Project(s) Details';
+			if (!isset($project_ids))
+			{
+				$no_results = true;
+				if ($this->SPW_User_Model->isUserAStudent(getCurrentUserId($this)))
+				{
+					$term = $this->SPW_User_Model->getUserGraduationTerm(getCurrentUserId($this));
+					$closedRequestsDate = date('D, d M Y', strtotime($term->closed_requests));
+					$message = 'You have not joined to a project yet. Please do so before '.$closedRequestsDate;
+				}
+				else
+				{
+					$message = 'You have not joined to a project yet...';
+				}
+			}
+
+			$length = count($project_ids);
+
+			for ($i = 0; $i < $length; $i++)
+			{
+				$lStudents = array();
+				$lStudentIds = $this->SPW_Project_Model->getSuggestedStudentsGivenMyProject($project_ids[$i]);
+
+				$term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_ids[$i]);
+
+				if (isset($term))
+				{
+					$currentDate = date('Y-m-d');
+					if ($term->closed_requests > $currentDate)
+					{
+						$lEditable[$i] = true;
+					}
+					else
+					{
+						$lEditable[$i] = false;
+					}
+				}
+
+				if (isset($lStudentIds))
+				{
+					for ($j = 0; $j < count($lStudentIds); $j++)
+					{
+						$userSumm = new SPW_User_Summary_View_Model();
+						$userSumm->user = $this->SPW_User_Model->getUserInfo($lStudentIds[$j]);
+						$lStudents[] = $userSumm;
+					}
+				}
+				else
+				{
+					$lStudents = NULL;
+				}
+
+				$lAlikeStudents[$i] = $lStudents;
+
+				$lMentors = array();
+				$lMentorIds = $this->SPW_Project_Model->getSuggestedMentorsGivenMyProject($project_ids[$i]);
+
+				if (isset($lMentorIds))
+				{
+					for ($j = 0; $j < count($lMentorIds); $j++)
+					{
+						$userSumm = new SPW_User_Summary_View_Model();
+						$userSumm->user = $this->SPW_User_Model->getUserInfo($lMentorIds[$j]);
+						$lMentors[] = $userSumm;
+					}
+				}
+				else
+				{
+					$lMentors = NULL;
+				}
+
+				$lAlikeMentors[$i] = $lMentors;
+			}
+
+		}
+		else
+		{
+			$lBelongProjects = $this->getBelongProjectIds();
+			$lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $lBelongProjects, FALSE);
+			$title = 'Project Details';
+
+			$currentUserBelongProjectIds = $this->SPW_User_Model->userHaveProjects(getCurrentUserId($this));
+
+			if ($this->SPW_Project_Summary_View_Model->isProjectInList($currentUserBelongProjectIds, $project_ids[0]))
+			{
+				$term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_ids[0]);
+
+				if (isset($term))
+				{
+					$currentDate = date('Y-m-d');
+					if ($term->closed_requests > $currentDate)
+					{
+						$lEditable[0] = true;
+					}
+					else
+					{
+						$lEditable[0] = false;
+					}
+				}
+
+				$lStudents = array();
+				$lStudentIds = $this->SPW_Project_Model->getSuggestedStudentsGivenMyProject($project_ids[0]);
+				if (count($lStudentIds) > 0)
+				{
+					for ($j = 0; $j < count($lStudentIds); $j++)
+					{
+						$userSumm = new SPW_User_Summary_View_Model();
+						$userSumm->user = $this->SPW_User_Model->getUserInfo($lStudentIds[$j]);
+						$lStudents[] = $userSumm;
+					}
+				}
+				else
+				{
+					$lStudents = NULL;
+				}
+
+				$lMentors = array();
+				$lMentorIds = $this->SPW_Project_Model->getSuggestedMentorsGivenMyProject($project_ids[0]);
+				if (count($lMentorIds) > 0)
+				{
+					for ($j = 0; $j < count($lMentorIds); $j++)
+					{
+						$userSumm = new SPW_User_Summary_View_Model();
+						$userSumm->user = $this->SPW_User_Model->getUserInfo($lMentorIds[$j]);
+						$lMentors[] = $userSumm;
+					}
+				}
+				else
+				{
+					$lMentors = NULL;
+				}
+			}
+			else
+			{
+				$lEditable[0] = false;
+				$lStudents = NULL;
+				$lMentors = NULL;
+			}
+
+			$lAlikeStudents[0] = $lStudents;
+			$lAlikeMentors[0] = $lMentors;
+		}
+
+		$data['title'] = $title;
+		$data['lEditable'] = $lEditable;
+		$data['no_results'] = $no_results;
+		$data['message'] = $message; 
+		$data['lProjects'] = $lProjects;
+		$data['lAlikeStudents'] = $lAlikeStudents;
+		$data['lAlikeMentors'] = $lAlikeMentors;
+
+		$this->load->view('project_detail_index', $data);
 	}
 
 	public function current_project()
 	{
-		$current_project_id = $this->getCurrentProjectId();
-		$this->details($current_project_id);
+		$current_project_ids = $this->getBelongProjectIds();
+		$this->details($current_project_ids, true);
 	}
 
 	public function past_projects()
 	{
-		$lProjects = $this->getPastProjectsInternal();
+		$lProjectIds = $this->SPW_Project_Model->getPastProjects();
+		$lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, NULL, TRUE);
 		if ( (!isset($lProjects) || count($lProjects) == 0) )
 		{
 			$no_results = true;
@@ -45,7 +209,7 @@ class ProjectController extends CI_Controller
 	}
 
 
-	private function getCurrentProjectId()
+	private function getBelongProjectIds()
 	{
 		if (is_test($this))
 		{
@@ -53,7 +217,7 @@ class ProjectController extends CI_Controller
 		}
 		else
 		{
-			throw new Exception('not implemented');
+			return $this->SPW_User_Model->userHaveProjects(getCurrentUserId($this));
 		}
 	}
 

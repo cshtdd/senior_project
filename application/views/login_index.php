@@ -1,8 +1,9 @@
 <?php $this->load->view("template_header"); ?>
 
 Do you already have an account on one of these sites? 
-
+<a href="<?php echo base_url('/login/oauth2')?>">
 <img src="https://ssl.gstatic.com/images/logos/google_logo_41.png" />
+</a>
 <img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" />
 
 
@@ -63,5 +64,25 @@ Do you already have an account on one of these sites?
 	<?php echo anchor('register/', 'click here to sign up', 'style="color: #0077CC; cursor:pointer; text-decoration:none"'); ?>    
 </div>
 
+<script>                                         
 
+	$( document ).ready(function() {
+
+	  	$("#btn").on("click", function(e) {
+	  		var 
+	  			fields = {
+	  				email: $.trim($("#email_address").val()),
+	  				password1: $.trim($('#password').val()),
+	  			};
+			if( !fields.email.length ){
+				e.preventDefault();
+				$(".errors").html("Email address required");
+			}else if( !fields.password.length){
+				e.preventDefault();
+				$(".errors").html("Password fields required");
+			}
+	  	});
+	});
+
+ </script> 
 <?php $this->load->view("template_footer"); ?>

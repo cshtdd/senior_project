@@ -18,7 +18,14 @@ ul {
   list-style: none;  
 }
 
-
+/*this class is not/shall not be used*/
+/*
+.error
+{
+  color: red;
+  font-weight: bold;
+}
+*/
 
 /*
 .project_summary {
