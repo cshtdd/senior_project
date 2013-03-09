@@ -1,68 +1,85 @@
 <?php $this->load->view("template_header"); ?>
 
-<?php 
-	echo form_open('register/register', array(
-		'class' => 'form-register',
-		'id' => 'registration_form'
-	));
-?>
+<p>
+	If you don’t already have an account with us
+</p>
 
-<h2>Create Account</h2>
+<div class="indent">
+	<?php 
+		echo form_open('register/register', array(
+			'class' => 'form-register',
+			'id' => 'registration_form'
+		));
+	?>
 
-<?php
-	//echo form_input('email_address',set_value('email_address'),'id="email_address"');
-	echo form_input(array(
-					'id' => 'email_address',
-					'name' => 'email_address',
-					'type' => 'text',
-					'class' => 'input-block-level input-large',
-					'placeholder' => 'email@example.com',
-					'value' => set_value('email_address')
-				));
+	<h2>Create Account</h2>
 
-	//echo form_password('password_1','','id="password_1"');
-	echo form_password(array(
-					'id' => 'password_1',
-					'name' => 'password_1',
-					'class' => 'input-block-level input-large',
-					'placeholder' => 'Password'
-				));
+	<?php
+		//echo form_input('email_address',set_value('email_address'),'id="email_address"');
+		echo form_input(array(
+						'id' => 'email_address',
+						'name' => 'email_address',
+						'type' => 'text',
+						'class' => 'input-block-level input-large',
+						'placeholder' => 'email@example.com',
+						'value' => set_value('email_address')
+					));
 
-	//echo form_password('password_2','','id="password_2"');
-	echo form_password(array(
-					'id' => 'password_2',
-					'name' => 'password_2',
-					'class' => 'input-block-level input-large',
-					'placeholder' => 'Confirm Password'
-				));
+		//echo form_password('password_1','','id="password_1"');
+		echo form_password(array(
+						'id' => 'password_1',
+						'name' => 'password_1',
+						'class' => 'input-block-level input-large',
+						'placeholder' => 'Password'
+					));
 
-	/* $data = array(
-		'id' => 'btn',
-		'class' => 'btn',
-		'name' => 'accounts',
-		);
+		//echo form_password('password_2','','id="password_2"');
+		echo form_password(array(
+						'id' => 'password_2',
+						'name' => 'password_2',
+						'class' => 'input-block-level input-large',
+						'placeholder' => 'Confirm Password'
+					));
 
-	 echo form_submit($data,'Create Senior Project Account');
-	*/
-	echo form_submit(array(
-		'id' => 'btn',
-		'name' => 'accounts',
-		'type' => 'Submit',
-		'class' => 'btn btn-large btn-primary',
-		'value' => 'Create Senior Project Account'
-	));
+		/* $data = array(
+			'id' => 'btn',
+			'class' => 'btn',
+			'name' => 'accounts',
+			);
 
-echo form_close() ?>
+		 echo form_submit($data,'Create Senior Project Account');
+		*/
+		echo form_submit(array(
+			'id' => 'btn',
+			'name' => 'accounts',
+			'type' => 'Submit',
+			'class' => 'btn btn-large btn-primary',
+			'value' => 'Register'
+		));
 
-<div class="errors">
-<?php echo validation_errors(); ?>
-<?php
+	echo form_close() ?>
 
-	if(isset($already_registered))
-	{
-		 echo "This email address is already registered"; 	
-	}
-?>
+	<div class="errors">
+	<?php echo validation_errors(); ?>
+	<?php
+
+		if(isset($already_registered))
+		{
+			 echo "This email address is already registered"; 	
+		}
+	?>
+	</div>
+
+</div>
+
+<p>
+	If you already have an account with us
+</p>
+
+<div class="indent">
+	<h3>
+		<?php echo anchor('login', 'log in here...') ?>    
+	</h3>
 </div>
 
 <script type="text/javascript">
