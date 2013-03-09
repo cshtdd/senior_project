@@ -102,37 +102,4 @@
 	</h3>
 </div>
 
-<!--
-	there are thousands of ways of doing this, 
-	none of which involve actual programming it
-	I'll implement this correctly
--->
-<!--
-<script type="text/javascript">
-
-	$( document ).ready(function() {
-
-	  	$("#btn").on("click", function(e) {
-	  		var 
-	  			fields = {
-	  				email: $.trim($("#email_address").val()),
-	  				password1: $.trim($('#password_1').val()),
-	  				password2: $.trim($('#password_2').val())
-	  			};
-			if( !fields.email.length ){
-				e.preventDefault();
-				$(".errors").html("Email address required");
-			}else if( !fields.password1.length && !fields.password2.length ){
-				e.preventDefault();
-				$(".errors").html("Password fields required");
-			}else if( fields.password1 !== fields.password2){
-				e.preventDefault();
-				$(".errors").html("Passwords did not match.");
-			}
-	  	});
-	});
-
- </script> 
--->
-
  <?php $this->load->view("template_footer"); ?>
