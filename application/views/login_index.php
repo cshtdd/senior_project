@@ -1,6 +1,8 @@
 <?php $this->load->view("template_header"); ?>
+<h2>Log In</h2>
 
 Do you already have an account on one of these sites? 
+
 <div class="row-fluid">
 
 	<div class="span2 well">
@@ -66,13 +68,13 @@ Do you already have an account on one of these sites?
 </div>
 
 
-<div id="affiliate-registration-group">
-	If you don’t already have an account on any of the above
 
-	<?php echo anchor('register/', 'click here to sign up', 'style="color: #0077CC; cursor:pointer; text-decoration:none"'); ?>    
-</div>
+If you don’t already have an account on any of the above
 
-<script>                                         
+<?php echo anchor('register/', 'click here to sign up', 'style="color: #0077CC; cursor:pointer; text-decoration:none"'); ?>    
+
+
+<script type="text/javascript"> 
 
 	$( document ).ready(function() {
 
@@ -92,5 +94,7 @@ Do you already have an account on one of these sites?
 	  	});
 	});
 
- </script> 
+</script> 
+
+
 <?php $this->load->view("template_footer"); ?>
