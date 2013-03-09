@@ -1,5 +1,30 @@
 <?php $this->load->view("template_header"); ?>
 
+<!-- START displaying validation errors -->
+<?php
+	$fullErrorText = validation_errors();
+
+	if(isset($already_registered))
+	{
+		 $fullErrorText = $fullErrorText.'This email address is already registered';
+	}
+
+	if (strlen($fullErrorText) > 0)
+	{ 
+?>
+		<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="errors"> 
+<?php 
+		echo $fullErrorText;
+?>
+			</div>
+		</div>
+<?php
+	}
+?>
+<!-- END displaying validation errors -->
+
 <p>
 	If you don’t already have an account with us
 </p>
@@ -58,17 +83,6 @@
 		));
 
 	echo form_close() ?>
-
-	<div class="errors">
-	<?php echo validation_errors(); ?>
-	<?php
-
-		if(isset($already_registered))
-		{
-			 echo "This email address is already registered"; 	
-		}
-	?>
-	</div>
 
 </div>
 
