@@ -14,10 +14,11 @@
 ?>
 		<div class="alert alert-error">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-
+			<div class="errors"> 
 <?php 
 		echo $fullErrorText;
 ?>
+			</div>
 		</div>
 <?php
 	}
