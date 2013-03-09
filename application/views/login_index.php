@@ -1,7 +1,7 @@
 <?php $this->load->view("template_header"); ?>
 <h2>Log In</h2>
 
-<!-- START displaying validation errors -->
+<!-- START displaying server-side validation errors -->
 <?php 
 	$fullErrorText = validation_errors();
 	if(isset($credentials_error))
@@ -23,7 +23,7 @@
 <?php
 	}
 ?>
-<!-- END displaying validation errors -->
+<!-- END displaying server-side validation errors -->
 
 <p>
 	Do you already have an account on one of these sites? 
@@ -99,34 +99,5 @@
 	</h3>
 </div>
 
-
-<!--
-	there are thousands of ways of doing this, 
-	none of which involve actual programming it
-	I'll implement this correctly
--->
-<!--
-<script type="text/javascript"> 
-
-	$( document ).ready(function() {
-
-	  	$("#btn").on("click", function(e) {
-	  		var 
-	  			fields = {
-	  				email: $.trim($("#email_address").val()),
-	  				password1: $.trim($('#password').val()),
-	  			};
-			if( !fields.email.length ){
-				e.preventDefault();
-				$(".errors").html("Email address required");
-			}else if( !fields.password.length){
-				e.preventDefault();
-				$(".errors").html("Password fields required");
-			}
-	  	});
-	});
-
-</script> 
--->
 
 <?php $this->load->view("template_footer"); ?>
