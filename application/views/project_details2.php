@@ -6,11 +6,9 @@
 
 <?php } else { ?>
 
-<ul class="project_list unstyled">
 
-		<lh><h2><?php echo anchor('project/'.$projectDetails->project->id, $projectDetails->project->title) ?></h2></lh>
+		<h2><?php echo $projectDetails->project->title ?></h2>
 
-		<li class="well">
 
 			<div class="pull-right right-text">
 				<p>
@@ -79,8 +77,7 @@
 
 			Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
 			<!--Project Status: <?php echo $projectDetails->project->status->name ?> -->
-		</li>
-</ul>
+		
 
 <?php }?>
 
