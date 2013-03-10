@@ -30,39 +30,11 @@
 				<?php echo $projectDetails->project->description ?>
 			</p>
 
-<!--
-			<ul class="unstyled inline">
-				<lh class="muted">Proposed By:</lh>
-				<li>
-					<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $projectDetails->proposedBySummary) )?>
-				</li>
-			</ul>
--->
-
 			<?php $this->load->view('user_summaries_full_list', array(
 				'listTitle' => 'Proposed By:',
 				'lUserSummaries' => array($projectDetails->proposedBySummary)
 			)) ?>
 
-<!--
-			<ul class="unstyled inline">
-				<lh class="muted">Mentors:</lh>
-
-				<?php if (isset($projectDetails->lMentorSummaries) && count($projectDetails->lMentorSummaries) > 0) { ?>
-					
-					<?php foreach ($projectDetails->lMentorSummaries as $iMentorSumm) { ?>
-						<li>
-							<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $iMentorSumm) )?>
-						</li>
-					<?php } ?>
-
-				<?php } else { ?>
-
-					<li>This team needs a mentor...</li>
-
-				<?php }?>
-			</ul>
--->
 
 			<?php $this->load->view('user_summaries_full_list', array(
 				'listTitle' => 'Mentors:',
@@ -70,26 +42,6 @@
 				'errorMessage' => 'This team needs a mentor...'
 			)) ?>
 
-
-<!--
-			<ul class="unstyled inline">
-				<lh class="muted">Team Members:</lh>
-
-				<?php if (isset($projectDetails->lTeamMemberSummaries) && count($projectDetails->lTeamMemberSummaries) > 0) { ?>
-
-					<?php foreach ($projectDetails->lTeamMemberSummaries as $iMemberSumm) { ?>
-						<li>
-							<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $iMemberSumm) )?>
-						</li>
-					<?php } ?>
-
-				<?php } else { ?>
-
-					<li>Join this team for a free beer! Not really...</li>
-
-				<?php }?>
-			</ul>
--->
 
 			<?php $this->load->view('user_summaries_full_list', array(
 				'listTitle' => 'Team Members:',
