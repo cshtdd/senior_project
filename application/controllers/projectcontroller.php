@@ -103,8 +103,12 @@ class ProjectController extends CI_Controller
 		{
 			$data['no_results'] = true;
 		}
+		else
+		{
+			$data['no_results'] = false;
+		}
 
-		$data['project_details'] = $project_details;
+		$data['projectDetails'] = $project_details;
 		$data['title'] = 'Project Details';
 
 		$this->load->view($resulting_view_name, $data);
