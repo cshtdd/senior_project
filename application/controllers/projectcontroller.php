@@ -13,8 +13,40 @@ class ProjectController extends CI_Controller
 		//$this->output->cache(60);
 	}
 
+	public function past_projects()
+	{
+		$lProjects = $this->getPastProjectsInternal();
 
-	public function details($project_ids, $belongProject=false)
+		if ( (!isset($lProjects) || count($lProjects) == 0) )
+		{
+			$no_results = true;
+		}
+		else
+		{
+			$no_results = false;
+		}
+
+		$data['title'] = 'Past Projects';
+		$data['no_results'] = $no_results;
+		$data['lProjects'] = $lProjects;
+
+		$this->load->view('project_past_projects', $data);
+	}
+
+
+	public function current_project()
+	{
+		//$current_project_ids = $this->getBelongProjectIds();
+		//$this->detailsInternal($current_project_ids, true);
+		$this->output->set_output('current project ');
+	}
+
+	public function details($project_id)
+	{
+		$this->output->set_output('project details '.$project_id);
+	}
+
+	private function detailsInternal($project_ids, $belongProject=false)
 	{
 		$lProjects = array();
 		$lAlikeStudents = array();
@@ -182,38 +214,11 @@ class ProjectController extends CI_Controller
 		$this->load->view('project_detail_index', $data);
 	}
 
-	public function current_project()
-	{
-		$current_project_ids = $this->getBelongProjectIds();
-		$this->details($current_project_ids, true);
-	}
-
-	public function past_projects()
-	{
-		$lProjects = $this->getPastProjectsInternal();
-
-		if ( (!isset($lProjects) || count($lProjects) == 0) )
-		{
-			$no_results = true;
-		}
-		else
-		{
-			$no_results = false;
-		}
-
-		$data['title'] = 'Past Projects';
-		$data['no_results'] = $no_results;
-		$data['lProjects'] = $lProjects;
-
-		$this->load->view('project_past_projects', $data);
-	}
-
-
 	private function getBelongProjectIds()
 	{
 		if (is_test($this))
 		{
-			return 100;
+			return array(100, 101);
 		}
 		else
 		{
