@@ -47,7 +47,7 @@ class ProjectController extends CI_Controller
 			if (!isset($current_project_ids) ||
 				count($current_project_ids) == 0) //no data to display
 			{
-				$data['title'] = 'My Project';
+				$data['list_title'] = 'My Project';
 				$data['no_results'] = true;
 				$data['message'] = $this->getMessageForCurrentUserWithoutProject();
 
@@ -63,7 +63,7 @@ class ProjectController extends CI_Controller
 			//get the project summary data for the selected projects
 			$lProjects = $this->getCurrentProjectsSummariesWithIdsInternal($current_project_ids);
 
-			$data['title'] = 'My Projects';
+			$data['list_title'] = 'My Projects';
 			$data['no_results'] = false;
 			$data['lProjects'] = $lProjects;
 			$this->load->view('project_current_project', $data);
