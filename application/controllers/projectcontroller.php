@@ -76,7 +76,21 @@ class ProjectController extends CI_Controller
 
 	public function details($project_id)
 	{
-		$this->output->set_output('project details '.$project_id);
+		//$this->output->set_output('project details '.$project_id);
+
+		//$data['title'] = 'project details '.$project_id;
+		//$this->load->view('project_details2', $data);
+
+		$current_project_ids = $this->getBelongProjectIds();
+		$resulting_view_name = 'project_details2';
+
+		if (in_array($project_id, $current_project_ids)) //if we are viewing the details of the current project
+		{
+			$resulting_view_name = 'project_details2_edit';
+		}
+
+		$data['title'] = 'Project Details';
+		$this->load->view($resulting_view_name, $data);
 	}
 
 /*
@@ -258,7 +272,7 @@ class ProjectController extends CI_Controller
 	{
 		if (is_test($this))
 		{
-			return array(/*100, 101*/);
+			return array(100, 101);
 		}
 		else
 		{
