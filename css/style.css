@@ -127,3 +127,8 @@ h4 a:visited
   /*text-indent: 1em;*/
   margin-left: 2em;
 }
+
+.skill
+{
+    padding: 5px;
+}

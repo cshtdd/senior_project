@@ -2,13 +2,13 @@
 	if (isset($lSkills) && count($lSkills) > 0)
 	{
 ?>
-		<ul>
+		<ul class="inline">
 		<?php
 			//print_r($lSkills);
 			foreach ($lSkills as $iSkill) 
 			{
 		?>
-				<li> <?php echo $iSkill->name ?> </li>
+				<li class="label label-info skill"> <?php echo $iSkill->name ?> </li>
 		<?php	
 			}
 		?>
