@@ -4,11 +4,10 @@
 ?>
 		<ul class="inline">
 		<?php
-			//print_r($lSkills);
 			foreach ($lSkills as $iSkill) 
 			{
 		?>
-				<li class="label label-info skill"><?php echo $iSkill->name ?></li>
+				<li class="label skill"><?php echo $iSkill->name ?></li>
 		<?php	
 			}
 		?>
