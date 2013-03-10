@@ -7,7 +7,11 @@
 <?php } else { ?>
 
 	<?php if (isset($lProjects) && count($lProjects) > 0) { ?>
-		<?php $this->load->view('project_summary_list', array('lProjects' => $lProjects, 'list_title' => 'Past Projects') )?>
+		<?php $this->load->view('project_summary_list', 
+			array('lProjects' => $lProjects, 
+			'list_title' => 'Past Projects'
+			) 
+		)?>
 	<?php } ?>
 
 <?php }?>
