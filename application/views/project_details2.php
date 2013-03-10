@@ -33,7 +33,7 @@
 			<ul class="unstyled inline">
 				<lh class="muted">Proposed By:</lh>
 				<li>
-					<?php $this->load->view('user_summary_full_name', array('user_summary' => $projectDetails->proposedBySummary) )?>
+					<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $projectDetails->proposedBySummary) )?>
 				</li>
 			</ul>
 
@@ -44,7 +44,7 @@
 					
 					<?php foreach ($projectDetails->lMentorSummaries as $iMentorSumm) { ?>
 						<li>
-							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMentorSumm) )?>
+							<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $iMentorSumm) )?>
 						</li>
 					<?php } ?>
 
@@ -63,7 +63,7 @@
 
 					<?php foreach ($projectDetails->lTeamMemberSummaries as $iMemberSumm) { ?>
 						<li>
-							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMemberSumm) )?>
+							<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $iMemberSumm) )?>
 						</li>
 					<?php } ?>
 
