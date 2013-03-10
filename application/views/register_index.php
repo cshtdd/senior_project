@@ -30,6 +30,22 @@
 </p>
 
 <div class="indent">
+
+	<script type="text/javascript">
+		function pwd_should_match()
+		{
+			var password_confirm = document.getElementById('password_2');
+			if (password_confirm.value != document.getElementById('password_1').value)
+			{
+				password_confirm.setCustomValidity('Passwords do not match');
+			}
+			else
+			{
+				password_confirm.setCustomValidity('');
+			}
+		}
+	</script>
+
 	<?php 
 		echo form_open('register/register', array(
 			'class' => 'form-register',
@@ -69,7 +85,8 @@
 						'class' => 'input-block-level input-large',
 						'placeholder' => 'Confirm Password',
 						'required' => '',
-						'title' => 'Password Confirmation'
+						'title' => 'Password Confirmation',
+						'oninput' => 'pwd_should_match()'
 					));
 
 		/* $data = array(
@@ -88,7 +105,8 @@
 			'value' => 'Register'
 		));
 
-	echo form_close() ?>
+		echo form_close() 
+	?>
 
 </div>
 
