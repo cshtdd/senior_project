@@ -12,8 +12,7 @@
 
 			<div class="pull-right right-text">
 				<p>
-					<!-- TODO change this to a horizontal list -->
-					<?php echo $projectDetails->getlSkillNames() ?>
+					<?php $this->load->view('skills_list', array('lSkills' => $projectDetails->lSkills) )?>
 				</p>
 
 				<p>
