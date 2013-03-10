@@ -36,15 +36,48 @@ class ProjectController extends CI_Controller
 
 	public function current_project()
 	{
-		//$current_project_ids = $this->getBelongProjectIds();
-		//$this->detailsInternal($current_project_ids, true);
-		$this->output->set_output('current project ');
+		$current_project_ids = $this->getBelongProjectIds();
+
+		if (!isset($current_project_ids) ||
+			count($current_project_ids) <= 1)  //only one single project to display
+		{
+			if (isset($current_project_ids) ||
+				count($current_project_ids) == 0) //no data to display
+			{
+				$data['title'] = 'My Project Details';
+				$data['no_results'] = true;
+				$data['message'] = $this->getMessageForCurrentUserWithoutProject();
+
+				$this->load->view('project_current_project', $data);
+			}
+			else
+			{
+				$this->details($current_project_ids[0]); //we are presenting the project details view with the current project
+			}
+		}
+		else //multiple projects to display
+		{
+			//get the project summary data for the selected projects
+			$lProjects = $this->getCurrentProjectsSummariesWithIdsInternal($current_project_ids);
+
+			$data['title'] = 'My Projects Details';
+			$data['no_results'] = false;
+			$data['lProjects'] = $lProjects;
+			$this->load->view('project_current_project', $data);
+		}
 	}
 
 	public function details($project_id)
 	{
 		$this->output->set_output('project details '.$project_id);
 	}
+
+/*
+	private function singleProjectDetailsInternal($project_id, $isCurrentUserProject)
+	{
+		throw new Exception('not implemented');
+	}
+*/
 
 	private function detailsInternal($project_ids, $belongProject=false)
 	{
@@ -218,7 +251,7 @@ class ProjectController extends CI_Controller
 	{
 		if (is_test($this))
 		{
-			return array(100, 101);
+			return array(/*100, 101*/);
 		}
 		else
 		{
@@ -360,5 +393,76 @@ class ProjectController extends CI_Controller
 		);
 
 		return $lProjects;
+	}
+
+	private function getCurrentProjectsSummariesWithIdsInternal($project_ids)
+	{
+		if (is_test($this))
+		{
+			return $this->getCurrentProjectsSummariesWithIdsInternalTest($project_ids);
+		}
+		else
+		{
+			return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $project_ids, FALSE);
+		}
+	}
+	private function getCurrentProjectsSummariesWithIdsInternalTest($project_ids)
+	{
+		$projStatus = new SPW_Project_Status_Model();
+		$projStatus->id = 1;
+		$projStatus->name = 'Open';
+
+
+		$project1 = new SPW_Project_Model();
+		$project1->id = $project_ids[0];
+		$project1->title = 'Free Music Sharing Platform';
+		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
+		$project1->status = $projStatus;
+
+		$project2 = new SPW_Project_Model();
+		$project2->id = $project_ids[1];
+		$project2->title = 'Moodle on Facebook';
+		$project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
+		$project2->status = $projStatus;
+
+
+
+		$project_summ_vm1 = new SPW_Project_Summary_View_Model();
+		$project_summ_vm1->project = $project1;
+
+		$project_summ_vm2 = new SPW_Project_Summary_View_Model();
+		$project_summ_vm2->project = $project2;
+
+		$lProjects = array(
+			$project_summ_vm1,
+			$project_summ_vm2
+		);
+
+		return $lProjects;
+	}
+
+	private function getMessageForCurrentUserWithoutProject()
+	{
+		$message = '';
+
+		if (is_test($this))
+		{
+			$message = 'You have not joined a project yet...';
+		}
+		else
+		{
+			if ($this->SPW_User_Model->isUserAStudent(getCurrentUserId($this)))
+			{
+				$term = $this->SPW_User_Model->getUserGraduationTerm(getCurrentUserId($this));
+				$closedRequestsDate = date('D, d M Y', strtotime($term->closed_requests));
+				$message = 'You have not joined to a project yet. Please do so before '.$closedRequestsDate;
+			}
+			else
+			{
+				$message = 'You have not joined to a project yet...';
+			}
+		}
+
+		return $message;
 	}
 }
