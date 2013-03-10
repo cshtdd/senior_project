@@ -9,7 +9,7 @@ class ProjectController extends CI_Controller
 
 		$this->load->helper('project_summary_view_model');
 		load_project_summary_models($this);
-
+		$this->load->model('SPW_Project_Details_View_Model');
 		//$this->output->cache(60);
 	}
 
@@ -82,14 +82,31 @@ class ProjectController extends CI_Controller
 		//$this->load->view('project_details2', $data);
 
 		$current_project_ids = $this->getBelongProjectIds();
-		$resulting_view_name = 'project_details2';
+		$project_details = $this->getProjectDetailsInternal($project_id);
 
 		if (in_array($project_id, $current_project_ids)) //if we are viewing the details of the current project
 		{
 			$resulting_view_name = 'project_details2_edit';
+
+			//get the people suggestion for the current project
+			$data['suggested_users'] = $this->getSuggestedUsersForCurrentProjectInternal($project_id);
+		}
+		else
+		{
+			$resulting_view_name = 'project_details2';
+
+
 		}
 
+
+		if (!isset($project_details))
+		{
+			$data['no_results'] = true;
+		}
+
+		$data['project_details'] = $project_details;
 		$data['title'] = 'Project Details';
+
 		$this->load->view($resulting_view_name, $data);
 	}
 
@@ -624,5 +641,129 @@ class ProjectController extends CI_Controller
 		);
 
 		return $lProjects;
+	}
+
+	private function getProjectDetailsInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return $this->getProjectDetailsInternalTest($project_id);
+		}
+		else
+		{
+			throw new Exception('Not implemented');
+		}
+	}
+	private function getProjectDetailsInternalTest($project_id)
+	{
+		$projStatus = new SPW_Project_Status_Model();
+		$projStatus->id = 1;
+		$projStatus->name = 'Open';
+
+		$term1 = new SPW_Term_Model();
+		$term1->id = 1;
+		$term1->name = 'Spring 2013';
+		$term1->description = 'Spring 2013';
+		$term1->start_date = '1-8-2013';
+		$term1->end_date = '4-26-2013';
+
+
+		$skill1 = new SPW_Skill_Model();
+		$skill1->id = 0;
+		$skill1->name = 'Ruby on Rails';
+
+		$skill2 = new SPW_Skill_Model();
+		$skill2->id = 1;
+		$skill2->name = 'jQuery';
+
+		$skill3 = new SPW_Skill_Model();
+		$skill3->id = 2;
+		$skill3->name = 'HTML';
+
+		$skill4 = new SPW_Skill_Model();
+		$skill4->id = 3;
+		$skill4->name = 'CSS';
+
+		$lSkills1 = array(
+			$skill1,
+			$skill2,
+			$skill3,
+			$skill4
+		);
+
+
+		$user1 = new SPW_User_Model();
+		$user1->id = 0;
+		$user1->first_name = 'Steven';
+		$user1->last_name = 'Luis';
+
+		$user_summ_vm1 = new SPW_User_Summary_View_Model();
+		$user_summ_vm1->user = $user1;
+
+		$user3 = new SPW_User_Model();
+		$user3->id = 2;
+		$user3->first_name = 'Karen';
+		$user3->last_name = 'Rodriguez';
+
+		$user_summ_vm3 = new SPW_User_Summary_View_Model();
+		$user_summ_vm3->user = $user3;
+
+
+
+
+		$project1 = new SPW_Project_Model();
+		$project1->id = $project_id;
+		$project1->title = 'Free Music Sharing Platform';
+		$project1->description = 'Poor students need an easy way to access all the music in the world for free.';
+		$project1->status = $projStatus;
+
+		$project_summ_vm1 = new SPW_Project_Details_View_Model();
+		$project_summ_vm1->project = $project1;
+		$project_summ_vm1->term = $term1;
+		$project_summ_vm1->lSkills = $lSkills1;
+		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
+		$project_summ_vm1->proposedBySummary = $user_summ_vm3;
+		$project_summ_vm1->displayJoin = false;
+		$project_summ_vm1->displayLeave = true;
+
+		return $project_summ_vm1;
+	}
+
+	private function getSuggestedUsersForCurrentProjectInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return $this->getSuggestedUsersForCurrentProjectInternalTest($project_id);
+		}
+		else
+		{
+			throw new Exception('Not implemented');
+		}
+	}
+	private function getSuggestedUsersForCurrentProjectInternalTest($project_id)
+	{
+		$user2 = new SPW_User_Model();
+		$user2->id = 1;
+		$user2->first_name = 'Lolo';
+		$user2->last_name = 'Gonzalez Sr.';
+
+		$user_summ_vm2 = new SPW_User_Summary_View_Model();
+		$user_summ_vm2->user = $user2;
+
+
+		$user4 = new SPW_User_Model();
+		$user4->id = 3;
+		$user4->first_name = 'Gregory';
+		$user4->last_name = 'Zhao Sr.';
+
+		$user_summ_vm4 = new SPW_User_Summary_View_Model();
+		$user_summ_vm4->user = $user4;
+
+		$suggestedUsers = array(
+				$user_summ_vm2,
+				$user_summ_vm4
+			);
+
+		return $suggestedUsers;
 	}
 }
