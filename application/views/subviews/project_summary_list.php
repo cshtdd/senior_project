@@ -8,7 +8,9 @@
 
 			<div class="pull-right right-text">
 				<p>
-					<?php echo $iProject->getlSkillNames() ?>
+					<!-- old way of displaying the skills -->
+					<!-- <?php echo $iProject->getlSkillNames() ?> -->
+					<?php $this->load->view('subviews/skills_list', array('lSkills' => $iProject->lSkills) )?>
 				</p>
 
 				<p>
