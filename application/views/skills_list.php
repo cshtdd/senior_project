@@ -8,7 +8,7 @@
 			foreach ($lSkills as $iSkill) 
 			{
 		?>
-				<li class="label label-info skill"> <?php echo $iSkill->name ?> </li>
+				<li class="label label-info skill"><?php echo $iSkill->name ?></li>
 		<?php	
 			}
 		?>
