@@ -16,7 +16,7 @@
 		?>
 				<li> 
 					<?php 
-						$this->load->view('user_summary_full_name_image', array(
+						$this->load->view('subviews/user_summary_full_name_image', array(
 							'user_summary' => $iUserSummary
 							) 
 						) 

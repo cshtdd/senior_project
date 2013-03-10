@@ -12,7 +12,7 @@
 
 			<div class="pull-right right-text">
 				<p>
-					<?php $this->load->view('skills_list', array('lSkills' => $projectDetails->lSkills) )?>
+					<?php $this->load->view('subviews/skills_list', array('lSkills' => $projectDetails->lSkills) )?>
 				</p>
 
 				<p>
@@ -30,20 +30,20 @@
 				<?php echo $projectDetails->project->description ?>
 			</p>
 
-			<?php $this->load->view('user_summaries_full_list', array(
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
 				'listTitle' => 'Proposed By:',
 				'lUserSummaries' => array($projectDetails->proposedBySummary)
 			)) ?>
 
 
-			<?php $this->load->view('user_summaries_full_list', array(
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
 				'listTitle' => 'Mentors:',
 				'lUserSummaries' => $projectDetails->lMentorSummaries,
 				'errorMessage' => 'This team needs a mentor...'
 			)) ?>
 
 
-			<?php $this->load->view('user_summaries_full_list', array(
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
 				'listTitle' => 'Team Members:',
 				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
 				'errorMessage' => 'Join this team for a free beer! Not really...'

@@ -3,7 +3,7 @@
 edit the current project
 
 <?php
-	print_r($project_details); 
+	print_r($projectDetails); 
 	print_r($suggested_users); 
 ?>
 

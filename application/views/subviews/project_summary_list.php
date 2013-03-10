@@ -34,7 +34,7 @@
 			<ul class="unstyled inline">
 				<lh class="muted">Proposed By:</lh>
 				<li>
-					<?php $this->load->view('user_summary_full_name', array('user_summary' => $iProject->proposedBySummary) )?>
+					<?php $this->load->view('subviews/user_summary_full_name', array('user_summary' => $iProject->proposedBySummary) )?>
 				</li>
 			</ul>
 
@@ -45,7 +45,7 @@
 					
 					<?php foreach ($iProject->lMentorSummaries as $iMentorSumm) { ?>
 						<li>
-							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMentorSumm) )?>
+							<?php $this->load->view('subviews/user_summary_full_name', array('user_summary' => $iMentorSumm) )?>
 						</li>
 					<?php } ?>
 
@@ -64,7 +64,7 @@
 
 					<?php foreach ($iProject->lTeamMemberSummaries as $iMemberSumm) { ?>
 						<li>
-							<?php $this->load->view('user_summary_full_name', array('user_summary' => $iMemberSumm) )?>
+							<?php $this->load->view('subviews/user_summary_full_name', array('user_summary' => $iMemberSumm) )?>
 						</li>
 					<?php } ?>
 

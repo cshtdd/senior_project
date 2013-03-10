@@ -18,7 +18,7 @@
 	<?php 
 		if (isset($lSuggestedProjects) && count($lSuggestedProjects) > 0)
 		{
-			$this->load->view('project_summary_list', array('lProjects' => $lSuggestedProjects, 'list_title' => 'Suggested Projects') );
+			$this->load->view('subviews/project_summary_list', array('lProjects' => $lSuggestedProjects, 'list_title' => 'Suggested Projects') );
 		}
 	?>
 
