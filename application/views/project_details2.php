@@ -30,13 +30,21 @@
 				<?php echo $projectDetails->project->description ?>
 			</p>
 
+<!--
 			<ul class="unstyled inline">
 				<lh class="muted">Proposed By:</lh>
 				<li>
 					<?php $this->load->view('user_summary_full_name_image', array('user_summary' => $projectDetails->proposedBySummary) )?>
 				</li>
 			</ul>
+-->
 
+			<?php $this->load->view('user_summaries_full_list', array(
+				'listTitle' => 'Proposed By:',
+				'lUserSummaries' => array($projectDetails->proposedBySummary)
+			)) ?>
+
+<!--
 			<ul class="unstyled inline">
 				<lh class="muted">Mentors:</lh>
 
@@ -54,8 +62,16 @@
 
 				<?php }?>
 			</ul>
+-->
+
+			<?php $this->load->view('user_summaries_full_list', array(
+				'listTitle' => 'Mentors:',
+				'lUserSummaries' => $projectDetails->lMentorSummaries,
+				'errorMessage' => 'This team needs a mentor...'
+			)) ?>
 
 
+<!--
 			<ul class="unstyled inline">
 				<lh class="muted">Team Members:</lh>
 
@@ -73,6 +89,13 @@
 
 				<?php }?>
 			</ul>
+-->
+
+			<?php $this->load->view('user_summaries_full_list', array(
+				'listTitle' => 'Team Members:',
+				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
+				'errorMessage' => 'Join this team for a free beer! Not really...'
+			)) ?>
 
 			Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
 			<!--Project Status: <?php echo $projectDetails->project->status->name ?> -->
