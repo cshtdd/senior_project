@@ -129,6 +129,21 @@
 		//alert(lUserIdsStr);
 
 		$('#' + hiddenFieldId).val(lUserIdsStr);
+
+		var isListEmpty = (lUserIdsStr.length == 0);
+		addErrorMessageToEmptyList(listId, isListEmpty);
+	}
+
+	function addErrorMessageToEmptyList(listId, isListEmpty)
+	{
+		if (isListEmpty)
+		{
+			alert('empty list');
+		}
+		else
+		{
+			alert('non empty list');
+		}
 	}
 
 	$(document).ready(function(){

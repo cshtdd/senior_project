@@ -52,7 +52,7 @@
 			if (isset($errorMessage) && strlen($errorMessage) > 0)
 			{
 	?>
-			<li><?php echo $errorMessage ?></li>
+				<li><?php echo $errorMessage ?></li>
 	<?php
 			}
 		}
