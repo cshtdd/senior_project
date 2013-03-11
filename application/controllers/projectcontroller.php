@@ -133,9 +133,43 @@ class ProjectController extends CI_Controller
 		}
 		else
 		{
-			$this->output->set_output('received a valid POST request');
+			//$this->output->set_output('received a valid POST request');
+
+			//reading parameters
+			$updated_project_id = $this->input->post('pid');
+
+			$postBackUrl = $this->input->post('pbUrl');
+			if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+
+			$updated_project_title = $this->input->post('text-project-title');
+			$updated_project_description = $this->input->post('text-description');
+
+			$updated_skill_names_str = $this->input->post('hidden-skill-list');
+			$update_mentor_ids_str = $this->input->post('mnthidden-ids');
+			$update_team_members_ids_str = $this->input->post('usrhidden-ids');
+
+			/*
+			$this->output->set_output(
+				$updated_project_id.' '.
+				$postBackUrl.' '.
+				$updated_project_title.' '.
+				$updated_project_description.' '.
+				$updated_skill_names_str.' '.
+				$update_mentor_ids_str.' '.
+				$update_team_members_ids_str
+			);
+			*/
+
+			//TODO validate the parameters and make sure everything is ok
+			//if something fails make sure to add the error message somewhere
+
+
+			//TODO splitting the ids str array into something usable
+
 
 			//TODO implement this, and then redirect to the request url
+
+			redirect($postBackUrl);
 		}
 	}
 
