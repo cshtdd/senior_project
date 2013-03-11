@@ -183,3 +183,11 @@ form .row-fluid .span12
 {
   margin-left: 0;
 }
+
+.myUserRemover,
+.myUserRemover:hover,
+.myUserRemover:visited
+{
+    text-decoration: none;
+    color: gray;
+}
