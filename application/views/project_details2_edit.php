@@ -216,7 +216,17 @@
 			$(this).click(function(e){
 				var userIdToInvite = $(this).attr('data-idtoinvite');
 
-				alert(userIdToInvite);
+				//alert(userIdToInvite);
+
+				$.ajax({
+					type: "POST",
+					url: '/usercontroller/invite',
+					data: 'uid='+userIdToInvite
+				}).done(function(){
+					alert('invited');
+				}).fail(function(){
+					alert('invitation failed');
+				});
 			});
 		});
 	//});
