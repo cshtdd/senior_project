@@ -84,7 +84,16 @@ class ProjectController extends CI_Controller
 		$current_project_ids = $this->getBelongProjectIds();
 		$project_details = $this->getProjectDetailsInternal($project_id);
 
-		if (in_array($project_id, $current_project_ids)) //if we are viewing the details of the current project
+		$isMyProject = in_array($project_id, $current_project_ids);
+
+		//don't allow details edit after close date
+		$isProjectClosed = $this->isProjectClosedInternal($project_id);
+
+		//TODO don't allow joining/leaving after close join
+
+		//if we are viewing the details of the current project
+		//and the project is not closed
+		if ($isMyProject && !$isProjectClosed) 
 		{
 			$resulting_view_name = 'project_details2_edit';
 
@@ -775,5 +784,30 @@ class ProjectController extends CI_Controller
 			);
 
 		return $suggestedUsers;
+	}
+
+	private function isProjectClosedInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return true && false;
+		}
+		else
+		{
+			$term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_id);
+
+			if (isset($term))
+			{
+				$currentDate = date('Y-m-d');
+				if ($term->closed_requests > $currentDate)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
 	}
 }
