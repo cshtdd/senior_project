@@ -1,13 +1,13 @@
-<ul class="inline">
-	<?php 
-		if (isset($listTitle) && strlen($listTitle) > 0)
-		{
-	?>
-		<lh><?php echo $listTitle ?></lh>
-	<?php
-		}
-	?>
+<?php 
+	if (isset($listTitle) && strlen($listTitle) > 0)
+	{
+?>
+	<h4 class="muted"><?php echo $listTitle ?></h4>
+<?php
+	}
+?>
 
+<ul class="inline">
 	<?php 
 		if (isset($lUserSummaries) && count($lUserSummaries) > 0)
 		{
