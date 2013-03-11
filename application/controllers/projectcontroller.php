@@ -898,7 +898,7 @@ class ProjectController extends CI_Controller
 	{
 		if (is_test($this))
 		{
-			return false;
+			return true;
 		}
 		else
 		{
