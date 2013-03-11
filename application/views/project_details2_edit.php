@@ -100,6 +100,7 @@
 					'listTitle' => 'Mentors:',
 					'lUserSummaries' => $projectDetails->lMentorSummaries,
 					'errorMessage' => 'This team needs a mentor...',
+					'topView' => 'subviews/user_remove',
 					'prefix' => 'mnt'
 				)) ?>
 			</div>
@@ -109,6 +110,7 @@
 			'listTitle' => 'Team Members:',
 			'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
 			'errorMessage' => 'This team has no members',
+			'topView' => 'subviews/user_remove',
 			'prefix' => 'usr'
 		)) ?>
 
@@ -116,6 +118,10 @@
 		echo form_close();
 	?>
 </div>
+
+<hr>
+
+
 
 <script type="text/javascript">
 	function buildlUserIds(listId)
