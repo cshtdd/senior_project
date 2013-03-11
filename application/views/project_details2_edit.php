@@ -1,6 +1,6 @@
 <?php $this->load->view("template_header"); ?>
 <?php $this->load->helper("skills"); ?>
-
+<?php $this->load->helper("loading"); ?>
 <!-- edit the current project -->
 
 <!--
@@ -218,14 +218,19 @@
 
 				//alert(userIdToInvite);
 
+				$(this).parent().append('<?php echo loading_img() ?>');
+
 				$.ajax({
 					type: "POST",
 					url: '/usercontroller/invite',
 					data: 'uid='+userIdToInvite
 				}).done(function(){
-					alert('invited');
+					//alert('invited');
 				}).fail(function(){
-					alert('invitation failed');
+					//alert('invitation failed');
+				}).always(function(){
+					$('#loading_img').remove();
+					//alert('finished');
 				});
 			});
 		});
