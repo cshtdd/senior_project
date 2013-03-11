@@ -141,6 +141,7 @@ h4 a:visited
     margin-right: auto;
 }
 
+
 .myTag a,
 .myTag a:hover
 .myTag a:visited  
@@ -164,4 +165,21 @@ h4 a:visited
     padding: 5px;
     line-height: 18px;
     margin-right: 5px;
+}
+
+
+textarea 
+{
+  width: 100%;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+form .row-fluid .span12
+{
+  margin-left: 0;
 }
