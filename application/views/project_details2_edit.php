@@ -3,6 +3,28 @@
 <?php $this->load->helper("loading"); ?>
 <!-- edit the current project -->
 
+<!-- START displaying server-side validation errors -->
+<?php
+	$fullErrorText = validation_errors();
+
+	if (strlen($fullErrorText) > 0)
+	{ 
+?>
+		<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class="errors"> 
+<?php 
+		echo $fullErrorText;
+?>
+			</div>
+		</div>
+<?php
+	}
+?>
+<!-- END displaying server-side validation errors -->
+
+
+
 <?php 
 	if (isset($can_leave_project) && $can_leave_project)
 	{
