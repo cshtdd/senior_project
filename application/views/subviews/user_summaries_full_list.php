@@ -16,7 +16,14 @@
 		?>
 				<li> 
 					<?php 
-						$this->load->view('subviews/user_summary_full_name_image', array(
+						$subViewName = 'subviews/user_summary_full_name_image';
+
+						if (isset($subview) && strlen($subview) > 0)
+						{
+							$subViewName = $subview;
+						}
+
+						$this->load->view($subViewName, array(
 							'user_summary' => $iUserSummary
 							) 
 						) 
