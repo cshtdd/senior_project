@@ -27,7 +27,19 @@
 ?>
 	<div class="row-fluid">
 		<div class="span3">
-			<?php echo $projectDetails->project->title ?>
+
+			<?php 
+				echo form_input(array(
+					'id' => 'text-project-title',
+					'name' => 'text-project-title',
+					'type' => 'text',
+					'class' => 'input-large',
+					'placeholder' => 'Enter the project title...',
+					'value' => $projectDetails->project->title,
+					'required' => '',
+					'title' => 'Project Title'
+				));
+			?>
 		</div>
 
 		<div class="span9">
@@ -39,15 +51,14 @@
 						'name' => 'text-new-tag',
 						'type' => 'text',
 						'class' => 'tagManager input-small',
-						'placeholder' => 'Enter skills...',
+						'placeholder' => 'Enter skills...'
 					));
 				?>
 			</div>
 		</div>
 	</div>
 
-	<div class="row-fluid">
-		<div class="span12">
+
 			<?php 
 				echo form_textarea(array(
 					'id' => 'text-description',
@@ -55,14 +66,12 @@
 					//'class' => 'input-large',
 					'rows' => '20',
 					'placeholder' => 'Enter a description for the project...',
-					'value' => $projectDetails->project->description
+					'value' => $projectDetails->project->description,
+					'required' => '',
+					'Title' => 'Project Description'
 				));
 			?>
-		</div>
-	</div>
 
-	<div class="row-fluid">
-		<div class="span2 offset10">
 			<?php 
 				echo form_submit(array(
 					'id' => 'btn-submit',
@@ -72,8 +81,7 @@
 					'value' => 'Save Changes'
 				));
 			?>
-		</div>
-	</div>
+
 <?php
 	echo form_close();
 ?>
