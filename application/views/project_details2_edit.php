@@ -101,6 +101,7 @@
 					'lUserSummaries' => $projectDetails->lMentorSummaries,
 					'errorMessage' => 'This team needs a mentor...',
 					'topView' => 'subviews/user_remove',
+					'noTopViewForCurrentUser' => true,
 					'prefix' => 'mnt'
 				)) ?>
 			</div>
@@ -111,6 +112,7 @@
 			'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
 			'errorMessage' => 'This team has no members',
 			'topView' => 'subviews/user_remove',
+			'noTopViewForCurrentUser' => true,
 			'prefix' => 'usr'
 		)) ?>
 
