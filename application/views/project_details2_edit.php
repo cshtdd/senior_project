@@ -211,6 +211,14 @@
 				buildlUserIds(parentListId);
 			});
 		});
+
+		$('.myUserInviter').each(function(index){
+			$(this).click(function(e){
+				var userIdToInvite = $(this).attr('data-idtoinvite');
+
+				alert(userIdToInvite);
+			});
+		});
 	//});
 </script>
 
