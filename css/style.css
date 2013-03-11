@@ -140,3 +140,28 @@ h4 a:visited
     margin-left: auto;
     margin-right: auto;
 }
+
+.myTag a,
+.myTag a:hover
+.myTag a:visited  
+{
+    text-decoration: none;
+}
+
+.myTag a,
+.myTag a:visited  
+{
+    color: silver;
+}
+
+.myTag a:hover
+{
+    color: gray;  
+}
+
+.myTag
+{
+    padding: 5px;
+    line-height: 18px;
+    margin-right: 5px;
+}

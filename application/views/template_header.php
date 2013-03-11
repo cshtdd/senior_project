@@ -22,7 +22,7 @@
 
 	<link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-	<link href="<?php echo base_url() ?>css/bootstrap-tagmanager.css" rel="stylesheet" media="screen">
+	<!-- <link href="<?php echo base_url() ?>css/bootstrap-tagmanager.css" rel="stylesheet" media="screen"> -->
 
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 
