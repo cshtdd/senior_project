@@ -20,7 +20,8 @@ edit the current project
 	$(document).ready(function(){
 
 		jQuery(".tagManager").tagsManager({
-			prefilled: ["Pisa", "Rome"],
+			//prefilled: ["Pisa", "Rome"],
+			prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
 			CapitalizeFirstLetter: true,
 			preventSubmitOnEnter: true,
 			typeahead: true,
@@ -29,7 +30,6 @@ edit the current project
 			hiddenTagListName: 'hiddenTagList',
 			tagClass: 'label pull-left'
 		});
-
 	});
 </script>
 
