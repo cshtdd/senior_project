@@ -155,7 +155,7 @@ class ProjectController extends CI_Controller
 			$projectId = $this->input->post('pid');
 			$currentUserId = getCurrentUserId($this);
 
-			leaveProjectInternal($projectId, $currentUserId);
+			$this->leaveProjectInternal($projectId, $currentUserId);
 
 			redirect($postBackUrl);
 		}
