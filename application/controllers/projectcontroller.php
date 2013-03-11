@@ -8,6 +8,7 @@ class ProjectController extends CI_Controller
 		parent::__construct();
 
 		$this->load->helper('project_summary_view_model');
+		$this->load->helper('request');
 		load_project_summary_models($this);
 		$this->load->model('SPW_Project_Details_View_Model');
 		//$this->output->cache(60);
@@ -121,6 +122,18 @@ class ProjectController extends CI_Controller
 		$data['title'] = 'Project Details';
 
 		$this->load->view($resulting_view_name, $data);
+	}
+
+	public function update()
+	{
+		if (!is_POST_request($this))
+		{
+			redirect('/');
+		}
+		else
+		{
+			$this->output->set_output('received a valid POST request');
+		}
 	}
 
 /*
