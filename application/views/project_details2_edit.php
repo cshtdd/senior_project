@@ -75,6 +75,16 @@
 			));
 		?>
 
+		<?php 
+			echo form_submit(array(
+				'id' => 'btn-submit',
+				'name' => 'btn-submit',
+				'type' => 'Submit',
+				'class' => 'btn btn-large btn-primary pull-right',
+				'value' => 'Save Changes'
+			));
+		?>
+
 		<div class="row-fluid"> 
 			<div class="span2">
 				<?php $this->load->view('subviews/user_summaries_full_list', array(
@@ -90,18 +100,6 @@
 					'errorMessage' => 'This team needs a mentor...',
 					'prefix' => 'mnt'
 				)) ?>
-			</div>
-
-			<div class="span2">
-				<?php 
-					echo form_submit(array(
-						'id' => 'btn-submit',
-						'name' => 'btn-submit',
-						'type' => 'Submit',
-						'class' => 'btn btn-large btn-primary',
-						'value' => 'Save Changes'
-					));
-				?>
 			</div>
 		</div>
 
