@@ -212,13 +212,23 @@
 				$(this).parent().append('<?php echo loading_img() ?>');
 
 				$.ajax({
-					type: "POST",
+					type: 'POST',
 					url: '/usercontroller/invite',
 					data: 'uid='+userIdToInvite
 				}).always(function(){
 					$('#loading_img').remove();
 				});
 			});
+		});
+
+		$('#btn-leave').click(function(e){
+			$(this).append('<?php echo loading_img() ?>');
+
+			$.ajax({
+					type: 'POST',
+					url: '/projectcontroller/leave',
+					data: 'pid=<?php echo $projectDetails->project->id ?>&pbUrl=<?php echo current_url() ?>'
+				});
 		});
 	//});
 </script>
