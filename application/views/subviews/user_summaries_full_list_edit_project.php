@@ -21,7 +21,12 @@
 				<li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
 					data-userid="<?php echo $user_summary->user->id ?>"> 
 
-					<?php $this->load->view('subviews/user_remove', array('user_summary' => $user_summary, 'prefix' => $prefix)) ?>
+					<?php
+						if (isset($topView))
+						{
+							$this->load->view($topView, array('user_summary' => $user_summary, 'prefix' => $prefix));
+						}
+					?>
 
 					<?php $this->load->view('subviews/user_summary_full_name_image', array('user_summary' => $user_summary)) ?>
 				</li>
