@@ -179,7 +179,8 @@ textarea
 }
 
 
-form .row-fluid .span12
+form .row-fluid .span12,
+form .row-fluid .span2
 {
   margin-left: 0;
 }
