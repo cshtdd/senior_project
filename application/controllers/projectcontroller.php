@@ -740,7 +740,14 @@ class ProjectController extends CI_Controller
 		$user_summ_vm3 = new SPW_User_Summary_View_Model();
 		$user_summ_vm3->user = $user3;
 
+		$user4 = new SPW_User_Model();
+		$user4->id = 4;
+		$user4->first_name = 'Ming';
+		$user4->last_name = 'Zhao';
+		$user4->picture = 'https://si0.twimg.com/profile_images/2623528696/iahn1tuacgx31qmlvia3.jpeg';
 
+		$user_summ_vm4 = new SPW_User_Summary_View_Model();
+		$user_summ_vm4->user = $user4;
 
 
 		$project1 = new SPW_Project_Model();
@@ -753,7 +760,8 @@ class ProjectController extends CI_Controller
 		$project_summ_vm1->project = $project1;
 		$project_summ_vm1->term = $term1;
 		$project_summ_vm1->lSkills = $lSkills1;
-		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
+		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1, $user_summ_vm4);
+		$project_summ_vm1->lTeamMemberSummaries = array($user_summ_vm4, $user_summ_vm1, $user_summ_vm3);
 		$project_summ_vm1->proposedBySummary = $user_summ_vm3;
 		$project_summ_vm1->displayJoin = false;
 		$project_summ_vm1->displayLeave = true;
