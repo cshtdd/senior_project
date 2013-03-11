@@ -6,7 +6,7 @@
 
 <?php } else { ?>
 
-	<?php $this->load->view('project_summary_list', array('lProjects' => $lProjects, 'list_title' => 'Project Results') )?>
+	<?php $this->load->view('subviews/project_summary_list', array('lProjects' => $lProjects, 'list_title' => 'Project Results') )?>
 
 <?php }?>
 

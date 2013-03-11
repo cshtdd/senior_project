@@ -1,5 +1,9 @@
 <h1>senior_project</h1>
 
+<h2>Useful links</h2>
+<p><a href="http://share.axure.com/6RZ1NQ/">Wireframes</a></p>
+<p><a href="http://srprog-spr13-01.aul.fiu.edu/senior-projects/">Deployed Site</a></p>
+
 <h2>Coding Guidelines</h2>
 
 <p>

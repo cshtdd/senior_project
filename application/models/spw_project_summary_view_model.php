@@ -21,7 +21,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	public $lTeamMemberSummaries;
 
 	public $justList;
-	
+
 	public $displayJoin;
 	public $displayLeave;
 
