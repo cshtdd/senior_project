@@ -133,6 +133,30 @@ class ProjectController extends CI_Controller
 		else
 		{
 			$this->output->set_output('received a valid POST request');
+
+			//TODO implement this, and then redirect to the request url
+		}
+	}
+
+	public function leave()
+	{
+		if (!is_POST_request($this))
+		{
+			redirect('/');
+		}
+		else
+		{
+			//$this->output->set_output('received a valid POST request');
+
+			$postBackUrl = $this->input->post('pbUrl');
+			if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+
+			$projectId = $this->input->post('pid');
+			$currentUserId = getCurrentUserId($this);
+
+			leaveProjectInternal($projectId, $currentUserId);
+
+			redirect($postBackUrl);
 		}
 	}
 
@@ -851,6 +875,21 @@ class ProjectController extends CI_Controller
 					return true;
 				}
 			}
+		}
+	}
+
+	private function leaveProjectInternal($projectId, $currentUserId)
+	{
+		if (is_test($this))
+		{
+			return true;
+		}
+		else
+		{
+			//TODO validate that the current user belongs to the specified project 
+			//TODO validate that the current user was not the one who proposed the project
+
+			throw new Exception('not implemented');
 		}
 	}
 }
