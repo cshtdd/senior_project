@@ -102,6 +102,7 @@
 					'errorMessage' => 'This team needs a mentor...',
 					'topView' => 'subviews/user_remove',
 					'noTopViewForCurrentUser' => true,
+					'bottomView' => '',
 					'prefix' => 'mnt'
 				)) ?>
 			</div>
@@ -113,6 +114,7 @@
 			'errorMessage' => 'This team has no members',
 			'topView' => 'subviews/user_remove',
 			'noTopViewForCurrentUser' => true,
+			'bottomView' => '',
 			'prefix' => 'usr'
 		)) ?>
 
@@ -121,9 +123,24 @@
 	?>
 </div>
 
-<hr>
+<?php 
+	if (isset($suggested_users) && count($suggested_users) > 0)
+	{
+?>
+		<hr>
+<?php
+		$this->load->view('subviews/user_summaries_full_list_edit_project', array(
+			'listTitle' => 'These people would be great for your team',
+			'lUserSummaries' => $suggested_users,
+			'errorMessage' => '',
+			'topView' => '',
+			'bottomView' => 'subviews/user_invite',
+			'noBottomViewForCurrentUser' => true,
+			'prefix' => 'sugg'
+		));
 
-
+	}
+?>
 
 <script type="text/javascript">
 	function buildlUserIds(listId)
