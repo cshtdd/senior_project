@@ -370,6 +370,7 @@ class ProjectController extends CI_Controller
 		$user1->id = 0;
 		$user1->first_name = 'Steven';
 		$user1->last_name = 'Luis Sr.';
+		$user1->picture = 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
 
 		$user_summ_vm1 = new SPW_User_Summary_View_Model();
 		$user_summ_vm1->user = $user1;
@@ -378,6 +379,7 @@ class ProjectController extends CI_Controller
 		$user2->id = 1;
 		$user2->first_name = 'Lolo';
 		$user2->last_name = 'Gonzalez Sr.';
+		$user2->picture = 'https://si0.twimg.com/profile_images/635646997/cashproductions_bigger.jpg';
 
 		$user_summ_vm2 = new SPW_User_Summary_View_Model();
 		$user_summ_vm2->user = $user2;
@@ -386,6 +388,7 @@ class ProjectController extends CI_Controller
 		$user3->id = 2;
 		$user3->first_name = 'Karen';
 		$user3->last_name = 'Rodriguez Sr.';
+		$user3->picture = 'https://si0.twimg.com/profile_images/1282173124/untitled-158-2_bigger.jpg';
 
 		$user_summ_vm3 = new SPW_User_Summary_View_Model();
 		$user_summ_vm3->user = $user3;
@@ -394,6 +397,7 @@ class ProjectController extends CI_Controller
 		$user4->id = 3;
 		$user4->first_name = 'Gregory';
 		$user4->last_name = 'Zhao Sr.';
+		$user4->picture = 'https://si0.twimg.com/profile_images/1501070030/John_2011_1_500x500_bigger.png';
 
 		$user_summ_vm4 = new SPW_User_Summary_View_Model();
 		$user_summ_vm4->user = $user4;
@@ -700,6 +704,7 @@ class ProjectController extends CI_Controller
 		$user1->id = 0;
 		$user1->first_name = 'Steven';
 		$user1->last_name = 'Luis';
+		$user1->picture = 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
 
 		$user_summ_vm1 = new SPW_User_Summary_View_Model();
 		$user_summ_vm1->user = $user1;
@@ -708,6 +713,7 @@ class ProjectController extends CI_Controller
 		$user3->id = 2;
 		$user3->first_name = 'Karen';
 		$user3->last_name = 'Rodriguez';
+		$user3->picture = 'https://si0.twimg.com/profile_images/635646997/cashproductions_bigger.jpg';
 
 		$user_summ_vm3 = new SPW_User_Summary_View_Model();
 		$user_summ_vm3->user = $user3;
