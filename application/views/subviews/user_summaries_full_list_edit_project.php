@@ -7,18 +7,22 @@
 	}
 ?>
 
-<ul class="inline" id="<?php echo $prefix.'-container' ?>">
+<ul class="inline" id="<?php echo $prefix.'-container' ?>" 
+	data-idwithlist="<?php echo $prefix.'hidden-ids'?>">
 	<?php 
 		if (isset($lUserSummaries) && count($lUserSummaries) > 0)
 		{
+			$userIdsArray = array();
+
 			foreach ($lUserSummaries as $user_summary) 
 			{
-		?>
+				$userIdsArray[] = $user_summary->user->id;
+	?>
 				<li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>"> 
 
 					<a href="#" class="myUserRemover" 
 						id="<?php echo $prefix.'-btn-rem-'.$user_summary->user->id ?>" 
-						tagidtoremove="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
+						data-idtoremove="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
 						title="Remove">x</a>
 
 					<div class='user-summary-full center-text'>
@@ -37,17 +41,30 @@
 						<?php echo anchor('user/'.$user_summary->user->id, $user_summary->getFullName()) ?>
 					</div>
 				</li>
-		<?php	
+	<?php	
 			}
+
+			$lUserIdsStr = join(', ', $userIdsArray);
 		} 
 		else 
 		{
 			if (isset($errorMessage) && strlen($errorMessage) > 0)
 			{
-		?>
+	?>
 			<li><?php echo $errorMessage ?></li>
-		<?php
+	<?php
 			}
 		}
 	?>
 </ul>
+<?php 
+	if (isset($lUserIdsStr) && strlen($lUserIdsStr) > 0) 
+	{
+?>
+		<input type="hidden" 
+			name="<?php echo $prefix.'hidden-ids'?>" 
+			id="<?php echo $prefix.'hidden-ids'?>" 
+			value="<?php echo $lUserIdsStr ?>"/>
+<?php
+	}
+?>
