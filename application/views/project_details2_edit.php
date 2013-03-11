@@ -126,6 +126,13 @@
 			'prefix' => 'usr'
 		)) ?>
 
+		<?php
+			echo form_hidden(array(
+				'pid' => $projectDetails->project->id,
+				'pbUrl' => current_url()
+				)
+			);
+		?>
 	<?php
 		echo form_close();
 	?>
@@ -205,7 +212,7 @@
 			typeahead: true,
 			//typeaheadSource: ["Pisa", "Rome", "Milan", "Florence", "New York", "Paris", "Berlin", "London", "Madrid"],
 			typeaheadSource: [ <?php echo all_skill_names($this) ?> ],
-			hiddenTagListName: 'hiddenTagList',
+			hiddenTagListName: 'hidden-skill-list',
 			tagClass: 'label pull-left'
 		});
 
