@@ -3,22 +3,6 @@
 <?php $this->load->helper("loading"); ?>
 <!-- edit the current project -->
 
-<!--
-<?php
-	print_r($projectDetails); 
-	print_r($suggested_users); 
-?>
--->
-
-
-<!--
-<form action='/projectcontroller/update'>
-	 <input type="text" name="tags" placeholder="Tags" class="tagManager"/>
-
-	 <input type="submit" value="Save Changes"/>
-</form>
--->
-
 <h2>Edit Your Project</h2>
 
 <div>
@@ -216,21 +200,14 @@
 			$(this).click(function(e){
 				var userIdToInvite = $(this).attr('data-idtoinvite');
 
-				//alert(userIdToInvite);
-
 				$(this).parent().append('<?php echo loading_img() ?>');
 
 				$.ajax({
 					type: "POST",
 					url: '/usercontroller/invite',
 					data: 'uid='+userIdToInvite
-				}).done(function(){
-					//alert('invited');
-				}).fail(function(){
-					//alert('invitation failed');
 				}).always(function(){
 					$('#loading_img').remove();
-					//alert('finished');
 				});
 			});
 		});
