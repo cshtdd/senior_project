@@ -80,17 +80,17 @@
 			)) ?>
 
 
-			<?php $this->load->view('subviews/user_summaries_full_list', array(
+			<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
 				'listTitle' => 'Mentors:',
 				'lUserSummaries' => $projectDetails->lMentorSummaries,
 				'errorMessage' => 'This team needs a mentor...'
 			)) ?>
 
 
-			<?php $this->load->view('subviews/user_summaries_full_list', array(
+			<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
 				'listTitle' => 'Team Members:',
 				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
-				'errorMessage' => 'Join this team for a free beer! Not really...'
+				'errorMessage' => 'This team has no members'
 			)) ?>
 
 
