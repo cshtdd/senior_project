@@ -791,10 +791,21 @@ class ProjectController extends CI_Controller
 	}
 	private function getSuggestedUsersForCurrentProjectInternalTest($project_id)
 	{
+		$user1 = new SPW_User_Model();
+		$user1->id = getCurrentUserId($this);
+		$user1->first_name = 'Phillippe';
+		$user1->last_name = 'Me';
+		$user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
+
+		$user_summ_vm1 = new SPW_User_Summary_View_Model();
+		$user_summ_vm1->user = $user1;
+
+
 		$user2 = new SPW_User_Model();
 		$user2->id = 1;
 		$user2->first_name = 'Lolo';
 		$user2->last_name = 'Gonzalez Sr.';
+		$user2->picture = 'https://si0.twimg.com/profile_images/362705903/dad_bigger.jpg';
 
 		$user_summ_vm2 = new SPW_User_Summary_View_Model();
 		$user_summ_vm2->user = $user2;
@@ -804,12 +815,14 @@ class ProjectController extends CI_Controller
 		$user4->id = 3;
 		$user4->first_name = 'Gregory';
 		$user4->last_name = 'Zhao Sr.';
+		$user4->picture = 'https://si0.twimg.com/profile_images/556789661/pigman_bigger.jpg';
 
 		$user_summ_vm4 = new SPW_User_Summary_View_Model();
 		$user_summ_vm4->user = $user4;
 
 		$suggestedUsers = array(
 				$user_summ_vm2,
+				$user_summ_vm1,
 				$user_summ_vm4
 			);
 
