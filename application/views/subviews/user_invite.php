@@ -1,8 +1,4 @@
-<!--
-<a href="#" class="myUserRemover pull-right" 
-	id="<?php echo $prefix.'-btn-rem-'.$user_summary->user->id ?>" 
-	data-idtoremove="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
-	title="Remove">x</a>
-<span class="clearfix"></span>
--->
-invite
+<div class="center-text">
+	<button type="button" class="btn myUserInviter"
+		data-idtoinvite="<?php echo $user_summary->user->id ?>">Invite</button>
+</div>
