@@ -19,6 +19,8 @@
 </form>
 -->
 
+<h2>Edit Your Project</h2>
+
 <?php 
 	echo form_open('projectcontroller/update', array(
 		//'class' => 'form-register',
