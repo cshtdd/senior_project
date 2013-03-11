@@ -36,7 +36,8 @@
 							}
 
 							echo img(array(
-								'src' => $imgUrl
+								'src' => $imgUrl,
+								'class' => 'user-img'
 							));
 						?>
 						<?php echo anchor('user/'.$user_summary->user->id, $user_summary->getFullName()) ?>

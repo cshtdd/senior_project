@@ -184,10 +184,16 @@ form .row-fluid .span12
   margin-left: 0;
 }
 
-.myUserRemover,
-.myUserRemover:hover,
-.myUserRemover:visited
+a.myUserRemover,
+a:hover.myUserRemover,
+a:visited.myUserRemover
 {
     text-decoration: none;
     color: gray;
+}
+
+/*img*/.user-img
+{
+    width: 100px;
+    height: 100px;
 }
