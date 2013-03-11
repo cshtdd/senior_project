@@ -6,9 +6,25 @@
 <?php 
 	if (isset($can_leave_project) && $can_leave_project)
 	{
-?>
-		<button id='btn-leave' type="button" class="btn btn-warning btn-large pull-right">Leave Project</button>
-<?php
+		echo form_open('projectcontroller/leave', array(
+			'id' => 'form-leave-project'
+		));
+
+		echo form_hidden(array(
+				'pid' => $projectDetails->project->id,
+				'pbUrl' => current_url()
+			));
+
+		//<button id='btn-leave' type="button" class="btn btn-warning btn-large pull-right">Leave Project</button>
+		echo form_submit(array(
+				'id' => 'btn-leave',
+				'name' => 'btn-submit',
+				'type' => 'Submit',
+				'class' => 'btn btn-warning btn-large pull-right',
+				'value' => 'Leave Project'
+			));
+
+		echo form_close();
 	}
 ?>
 
@@ -17,8 +33,7 @@
 <div>
 	<?php 
 		echo form_open('projectcontroller/update', array(
-			//'class' => 'form-register',
-			'id' => 'edit_project_form'
+			'id' => 'form-edit-project'
 		));
 	?>
 		<div class="row-fluid">
@@ -221,6 +236,7 @@
 			});
 		});
 
+		/*
 		$('#btn-leave').click(function(e){
 			$(this).append('<?php echo loading_img() ?>');
 
@@ -230,6 +246,7 @@
 					data: 'pid=<?php echo $projectDetails->project->id ?>&pbUrl=<?php echo current_url() ?>'
 				});
 		});
+		*/
 	//});
 </script>
 
