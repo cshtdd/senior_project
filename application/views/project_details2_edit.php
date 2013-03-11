@@ -74,6 +74,28 @@
 				));
 			?>
 
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
+				'listTitle' => 'Proposed By:',
+				'lUserSummaries' => array($projectDetails->proposedBySummary)
+			)) ?>
+
+
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
+				'listTitle' => 'Mentors:',
+				'subview' => 'subviews/user_summary_edit_full_name_image',
+				'lUserSummaries' => $projectDetails->lMentorSummaries,
+				'errorMessage' => 'This team needs a mentor...'
+			)) ?>
+
+
+			<?php $this->load->view('subviews/user_summaries_full_list', array(
+				'listTitle' => 'Team Members:',
+				'subview' => 'subviews/user_summary_edit_full_name_image',
+				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
+				'errorMessage' => 'Join this team for a free beer! Not really...'
+			)) ?>
+
+
 			<?php 
 				echo form_submit(array(
 					'id' => 'btn-submit',
