@@ -132,3 +132,11 @@ h4 a:visited
 {
     padding: 5px;
 }
+
+.user-summary-full img,
+.user-summary-full a
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
