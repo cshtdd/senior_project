@@ -3,6 +3,15 @@
 <?php $this->load->helper("loading"); ?>
 <!-- edit the current project -->
 
+<?php 
+	if (isset($can_leave_project) && $can_leave_project)
+	{
+?>
+		<button id='btn-leave' type="button" class="btn btn-warning btn-large pull-right">Leave Project</button>
+<?php
+	}
+?>
+
 <h2>Edit Your Project</h2>
 
 <div>
