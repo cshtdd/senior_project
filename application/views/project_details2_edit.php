@@ -90,7 +90,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-		jQuery(".tagManager").tagsManager({
+		$(".tagManager").tagsManager({
 			//prefilled: ["Pisa", "Rome"],
 			prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
 			CapitalizeFirstLetter: true,
@@ -101,6 +101,8 @@
 			hiddenTagListName: 'hiddenTagList',
 			tagClass: 'label pull-left'
 		});
+
+
 	});
 </script>
 
