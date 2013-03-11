@@ -18,7 +18,8 @@
 			{
 				$userIdsArray[] = $user_summary->user->id;
 	?>
-				<li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>"> 
+				<li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
+					data-userid="<?php echo $user_summary->user->id ?>"> 
 
 					<a href="#" class="myUserRemover pull-right" 
 						id="<?php echo $prefix.'-btn-rem-'.$user_summary->user->id ?>" 

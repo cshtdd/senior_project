@@ -112,6 +112,25 @@
 
 
 <script type="text/javascript">
+	function buildlUserIds(listId)
+	{
+		var hiddenFieldId = $('#' + listId).attr('data-idwithlist');
+
+		//alert(listId);
+		//alert(hiddenFieldId);
+
+		var lUserIds = [];
+
+		$('#' + listId + ' li').each(function(index){
+			lUserIds.push($(this).attr('data-userid'));
+		});
+
+		var lUserIdsStr = lUserIds.join();
+		//alert(lUserIdsStr);
+
+		$('#' + hiddenFieldId).val(lUserIdsStr);
+	}
+
 	$(document).ready(function(){
 
 		$(".tagManager").tagsManager({
@@ -130,7 +149,10 @@
 			$(this).click(function(e){
 				e.preventDefault();
 				var idToRemove = $(this).attr("data-idtoremove");
+				var parentListId = $('#' + idToRemove).parent().attr('id');
+
 				$('#' + idToRemove).remove();
+				buildlUserIds(parentListId);
 			});
 		});
 	});
