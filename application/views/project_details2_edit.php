@@ -83,14 +83,16 @@
 			<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
 				'listTitle' => 'Mentors:',
 				'lUserSummaries' => $projectDetails->lMentorSummaries,
-				'errorMessage' => 'This team needs a mentor...'
+				'errorMessage' => 'This team needs a mentor...',
+				'prefix' => 'mnt'
 			)) ?>
 
 
 			<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
 				'listTitle' => 'Team Members:',
 				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
-				'errorMessage' => 'This team has no members'
+				'errorMessage' => 'This team has no members',
+				'prefix' => 'usr'
 			)) ?>
 
 
