@@ -138,11 +138,21 @@
 	{
 		if (isListEmpty)
 		{
-			alert('empty list');
-		}
-		else
-		{
-			alert('non empty list');
+			//alert('empty list');
+
+			var errorMessageStr = '';
+
+			if (listId.indexOf('mnt') == 0) {
+				errorMessageStr = 'This team needs a mentor...';
+			}
+
+			if (listId.indexOf('usr') == 0) {
+				errorMessageStr = 'This team has no members';
+			}
+
+			if (errorMessageStr.length > 0) {
+				$('#' + listId).append($('<li>' + errorMessageStr + '</li>'));
+			}
 		}
 	}
 
