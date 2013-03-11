@@ -902,6 +902,7 @@ class ProjectController extends CI_Controller
 		}
 		else
 		{
+			//this should check whether the current user is the creator of the project and that sort of stuff
 			throw new Exception('not implemented');
 		}
 	}
