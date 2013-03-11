@@ -34,6 +34,18 @@
 					?>
 
 					<?php $this->load->view('subviews/user_summary_full_name_image', array('user_summary' => $user_summary)) ?>
+
+					<?php
+						if (isset($bottomView) && strlen($bottomView) > 0)
+						{
+							if (!isset($noBottomViewForCurrentUser) || 
+								!$noBottomViewForCurrentUser ||
+								getCurrentUserId($this) != $user_summary->user->id)
+							{ 
+								$this->load->view($bottomView, array('user_summary' => $user_summary, 'prefix' => $prefix));
+							}
+						}
+					?>
 				</li>
 	<?php	
 			}
