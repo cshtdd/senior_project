@@ -22,9 +22,14 @@
 					data-userid="<?php echo $user_summary->user->id ?>"> 
 
 					<?php
-						if (isset($topView))
+						if (isset($topView) && strlen($topView) > 0)
 						{
-							$this->load->view($topView, array('user_summary' => $user_summary, 'prefix' => $prefix));
+							if (!isset($noTopViewForCurrentUser) || 
+								!$noTopViewForCurrentUser ||
+								getCurrentUserId($this) != $user_summary->user->id)
+							{ 
+								$this->load->view($topView, array('user_summary' => $user_summary, 'prefix' => $prefix));
+							}
 						}
 					?>
 
