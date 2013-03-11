@@ -126,7 +126,13 @@
 			tagClass: 'label pull-left'
 		});
 
-
+		$('.myUserRemover').each(function(index){
+			$(this).click(function(e){
+				e.preventDefault();
+				var idToRemove = $(this).attr("data-idtoremove");
+				$('#' + idToRemove).remove();
+			});
+		});
 	});
 </script>
 
