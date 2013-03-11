@@ -100,6 +100,7 @@ class ProjectController extends CI_Controller
 
 			//get the people suggestion for the current project
 			$data['suggested_users'] = $this->getSuggestedUsersForCurrentProjectInternal($project_id);
+			$data['can_leave_project'] = $this->getCurrentUserCanLeaveProjectInternal($project_id);
 		}
 		else
 		{
@@ -889,6 +890,18 @@ class ProjectController extends CI_Controller
 			//TODO validate that the current user belongs to the specified project 
 			//TODO validate that the current user was not the one who proposed the project
 
+			throw new Exception('not implemented');
+		}
+	}
+
+	private function getCurrentUserCanLeaveProjectInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return false;
+		}
+		else
+		{
 			throw new Exception('not implemented');
 		}
 	}
