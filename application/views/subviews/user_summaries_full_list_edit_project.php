@@ -21,11 +21,7 @@
 				<li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
 					data-userid="<?php echo $user_summary->user->id ?>"> 
 
-					<a href="#" class="myUserRemover pull-right" 
-						id="<?php echo $prefix.'-btn-rem-'.$user_summary->user->id ?>" 
-						data-idtoremove="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
-						title="Remove">x</a>
-					<span class="clearfix"></span>
+					<?php $this->load->view('subviews/user_remove', array('user_summary' => $user_summary, 'prefix' => $prefix)) ?>
 
 					<?php $this->load->view('subviews/user_summary_full_name_image', array('user_summary' => $user_summary)) ?>
 				</li>
