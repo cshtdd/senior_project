@@ -1,7 +1,7 @@
 <?php $this->load->view("template_header"); ?>
 <?php $this->load->helper("skills"); ?>
 
-edit the current project
+<!-- edit the current project -->
 
 <!--
 <?php
@@ -26,8 +26,11 @@ edit the current project
 	));
 ?>
 	<div class="row-fluid">
+		<div class="span3">
+			<?php echo $projectDetails->project->title ?>
+		</div>
 
-		<div class="span9 offset3">
+		<div class="span9">
 			<div class="pull-right">
 				<!--<input type="text" name="tags" placeholder="Tags" class="tagManager"/> -->
 				<?php 
@@ -41,7 +44,9 @@ edit the current project
 				?>
 			</div>
 		</div>
+	</div>
 
+	<div class="row-fluid">
 		<div class="span12">
 			<?php 
 				echo form_textarea(array(
@@ -54,17 +59,20 @@ edit the current project
 				));
 			?>
 		</div>
+	</div>
 
-		<?php 
-			echo form_submit(array(
-				'id' => 'btn-submit',
-				'name' => 'btn-submit',
-				'type' => 'Submit',
-				'class' => 'btn btn-large btn-primary',
-				'value' => 'Save Changes'
-			));
-		?>
-
+	<div class="row-fluid">
+		<div class="span2 offset10">
+			<?php 
+				echo form_submit(array(
+					'id' => 'btn-submit',
+					'name' => 'btn-submit',
+					'type' => 'Submit',
+					'class' => 'btn btn-large btn-primary',
+					'value' => 'Save Changes'
+				));
+			?>
+		</div>
 	</div>
 <?php
 	echo form_close();
