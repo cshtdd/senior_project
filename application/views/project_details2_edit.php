@@ -85,6 +85,8 @@
 			));
 		?>
 
+		Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
+
 		<div class="row-fluid"> 
 			<div class="span2">
 				<?php $this->load->view('subviews/user_summaries_full_list', array(
