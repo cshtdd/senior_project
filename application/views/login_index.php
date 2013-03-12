@@ -36,13 +36,13 @@
 
 
 			<div class="login-service">
-				<a href="<?php echo base_url('/login/gmail_oauth2')?>">
+				<a href="<?php echo base_url('/login/google_oauth2')?>">
 				<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" />
 				</a>
 			</div>
 
 			<div class="login-service">
-				<a href="<?php echo base_url('/login/gmail_oauth2')?>">
+				<a href="<?php echo base_url('/login/google_oauth2')?>">
 					<?php echo img(array('src' => '/img/google_login.png'))?>
 				</a>
 			</div>

@@ -26,12 +26,12 @@ class LoginController extends CI_Controller
 		$this->load->view('login_index');
 	}
 
-	public function gmail_oauth2()
+	public function google_oauth2()
 	{
 		$client = new OAuth2\Client(
 	        '10019035853.apps.googleusercontent.com',
 	        'MWTrFtPTn3TxUOf8q9jqPpd5',
-	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/oauth2_callback'
+	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/google_oauth2_callback'
         );
 
 		$configuration = new OAuth2\Service\Configuration(
@@ -48,14 +48,14 @@ class LoginController extends CI_Controller
 		$service->authorize();
 	}
 
-	public function gmail_oauth2_callback()
+	public function google_oauth2_callback()
 	{
 		$code = $this->input->get("code");
 
 		$client = new OAuth2\Client(
 	        '10019035853.apps.googleusercontent.com',
 	        'MWTrFtPTn3TxUOf8q9jqPpd5',
-	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/oauth2_callback'
+	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/google_oauth2_callback'
         );
 
 		$configuration = new OAuth2\Service\Configuration(
@@ -226,5 +226,4 @@ class LoginController extends CI_Controller
 
 
 	}
-
 }

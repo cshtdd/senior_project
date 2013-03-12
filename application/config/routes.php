@@ -47,8 +47,10 @@ $route['(?i)(me)'] = 'usercontroller/current_user';
 $route['(?i)(user)'] = 'usercontroller/current_user';
 //I NEED THIS this is where the user profile links point to
 //whatever the reason to previously remove this escapes my knowledge
+$route['(?i)(user)/linkedIn_initiate'] = 'usercontroller/linkedIn_initiate';
+$route['(?i)(user)/linkedIn_callback'] = 'usercontroller/linkedIn_callback';
 $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
-//$route['(?i)(user)/(:any)'] = 'usercontroller/$2';
+
 
 
 $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
