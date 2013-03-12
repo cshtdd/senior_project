@@ -12,6 +12,7 @@ class UserController extends CI_Controller
         $this->load->model('SPW_Skill_Model');
         $this->load->model('SPW_Experience_Model');
         $this->load->model('SPW_Language_Model');
+        $this->load->model('SPW_Role_Model');
         $this->load->model('SPW_User_Model');
         $this->load->model('SPW_User_Summary_View_Model');
         $this->load->model('SPW_User_Details_View_Model');
@@ -318,6 +319,10 @@ class UserController extends CI_Controller
             $experience3
         );
 
+        $role = new SPW_Role_Model();
+        $role->id = 5;
+        $role->name = 'Student';
+
 
         $userDetailsViewModel = new SPW_User_Details_View_Model();
         $userDetailsViewModel->user = $user1;
@@ -325,6 +330,7 @@ class UserController extends CI_Controller
         $userDetailsViewModel->lExperiences = $lExperiences;
         $userDetailsViewModel->lLanguages = $lLanguages;
         $userDetailsViewModel->term = $term1;
+        $userDetailsViewModel->role = $role;
 
         return $userDetailsViewModel;
     }
