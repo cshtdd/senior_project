@@ -244,7 +244,88 @@ class UserController extends CI_Controller
     }
     private function getUserDetailsInternalTest($user_id)
     {
-        //implement
-        return null;
+        $user1 = new SPW_User_Model();
+        $user1->id = $user_id;
+        $user1->first_name = 'Flash';
+        $user1->last_name = 'Gordon';
+        $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
+
+
+        $skill1 = new SPW_Skill_Model();
+        $skill1->id = 0;
+        $skill1->name = 'Cobol';
+
+        $skill2 = new SPW_Skill_Model();
+        $skill2->id = 1;
+        $skill2->name = 'Matlab';
+
+        $skill3 = new SPW_Skill_Model();
+        $skill3->id = 2;
+        $skill3->name = 'Gopher';
+
+        $skill4 = new SPW_Skill_Model();
+        $skill4->id = 3;
+        $skill4->name = 'bash';
+
+        $lSkills = array(
+            $skill1,
+            $skill2,
+            $skill3,
+            $skill4
+        );
+
+
+        $term1 = new SPW_Term_Model();
+        $term1->id = 1;
+        $term1->name = 'Spring 2013';
+        $term1->description = 'Spring 2013';
+        $term1->start_date = '1-8-2013';
+        $term1->end_date = '4-26-2013';
+
+
+        $language1 = new SPW_Language_Model();
+        $language1->id = 1;
+        $language1->name = 'English';
+
+        $language2 = new SPW_Language_Model();
+        $language2->id = 2;
+        $language2->name = 'Spanish';
+
+        $lLanguages = array(
+            $language1,
+            $language2
+        );
+
+        $experience1 = new SPW_Experience_Model();
+        $experience1->id = 1;
+        $experience1->title = 'Senior iOS developer at Apple';
+        $experience1->description = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
+
+        $experience2 = new SPW_Experience_Model();
+        $experience2->id = 2;
+        $experience2->title = 'Senior Android developer at Google';
+        $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
+
+        $experience3 = new SPW_Experience_Model();
+        $experience3->id = 3;
+        $experience3->title = 'Senior Mobile developer at Microsoft';
+        $experience3->description = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
+
+
+        $lExperiences = array(
+            $experience1,
+            $experience2,
+            $experience3
+        );
+
+
+        $userDetailsViewModel = new SPW_User_Details_View_Model();
+        $userDetailsViewModel->user = $user1;
+        $userDetailsViewModel->lSkills = $lSkills;
+        $userDetailsViewModel->lExperiences = $lExperiences;
+        $userDetailsViewModel->lLanguages = $lLanguages;
+        $userDetailsViewModel->term = $term1;
+
+        return $userDetailsViewModel;
     }
 }
