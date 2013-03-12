@@ -23,6 +23,7 @@ class UserController extends CI_Controller
 	public function profile($user_id='')
 	{
 		$this->output->set_output('user profile '.$user_id);
+        $this->load->view('user_profile');
 	}
 
 	public function current_user()
