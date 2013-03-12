@@ -74,11 +74,11 @@ class SPW_User_Model extends CI_Model
 
 		if($query->num_rows() > 0)
 		{
-			return true;
+			return $query->id;
 		}
 		else
 		{
-			return false;
+			return 0;
 		}
 	}
 

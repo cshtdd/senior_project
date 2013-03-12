@@ -12,6 +12,8 @@ require_once("application/libraries/OAuth2/Service.php");
 
 class LoginController extends CI_Controller 
 {
+	
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -112,13 +114,16 @@ class LoginController extends CI_Controller
 
 		$this->load->model('spw_user_model');
 		
-		if(!$this->spw_user_model->is_google_registered($id)){
-				$this->spw_user_model->create_new_google_user($email, $given_name, $family_name, $id);
+		$spw_id = $this->spw_user_model->is_google_registered($id);
+
+		if($spw_id == 0){
+				$spw_id  = $this->spw_user_model->create_new_google_user($email, $given_name, $family_name, $id);
 				$is_google_registered = false;
 		}
 
 		$sess_array = array(
-					'id' => $id, 
+					'id' => $spw_id,
+					'google_id' => $id, 
 					'email' => $email, 
 					'using' => 'google'
 				);
@@ -132,4 +137,61 @@ class LoginController extends CI_Controller
 		}
 
 	}
+
+	public function fb_oauth2(){
+		$client = new OAuth2\Client(
+	        '304630476333217',
+	        'ac0547ea3d91386b0247281904f71988',
+	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/fb_oauth2_callback'
+        );
+
+		$configuration = new OAuth2\Service\Configuration(
+	        'https://www.facebook.com/dialog/oauth?',
+	        'https://graph.facebook.com/oauth/access_token?'
+        );
+
+        $dataStore = new OAuth2\DataStore\Session();
+
+		$scope = 'email';
+
+		$service = new OAuth2\Service($client, $configuration, $dataStore, $scope);
+
+		$service->authorize();
+
+	}
+
+	public function fb_oauth2_callback()
+	{
+		$code = $this->input->get("code");
+
+		$client = new OAuth2\Client(
+	        '304630476333217',
+	        'ac0547ea3d91386b0247281904f71988',
+	        'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/fb_oauth2_callback'
+        );
+
+		$configuration = new OAuth2\Service\Configuration(
+	        'https://www.facebook.com/dialog/oauth?',
+	        'https://graph.facebook.com/oauth/access_token?'
+        );
+
+
+        $dataStore = new OAuth2\DataStore\Session();
+
+		$scope = 'email';
+
+		$service = new OAuth2\Service($client, $configuration, $dataStore, $scope);
+
+		$service->getAccessToken($code);
+
+		$token = $dataStore->retrieveAccessToken();
+
+		$userinfo = $service->callApiEndpoint('https://graph.facebook.com/me?access_token=');
+
+		$userinfo = json_decode($userinfo);
+		var_dump($userinfo);
+		die();
+
+	}
+
 }
