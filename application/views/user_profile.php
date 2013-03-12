@@ -30,7 +30,8 @@
 
 				<?php echo $userDetails->role->name ?>
 
-				<?php echo $userDetails->term->description ?>
+
+				<?php echo $userDetails->user->graduation_term->name ?>
 			</div>
 		</div>
 

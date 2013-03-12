@@ -245,13 +245,21 @@ class UserController extends CI_Controller
     }
     private function getUserDetailsInternalTest($user_id)
     {
+        $term1 = new SPW_Term_Model();
+        $term1->id = 1;
+        $term1->name = 'Spring 2013';
+        $term1->description = 'Spring 2013';
+        $term1->start_date = '1-8-2013';
+        $term1->end_date = '4-26-2013';
+
+
         $user1 = new SPW_User_Model();
         $user1->id = $user_id;
         $user1->first_name = 'Flash';
         $user1->last_name = 'Gordon';
         $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
         $user1->summary_spw = 'Mobile oriented developer. Has worked for the biggest players in the field.';
-
+        $user1->graduation_term = $term1;
 
         $skill1 = new SPW_Skill_Model();
         $skill1->id = 0;
@@ -275,15 +283,6 @@ class UserController extends CI_Controller
             $skill3,
             $skill4
         );
-
-
-        $term1 = new SPW_Term_Model();
-        $term1->id = 1;
-        $term1->name = 'Spring 2013';
-        $term1->description = 'Spring 2013';
-        $term1->start_date = '1-8-2013';
-        $term1->end_date = '4-26-2013';
-
 
         $language1 = new SPW_Language_Model();
         $language1->id = 1;
@@ -330,7 +329,6 @@ class UserController extends CI_Controller
         $userDetailsViewModel->lSkills = $lSkills;
         $userDetailsViewModel->lExperiences = $lExperiences;
         $userDetailsViewModel->lLanguages = $lLanguages;
-        $userDetailsViewModel->term = $term1;
         $userDetailsViewModel->role = $role;
 
         return $userDetailsViewModel;
