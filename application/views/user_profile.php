@@ -13,15 +13,22 @@
 	{
 ?>
 
-		<?php echo img(array('src' => $userDetails->user->picture)) ?>
+		<div class="row-fluid">
+			<div class="span4">
+				<?php echo img(array('src' => $userDetails->user->picture)) ?>
+			</div>
 
-		<h3>
-			<?php echo $userDetails->getFullName() ?>
-		</h3>
+			<div class="span8">
+				<h3>
+					<?php echo $userDetails->getFullName() ?>
+				</h3>
 
-		<?php echo $userDetails->role->name ?>
+				<?php echo $userDetails->role->name ?>
 
-		<?php echo $userDetails->term->description ?>
+				<?php echo $userDetails->term->description ?>
+			</div>
+		</div>
+
 
 		<div class="spaced-top">
 			<?php if (isset($userDetails->lSkills) && count($userDetails->lSkills) > 0) { ?>
