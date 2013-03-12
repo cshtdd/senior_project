@@ -1,6 +1,6 @@
 <?php
 
-class SPW_Experience extends CI_Model
+class SPW_Experience_Model extends CI_Model
 {
 	public $id;
 	public $title;
