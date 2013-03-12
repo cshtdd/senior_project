@@ -32,9 +32,33 @@
 					</div>
 
 					<div class="span8">
-						<h3>
-							<?php echo $userDetails->getFullName() ?>
-						</h3>
+
+						<?php 
+							echo form_input(array(
+								'id' => 'text-first-name',
+								'name' => 'text-first-name',
+								'type' => 'text',
+								'class' => 'input-large',
+								'placeholder' => 'First Name...',
+								'value' => $userDetails->user->first_name,
+								'required' => '',
+								'title' => 'First Name'
+							));
+						?>
+
+						<?php 
+							echo form_input(array(
+								'id' => 'text-last-name',
+								'name' => 'text-last-name',
+								'type' => 'text',
+								'class' => 'input-large',
+								'placeholder' => 'Last Name...',
+								'value' => $userDetails->user->last_name,
+								'required' => '',
+								'title' => 'Last Name'
+							));
+						?>
+
 
 						<?php echo $userDetails->role->name ?>
 
