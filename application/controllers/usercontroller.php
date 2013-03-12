@@ -22,7 +22,32 @@ class UserController extends CI_Controller
 
 	public function profile($user_id='')
 	{
-		$this->output->set_output('user profile '.$user_id);
+		//$this->output->set_output('user profile '.$user_id);
+        $currentUserId = getCurrentUserId($this);
+        $user_details = $this->getUserDetailsInternal($user_id);
+
+        if ($user_id == $currentUserId) //we are viewing the current user profile
+        {
+            $resulting_view_name = 'user_profile_edit';
+        }
+        else //we are viewing somebody else's profile
+        {
+            $resulting_view_name = 'user_profile';
+        }
+
+        if (isset($user_details))
+        {
+            $data['no_results'] = false;
+        }
+        else
+        {
+            $data['no_results'] = true;
+        }
+
+        $data['userDetails'] = $project_details;
+        $data['title'] = 'User Details';
+
+        $this->load->view($resulting_view_name, $data);
 	}
 
 	public function current_user()
