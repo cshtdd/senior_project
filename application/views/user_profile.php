@@ -14,8 +14,13 @@
 ?>
 
 		<div class="row-fluid">
-			<div class="span4">
-				<?php echo img(array('src' => $userDetails->user->picture)) ?>
+			<div class="span4 center-text">
+				<?php 
+					echo img(array(
+						'src' => $userDetails->user->picture,
+						'class' => 'user-img-large'
+					))
+				?>
 			</div>
 
 			<div class="span8">

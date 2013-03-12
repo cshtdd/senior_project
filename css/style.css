@@ -199,6 +199,13 @@ a:visited.myUserRemover
     height: 100px;
 }
 
+.user-img-large
+{
+    max-width: 100%;
+    /* max-width: 50px; */
+    max-height: 322px;
+}
+
 .spaced-top
 {
     margin-top: 2em;
