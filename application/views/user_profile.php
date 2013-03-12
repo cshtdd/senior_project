@@ -65,13 +65,13 @@
 
 		<div class="spaced-top">
 			<?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) {	?>
-				<h4>Experiences</h4>
+				<h4>Experience</h4>
 				<ul>
 					<?php foreach($userDetails->lExperiences as $iExperience) { ?>
-						<li>
-							<p>
+						<li class="well">
+							<h5>
 								<?php echo $iExperience->title ?>
-							</p>
+							</h5>
 
 							<p>
 								<?php echo $iExperience->description ?>
