@@ -64,6 +64,13 @@
 		</div>
 
 		<div class="spaced-top">
+			<?php if(isset($userDetails->user->summary_linkedIn) && strlen($userDetails->user->summary_linkedIn) > 0) {?>
+				<h4>Linked In Summary</h4>
+				<?php echo $userDetails->user->summary_linkedIn ?>
+			<?php }?>
+		</div>
+
+		<div class="spaced-top">
 			<?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) {	?>
 				<h4>Experience</h4>
 				<ul>
