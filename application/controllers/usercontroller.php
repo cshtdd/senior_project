@@ -7,23 +7,48 @@ class UserController extends CI_Controller
 		parent::__construct();
 
         $this->load->helper('request');
-		/*
-		$this->load->model('SPW_Project_Model');
-		$this->load->model('SPW_Term_Model');
-		$this->load->model('SPW_Skill_Model');
-		$this->load->model('SPW_User_Model');
-		$this->load->model('SPW_Project_Status_Model');
-		$this->load->model('SPW_User_Summary_View_Model');
-		$this->load->model('SPW_Project_Summary_View_Model');
-		*/
+
+        $this->load->model('SPW_Term_Model');
+        $this->load->model('SPW_Skill_Model');
+        $this->load->model('SPW_Experience_Model');
+        $this->load->model('SPW_Language_Model');
+        $this->load->model('SPW_Role_Model');
+        $this->load->model('SPW_User_Model');
+        $this->load->model('SPW_User_Summary_View_Model');
+        $this->load->model('SPW_User_Details_View_Model');
+
 		//$this->output->cache(60);
 	}
 
 
 	public function profile($user_id='')
 	{
-		$this->output->set_output('user profile '.$user_id);
-        $this->load->view('user_profile');
+		//$this->output->set_output('user profile '.$user_id);
+        $currentUserId = getCurrentUserId($this);
+        $user_details = $this->getUserDetailsInternal($user_id);
+
+        if ($user_id == $currentUserId) //we are viewing the current user profile
+        {
+            $resulting_view_name = 'user_profile_edit';
+        }
+        else //we are viewing somebody else's profile
+        {
+            $resulting_view_name = 'user_profile';
+        }
+
+        if (isset($user_details))
+        {
+            $data['no_results'] = false;
+        }
+        else
+        {
+            $data['no_results'] = true;
+        }
+
+        $data['userDetails'] = $user_details;
+        $data['title'] = 'User Details';
+
+        $this->load->view($resulting_view_name, $data);
 	}
 
 	public function current_user()
@@ -205,5 +230,108 @@ class UserController extends CI_Controller
         {
             throw new Exception('not implemented');
         }
+    }
+
+    private function getUserDetailsInternal($user_id)
+    {
+        if (is_test($this))
+        {
+            return $this->getUserDetailsInternalTest($user_id);
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
+    private function getUserDetailsInternalTest($user_id)
+    {
+        $term1 = new SPW_Term_Model();
+        $term1->id = 1;
+        $term1->name = 'Spring 2013';
+        $term1->description = 'Spring 2013';
+        $term1->start_date = '1-8-2013';
+        $term1->end_date = '4-26-2013';
+
+
+        $user1 = new SPW_User_Model();
+        $user1->id = $user_id;
+        $user1->first_name = 'Flash';
+        $user1->last_name = 'Gordon';
+        $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
+        $user1->summary_spw = 'Mobile oriented developer. Has worked for the biggest players in the field.';
+        $user1->summary_linkedIn = 'Worked as a security expert at LinkedIn right after they lost all of their passwords';
+        $user1->graduation_term = $term1;
+
+        $skill1 = new SPW_Skill_Model();
+        $skill1->id = 0;
+        $skill1->name = 'Cobol';
+
+        $skill2 = new SPW_Skill_Model();
+        $skill2->id = 1;
+        $skill2->name = 'Matlab';
+
+        $skill3 = new SPW_Skill_Model();
+        $skill3->id = 2;
+        $skill3->name = 'Gopher';
+
+        $skill4 = new SPW_Skill_Model();
+        $skill4->id = 3;
+        $skill4->name = 'bash';
+
+        $lSkills = array(
+            $skill1,
+            $skill2,
+            $skill3,
+            $skill4
+        );
+
+        $language1 = new SPW_Language_Model();
+        $language1->id = 1;
+        $language1->name = 'English';
+
+        $language2 = new SPW_Language_Model();
+        $language2->id = 2;
+        $language2->name = 'Spanish';
+
+        $lLanguages = array(
+            $language1,
+            $language2
+        );
+
+        $experience1 = new SPW_Experience_Model();
+        $experience1->id = 1;
+        $experience1->title = 'Senior iOS developer at Apple';
+        $experience1->description = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
+
+        $experience2 = new SPW_Experience_Model();
+        $experience2->id = 2;
+        $experience2->title = 'Senior Android developer at Google';
+        $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
+
+        $experience3 = new SPW_Experience_Model();
+        $experience3->id = 3;
+        $experience3->title = 'Senior Mobile developer at Microsoft';
+        $experience3->description = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
+
+
+        $lExperiences = array(
+            $experience1,
+            $experience2,
+            $experience3
+        );
+
+        $role = new SPW_Role_Model();
+        $role->id = 5;
+        $role->name = 'Student';
+
+
+        $userDetailsViewModel = new SPW_User_Details_View_Model();
+        $userDetailsViewModel->user = $user1;
+        $userDetailsViewModel->lSkills = $lSkills;
+        $userDetailsViewModel->lExperiences = $lExperiences;
+        $userDetailsViewModel->lLanguages = $lLanguages;
+        $userDetailsViewModel->role = $role;
+
+        return $userDetailsViewModel;
     }
 }
