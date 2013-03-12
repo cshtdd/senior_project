@@ -19,12 +19,23 @@
 
 		<?php echo $userDetails->term->description ?>
 
-		<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lSkills) )?>
 
-		<?php echo $userDetails->user->summary_spw ?>
+		<?php if (isset($userDetails->lSkills) && count($userDetails->lSkills) > 0) { ?>
+			Skills
+			<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lSkills) )?>
+		<?php }?>
 
-		<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lLanguages) )?>
 
+		<?php if (isset($userDetails->lLanguages) && count($userDetails->lLanguages) > 0) { ?>
+			Languages
+			<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lLanguages) )?>
+		<?php }?>
+
+
+		<?php if(isset($userDetails->user->summary_spw) && strlen($userDetails->user->summary_spw) > 0) {?>
+			Short Bio
+			<?php echo $userDetails->user->summary_spw ?>
+		<?php }?>
 
 
 		<?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) {	?>
