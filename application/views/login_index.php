@@ -32,30 +32,35 @@
 <div class="indent">
 	<div class="row-fluid">
 
-		<div class="span4">
-			<div class="well">
+		<div class="span3">
+
+			<div class="login-service">
 				<a href="<?php echo base_url('/login/gmail_oauth2')?>">
 					<?php echo img(array('src' => '/img/google_login.png'))?>
 				</a>
 			</div>
 
-			<div class="well">
+			<div class="login-service">
 				<a href="<?php echo base_url('/login/gmail_oauth2')?>">
 				<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" />
 				</a>
 			</div>
+		</div>
 
-			<div class="well">
+		<div class="span3">
+
+			<div class="login-service">
 				<a href="<?php echo base_url('/login/fb_oauth2')?>">
 					<?php echo img(array('src' => '/img/fb_login.png'))?>
 				</a>
 			</div>
 
-			<div class="well">
+			<div class="login-service">
 				<a href="<?php echo base_url('/login/linkedIn_initiate')?>">
 					<?php echo img(array('src' => '/img/linkedin_login.png'))?>
 				</a>
 			</div>
+
 		</div>
 
 		<div class="span6">
