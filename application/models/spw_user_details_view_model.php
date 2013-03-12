@@ -10,6 +10,8 @@ class SPW_User_Details_View_Model extends SPW_User_Summary_View_Model
 	public $lLanguages;
 	//a SPW_Term_Model object
 	public $term;
+	//a SPW_Role_Model object
+	public $role;
 
 	public function __construct()
 	{
