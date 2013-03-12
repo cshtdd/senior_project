@@ -7,15 +7,15 @@ class UserController extends CI_Controller
 		parent::__construct();
 
         $this->load->helper('request');
-		/*
-		$this->load->model('SPW_Project_Model');
-		$this->load->model('SPW_Term_Model');
-		$this->load->model('SPW_Skill_Model');
-		$this->load->model('SPW_User_Model');
-		$this->load->model('SPW_Project_Status_Model');
-		$this->load->model('SPW_User_Summary_View_Model');
-		$this->load->model('SPW_Project_Summary_View_Model');
-		*/
+
+        $this->load->model('SPW_Term_Model');
+        $this->load->model('SPW_Skill_Model');
+        $this->load->model('SPW_Experience_Model');
+        $this->load->model('SPW_Language_Model');
+        $this->load->model('SPW_User_Model');
+        $this->load->model('SPW_User_Summary_View_Model');
+        $this->load->model('SPW_User_Details_View_Model');
+
 		//$this->output->cache(60);
 	}
 
@@ -44,7 +44,7 @@ class UserController extends CI_Controller
             $data['no_results'] = true;
         }
 
-        $data['userDetails'] = $project_details;
+        $data['userDetails'] = $user_details;
         $data['title'] = 'User Details';
 
         $this->load->view($resulting_view_name, $data);
@@ -230,15 +230,21 @@ class UserController extends CI_Controller
             throw new Exception('not implemented');
         }
     }
+
     private function getUserDetailsInternal($user_id)
     {
         if (is_test($this))
         {
-            return getUserDetailsInternalTest($user_id);
+            return $this->getUserDetailsInternalTest($user_id);
         }
         else
         {
             throw new Exception('not implemented');
         }
+    }
+    private function getUserDetailsInternalTest($user_id)
+    {
+        //implement
+        return null;
     }
 }
