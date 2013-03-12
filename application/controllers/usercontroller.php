@@ -230,4 +230,15 @@ class UserController extends CI_Controller
             throw new Exception('not implemented');
         }
     }
+    private function getUserDetailsInternal($user_id)
+    {
+        if (is_test($this))
+        {
+            return getUserDetailsInternalTest($user_id);
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
 }
