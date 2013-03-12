@@ -2,6 +2,7 @@
 
 class UserController extends CI_Controller 
 {
+    
 	public function __construct()
 	{
 		parent::__construct();
@@ -161,9 +162,36 @@ class UserController extends CI_Controller
         $this->session->set_flashdata('oauth_request_token_secret',$token['linkedin']['oauth_token_secret']);
         $this->session->set_flashdata('oauth_request_token',$token['linkedin']['oauth_token']);
         
-        $link = "https://api.linkedin.com/uas/oauth/authorize?oauth_token=". $token['linkedin']['oauth_token'];  
+        $link = "https://api.linkedin.com/uas/oauth/authorize?oauth_token=". $token['linkedin']['oauth_token']; 
+
+        $this->session->set_flashdata('linkedIn_sync', 'true'); 
+
         redirect($link);
 	}
+
+    public function linkedIn_sync()
+    {
+        // setup before redirecting to Linkedin for authentication.
+         $linkedin_config = array(
+             'appKey'       => '1ky0pyoc0rpe',
+             'appSecret'    => '7WIPfrEkya3QT3LR',
+             'callbackUrl'  => 'http://srprog-spr13-01.aul.fiu.edu/senior-projects/user/linkedIn_callback'
+         );
+        
+        $this->load->library('linkedin', $linkedin_config);
+        $this->linkedin->setResponseFormat(LINKEDIN::_RESPONSE_JSON);
+        $token = $this->linkedin->retrieveTokenRequest();
+        
+        $this->session->set_flashdata('oauth_request_token_secret',$token['linkedin']['oauth_token_secret']);
+        $this->session->set_flashdata('oauth_request_token',$token['linkedin']['oauth_token']);
+        
+        $link = "https://api.linkedin.com/uas/oauth/authorize?oauth_token=". $token['linkedin']['oauth_token'];  
+
+        $this->session->set_flashdata('linkedIn_sync', 'true');
+
+        redirect($link);
+    }
+
 
 	public  function linkedIn_cancel() {
     
@@ -171,8 +199,8 @@ class UserController extends CI_Controller
     }
 
     public  function linkedIn_callback() {
-    
-         $linkedin_config = array(
+
+        $linkedin_config = array(
                      'appKey'       => '1ky0pyoc0rpe',
                      'appSecret'    => '7WIPfrEkya3QT3LR',
                      'callbackUrl'  => 'http://srprog-spr13-01.aul.fiu.edu/senior-projects/user/linkedIn_callback'
@@ -183,39 +211,69 @@ class UserController extends CI_Controller
          
         $oauth_token = $this->session->flashdata('oauth_request_token');
         $oauth_token_secret = $this->session->flashdata('oauth_request_token_secret');
-
+        
         $oauth_verifier = $this->input->get('oauth_verifier');
 
         $response = $this->linkedin->retrieveTokenAccess($oauth_token, $oauth_token_secret, $oauth_verifier);
-        
         
         if($response['success'] === TRUE) {
         	
 	        $oauth_expires_in = $response['linkedin']['oauth_expires_in'];
 	        $oauth_authorization_expires_in = $response['linkedin']['oauth_authorization_expires_in'];
 	        
+            $this->session->keep_flashdata('linkedIn_sync');
+
 	        $response = $this->linkedin->setTokenAccess($response['linkedin']);
+            $this->session->keep_flashdata('linkedIn_sync');
 	        $profile = $this->linkedin->profile('~:(id,first-name,last-name,picture-url,headline,email-address,summary,skills,languages,positions)');
 
 	        $user = json_decode($profile['linkedin']);
 
-	        $user_profile = (object)array(
-		        					'first_name' 			=> $user->firstName,
-		        					'last_name' 			=> $user->lastName,
-		        					'picture' 				=> $user->pictureUrl,
-		        					'headline_linkedIn' 	=> $user->headline,
-		        					'summary_linkedIn'      => $user->summary,
-		        					'positions_linkedIn'    => $this->parse_positions($user->positions),
-		        					'skills' 				=> $this->parse_skills($user->skills),
-		        					'languages' 			=> $this->parse_languages($user->languages),
-		        				);
+            $user_profile = (object)array(
+                    'id'                    => $user->id,
+                    'first_name'            => $user->firstName,
+                    'last_name'             => $user->lastName,
+                    'picture'               => $user->pictureUrl,
+                    'headline_linkedIn'     => $user->headline,
+                    'summary_linkedIn'      => $user->summary,
+                    'positions_linkedIn'    => $this->parse_positions($user->positions),
+                    'skills'                => $this->parse_skills($user->skills),
+                    'languages'             => $this->parse_languages($user->languages),
+                );
 
-	        var_dump($user_profile) ; 				
-	        die();
+            if($this->session->flashdata('linkedIn_sync') == 'false')
+            {
+                $is_linkedin_registered = true;
 
-        } else {
-          // bad token request, display diagnostic information
-          echo "Request token retrieval failed:<br /><br />RESPONSE:<br /><br />" . print_r($response, TRUE);
+                $this->load->model('spw_user_model');
+            
+                $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
+
+                 if($spw_id == 0){
+                    $spw_id  = $this->spw_user_model->create_new_linkedin_user($email, $given_name, $family_name, $id);
+                    $is_linkedin_registered = false;
+                }
+
+                $sess_array = array(
+                            'id' => $spw_id,
+                            'linked_id' => $id, 
+                            'email' => $email, 
+                            'using' => 'linkedin'
+                        );
+
+                $this->session->set_userdata('logged_in', $sess_array);
+
+                if($is_linkedin_registered){
+                    redirect('home','refresh');
+                }else{
+                    redirect('user','refresh');
+                }
+
+            } else {
+                //TODO: Update LinkedIn Profile for Logged In student
+            }
+        }else{
+            echo "Bad Request";
         }                  
     }
 
