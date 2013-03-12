@@ -189,8 +189,41 @@ class LoginController extends CI_Controller
 		$userinfo = $service->callApiEndpoint('https://graph.facebook.com/me?access_token=');
 
 		$userinfo = json_decode($userinfo);
-		var_dump($userinfo);
-		die();
+
+		$id = $userinfo->id;
+
+		$email = $userinfo->email;
+
+		$given_name = $userinfo->first_name;
+
+		$family_name = $userinfo->last_name;
+
+		$is_facebook_registered = true; 
+
+		$this->load->model('spw_user_model');
+		
+		$spw_id = $this->spw_user_model->is_facebook_registered($id);
+
+		if($spw_id == 0){
+				$spw_id  = $this->spw_user_model->create_new_facebook_user($email, $given_name, $family_name, $id);
+				$is_facebook_registered = false;
+		}
+
+		$sess_array = array(
+					'id' => $spw_id,
+					'facebook_id' => $id, 
+					'email' => $email, 
+					'using' => 'facebook'
+				);
+
+		$this->session->set_userdata('logged_in', $sess_array);
+
+		if($is_facebook_registered){
+			redirect('home','refresh');
+		}else{
+			redirect('user','refresh');
+		}
+
 
 	}
 
