@@ -33,13 +33,15 @@
 	<div class="row-fluid">
 
 		<div class="span2 well">
-			<a href="<?php echo base_url('/login/oauth2')?>">
+			<a href="<?php echo base_url('/login/gmail_oauth2')?>">
 				<img src="https://ssl.gstatic.com/images/logos/google_logo_41.png" />
 			</a>
 		</div>
 
 		<div class="span2 well">
+			<a href="<?php echo base_url('/login/gmail_oauth2')?>">
 			<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" />
+			</a>
 		</div>
 
 		<div class="span6">

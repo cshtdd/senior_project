@@ -74,11 +74,14 @@ class SPW_User_Model extends CI_Model
 
 		if($query->num_rows() > 0)
 		{
-			return true;
+			foreach ($query->result() as $row)
+			{
+			   return $row->id;
+			}
 		}
 		else
 		{
-			return false;
+			return 0;
 		}
 	}
 
@@ -106,7 +109,40 @@ class SPW_User_Model extends CI_Model
  		$this->db->insert('spw_user', $data);
  		return $this->db->insert_id();
  	}
+ 	
+ 	public function is_facebook_registered($id)
+	{
+		$query = $this->db
+					   ->where('facebook_id',$id)
+					   ->get('spw_user');
+
+		if($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+			   return $row->id;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public function create_new_facebook_user($email_address, $given_name, $family_name,$facebook_id)
+ 	{
+ 	
+ 		$data = array(
+ 		   'email' =>  $email_address ,
+ 		   'first_name' => $given_name, 
+ 		   'last_name' => $family_name,
+ 		   'facebook_id' => $facebook_id,
+ 		);
  
+ 		$this->db->insert('spw_user', $data);
+ 		return $this->db->insert_id();
+ 	}
+ 	
  
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
