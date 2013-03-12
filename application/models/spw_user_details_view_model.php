@@ -11,6 +11,11 @@ class SPW_User_Details_View_Model extends SPW_User_Summary_View_Model
 	//a SPW_Role_Model object
 	public $role;
 
+	//a list of SPW_Role objects with all the available roles
+	public $lRoles;
+	//a list of all the available terms students can choose
+	public $lTerms;
+
 	public function __construct()
 	{
 		parent::__construct();
