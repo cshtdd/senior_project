@@ -22,11 +22,13 @@
 
 	<link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+	<!-- <link href="<?php echo base_url() ?>css/bootstrap-tagmanager.css" rel="stylesheet" media="screen"> -->
 
 	<link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
 
 </head>
 <body>

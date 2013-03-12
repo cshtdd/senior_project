@@ -15,12 +15,7 @@
 			{
 		?>
 				<li> 
-					<?php 
-						$this->load->view('subviews/user_summary_full_name_image', array(
-							'user_summary' => $iUserSummary
-							) 
-						) 
-					?> 
+					<?php $this->load->view('subviews/user_summary_full_name_image', array('user_summary' => $iUserSummary)) ?>
 				</li>
 		<?php	
 			}
