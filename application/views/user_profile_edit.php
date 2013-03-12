@@ -74,9 +74,20 @@
 								?>
 								<?php echo $iRole->name ?>
 
-								<?php if (strtolower($iRole->name) == 'student') { ?>
+								<?php 
+									if (strtolower($iRole->name) == 'student') 
+									{ 
+										$arrTermsOptions = array();
 
-								<?php } ?>
+										foreach ($userDetails->lTerms as $iTerm) 
+										{
+											//echo $iTerm->id.' '.$iTerm->name;
+											$arrTermsOptions[$iTerm->id] = $iTerm->name;
+										}
+
+										echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
+								 	} 
+								?>
 								</label>
 						<?php
 							}
