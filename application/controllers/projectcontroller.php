@@ -195,6 +195,55 @@ class ProjectController extends CI_Controller
 		}
 	}
 
+	public function create_new_project()
+	{
+		//TODO redirect to home if not logged in
+ 		$currentUserId = getCurrentUserId($this);
+
+		//TODO read this from the DB eventually
+		$projStatus = new SPW_Project_Status_Model();
+		$projStatus->id = 1;
+		$projStatus->name = 'created';
+
+		$project1 = new SPW_Project_Model();
+		$project1->id = -1;
+		$project1->title = '';
+		$project1->description = '';
+		$project1->status = $projStatus;
+
+		//TODO get the current user term from the DB
+		$term1 = new SPW_Term_Model();
+		$term1->id = 1;
+		$term1->name = 'Spring 2013';
+		$term1->description = 'Spring 2013';
+		$term1->start_date = '1-8-2013';
+		$term1->end_date = '4-26-2013';
+
+		//TODO get the current user data from the db
+		$user1 = new SPW_User_Model();
+		$user1->id = getCurrentUserId($this);
+		$user1->first_name = 'Phillippe';
+		$user1->last_name = 'Me';
+		$user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
+
+		$current_user_vm = new SPW_User_Summary_View_Model();
+		$current_user_vm->user = $user1;
+
+
+		$project_details = new SPW_Project_Details_View_Model();
+		$project_details->project = $project1;
+		$project_details->term = $term1;
+		$project_details->proposedBySummary = $current_user_vm;
+		$project_details->displayJoin = false;
+		$project_details->displayLeave = false;
+
+		$data['projectDetails'] = $project_details;
+		$data['title'] = 'Create Project';
+		$data['creating_new'] = true;
+
+		$this->load->view('project_details2_edit', $data);
+	}
+
 /*
 	private function singleProjectDetailsInternal($project_id, $isCurrentUserProject)
 	{
