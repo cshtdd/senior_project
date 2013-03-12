@@ -252,6 +252,27 @@ class UserController extends CI_Controller
         $term1->start_date = '1-8-2013';
         $term1->end_date = '4-26-2013';
 
+        $term2 = new SPW_Term_Model();
+        $term2->id = 2;
+        $term2->name = 'Summer 2013';
+        $term2->description = 'Summer 2013';
+        $term2->start_date = '4-26-2013';
+        $term2->end_date = '1-8-2013';
+
+        $term3 = new SPW_Term_Model();
+        $term3->id = 3;
+        $term3->name = 'Fall 2013';
+        $term3->description = 'Fall 2013';
+        $term3->start_date = '1-8-2013';
+        $term3->end_date = '12-28-2013';
+
+        $lTerms = array(
+                $term1,
+                $term2,
+                $term3
+            );
+
+
 
         $user1 = new SPW_User_Model();
         $user1->id = $user_id;
@@ -320,9 +341,25 @@ class UserController extends CI_Controller
             $experience3
         );
 
+
+        $role1 = new SPW_Role_Model();
+        $role1->id = 4;
+        $role1->name = 'Client';
+
+        $role2 = new SPW_Role_Model();
+        $role2->id = 3;
+        $role2->name = 'Professor';
+
         $role = new SPW_Role_Model();
         $role->id = 5;
         $role->name = 'Student';
+
+
+        $lRoles = array(
+            $role,
+            $role2,
+            $role1
+        );
 
 
         $userDetailsViewModel = new SPW_User_Details_View_Model();
@@ -331,6 +368,8 @@ class UserController extends CI_Controller
         $userDetailsViewModel->lExperiences = $lExperiences;
         $userDetailsViewModel->lLanguages = $lLanguages;
         $userDetailsViewModel->role = $role;
+        $userDetailsViewModel->lTerms = $lTerms;
+        $userDetailsViewModel->lRoles = $lRoles;
 
         return $userDetailsViewModel;
     }
