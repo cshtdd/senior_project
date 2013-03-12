@@ -34,7 +34,7 @@ class SearchController extends CI_Controller
 			if (isset($lProjects) && count($lProjects) > 0)
 			{
 				$data['lProjects'] = $lProjects;
-				$data['lUsers'] = $l
+				$data['lUsers'] = $lUsers;
 				$data['no_results'] = false;
 			}
 		}
@@ -62,7 +62,14 @@ class SearchController extends CI_Controller
 
 	private function getUsersWithSearchParam($search_query)
 	{
-		
+		if (is_test($this))
+		{
+			return $this->getUsersWithSearchParamTest($search_query);
+		}
+		else
+		{
+			throw Exception('not implemented');
+		}
 	}
 
 	private function dumpQueryIdsOnArray($query)
@@ -249,15 +256,62 @@ class SearchController extends CI_Controller
 			$project_summ_vm1, 
 			$project_summ_vm2,
 			$project_summ_vm1, 
-			$project_summ_vm2,
+			$project_summ_vm2 /*, 
 			$project_summ_vm1, 
 			$project_summ_vm2,
 			$project_summ_vm1, 
 			$project_summ_vm2,
 			$project_summ_vm1, 
-			$project_summ_vm2
+			$project_summ_vm2 */
 		);
 
 		return $lProjects;
+	}
+
+	private function getUsersWithSearchParamTest($search_query)
+	{
+		$user1 = new SPW_User_Model();
+		$user1->id = 0;
+		$user1->first_name = 'Steven';
+		$user1->last_name = 'Luis';
+		$user1->picture = 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
+
+		$user_summ_vm1 = new SPW_User_Summary_View_Model();
+		$user_summ_vm1->user = $user1;
+
+		$user2 = new SPW_User_Model();
+		$user2->id = 1;
+		$user2->first_name = 'Lolo';
+		$user2->last_name = 'Gonzalez';
+		$user2->picture = 'https://si0.twimg.com/profile_images/65653569/amy-silly_bigger.png';
+
+		$user_summ_vm2 = new SPW_User_Summary_View_Model();
+		$user_summ_vm2->user = $user2;
+
+		$user3 = new SPW_User_Model();
+		$user3->id = 2;
+		$user3->first_name = 'Karen';
+		$user3->last_name = 'Rodriguez';
+		$user3->picture = 'https://si0.twimg.com/profile_images/65653569/amy-silly_bigger.png';
+
+		$user_summ_vm3 = new SPW_User_Summary_View_Model();
+		$user_summ_vm3->user = $user3;
+
+		$user4 = new SPW_User_Model();
+		$user4->id = 3;
+		$user4->first_name = 'Gregory';
+		$user4->last_name = 'Zhao';
+		$user3->picture = 'https://si0.twimg.com/profile_images/2830125611/3532254801ca705a5ffc995bded62d13_bigger.png';
+
+		$user_summ_vm4 = new SPW_User_Summary_View_Model();
+		$user_summ_vm4->user = $user4;
+
+		$result = array(
+				$user_summ_vm1,
+				$user_summ_vm2,
+				$user_summ_vm3,
+				$user_summ_vm4
+			);
+		return $result;
 	}
 }
