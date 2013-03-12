@@ -29,10 +29,12 @@ class SearchController extends CI_Controller
 			$search_query = urldecode($search_param);
 
 			$lProjects = $this->getProjectsWithSearchParam($search_query);
+			$lUsers = $this->getUsersWithSearchParam($search_query);
 
 			if (isset($lProjects) && count($lProjects) > 0)
 			{
 				$data['lProjects'] = $lProjects;
+				$data['lUsers'] = $l
 				$data['no_results'] = false;
 			}
 		}
@@ -42,15 +44,88 @@ class SearchController extends CI_Controller
 
 	private function getProjectsWithSearchParam($search_query)
 	{
+		$lProjectsFound = array();
+		$lProjectIds = array();
+
 		if (is_test($this))
 		{
 			return $this->getProjectsWithSearchParamTest($search_query);
 		}
 		else
 		{
-			throw new Exception('not implemented'); 
+			$lProjectIds = $this->searchKeywordDatabaseQueriesForProjects($search_query);
+
+
+
 		}
 	}
+
+	private function getUsersWithSearchParam($search_query)
+	{
+		
+	}
+
+	private function dumpQueryIdsOnArray($query)
+	{
+		$res = array();
+
+		if (isset($query))
+		{
+			foreach ($query->result() as $row)
+			{
+				$res[] = $row->id;
+			}
+		}
+
+		return $res;
+
+	}
+
+	private function searchKeywordDatabaseQueriesForProjects($keyword)
+	{
+		$user_id = getCurrentUserId($this);
+		$listIds = array();
+
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+
+			$sql = 'select id
+					from spw_project
+					where (delivery_term = ?) and (status = 3) and
+					((title = '.$term->id.') or (description = '.$term->id.'))';
+
+			$query = $this->db->query($sql);
+
+			$listIds = $this->dumpQueryIdsOnArray($query);
+
+
+
+
+
+
+					$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
+		}
+		else
+		{
+
+		}
+	}
+
+	private function refineSearchQuery($lSearchQuery)
+	{
+
+	}
+
+	private function combineListIds($list1, $list2)
+	{
+		$res = array_unique(array_merge($list1, $list2));
+		sort($res);
+		return $res;
+	}
+
 	private function getProjectsWithSearchParamTest($search_query)
 	{
 		$projStatus = new SPW_Project_Status_Model();

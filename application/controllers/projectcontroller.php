@@ -523,6 +523,7 @@ class ProjectController extends CI_Controller
 			throw new Exception('Not implemented');
 		}
 	}
+	
 	private function getSuggestedProjectsForCurrentUserWithNoProjectTest()
 	{
 		$projStatus = new SPW_Project_Status_Model();
