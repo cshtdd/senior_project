@@ -6,6 +6,7 @@ class UserController extends CI_Controller
 	{
 		parent::__construct();
 
+        $this->load->helper('request');
 		/*
 		$this->load->model('SPW_Project_Model');
 		$this->load->model('SPW_Term_Model');
@@ -29,6 +30,28 @@ class UserController extends CI_Controller
 		$current_user_id = getCurrentUserId($this);
 		$this->profile($current_user_id);
 	} 
+
+    public function invite()
+    {
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            if (isUserLoggedIn($this))
+            {
+                $currentUser = getCurrentUserId($this);
+                $invitedUser = $this->input->post('uid');
+
+               inviteUserInternal($currentUser, $invitedUser);
+            }
+            else
+            {
+                redirect('/');
+            }
+        }
+    } 
 
     public function parse_positions($positions)
     {
@@ -170,5 +193,16 @@ class UserController extends CI_Controller
         }                  
     }
 
-  
+    private function inviteUserInternal($currentUserId, $invitedUserId)
+    {
+        if (is_test($this))
+        {
+            $this->output->set_output('Current User '.$currentUser.' InvitedUser '.$invitedUser);
+            return true;
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
 }

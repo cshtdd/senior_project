@@ -140,3 +140,61 @@ h4 a:visited
     margin-left: auto;
     margin-right: auto;
 }
+
+
+.myTag a,
+.myTag a:hover
+.myTag a:visited  
+{
+    text-decoration: none;
+}
+
+.myTag a,
+.myTag a:visited  
+{
+    color: silver;
+}
+
+.myTag a:hover
+{
+    color: gray;  
+}
+
+.myTag
+{
+    padding: 5px;
+    line-height: 18px;
+    margin-right: 5px;
+}
+
+
+textarea 
+{
+  width: 100%;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+form .row-fluid .span12 /*,
+form .row-fluid .span2 */
+{
+  margin-left: 0;
+}
+
+a.myUserRemover,
+a:hover.myUserRemover,
+a:visited.myUserRemover
+{
+    text-decoration: none;
+    color: gray;
+}
+
+/*img*/.user-img
+{
+    width: 100px;
+    height: 100px;
+}

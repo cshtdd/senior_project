@@ -8,6 +8,7 @@ class ProjectController extends CI_Controller
 		parent::__construct();
 
 		$this->load->helper('project_summary_view_model');
+		$this->load->helper('request');
 		load_project_summary_models($this);
 		$this->load->model('SPW_Project_Details_View_Model');
 		//$this->output->cache(60);
@@ -84,12 +85,22 @@ class ProjectController extends CI_Controller
 		$current_project_ids = $this->getBelongProjectIds();
 		$project_details = $this->getProjectDetailsInternal($project_id);
 
-		if (in_array($project_id, $current_project_ids)) //if we are viewing the details of the current project
+		$isMyProject = in_array($project_id, $current_project_ids);
+
+		//don't allow details edit after close date
+		$isProjectClosed = $this->isProjectClosedInternal($project_id);
+
+		//TODO don't allow joining/leaving after close join
+
+		//if we are viewing the details of the current project
+		//and the project is not closed
+		if ($isMyProject && !$isProjectClosed) 
 		{
 			$resulting_view_name = 'project_details2_edit';
 
 			//get the people suggestion for the current project
 			$data['suggested_users'] = $this->getSuggestedUsersForCurrentProjectInternal($project_id);
+			$data['can_leave_project'] = $this->getCurrentUserCanLeaveProjectInternal($project_id);
 		}
 		else
 		{
@@ -112,6 +123,76 @@ class ProjectController extends CI_Controller
 		$data['title'] = 'Project Details';
 
 		$this->load->view($resulting_view_name, $data);
+	}
+
+	public function update()
+	{
+		if (!is_POST_request($this))
+		{
+			redirect('/');
+		}
+		else
+		{
+			//$this->output->set_output('received a valid POST request');
+
+			//reading parameters
+			$updated_project_id = $this->input->post('pid');
+
+			$postBackUrl = $this->input->post('pbUrl');
+			if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+
+			$updated_project_title = $this->input->post('text-project-title');
+			$updated_project_description = $this->input->post('text-description');
+
+			$updated_skill_names_str = $this->input->post('hidden-skill-list');
+			$update_mentor_ids_str = $this->input->post('mnthidden-ids');
+			$update_team_members_ids_str = $this->input->post('usrhidden-ids');
+
+			/*
+			$this->output->set_output(
+				$updated_project_id.' '.
+				$postBackUrl.' '.
+				$updated_project_title.' '.
+				$updated_project_description.' '.
+				$updated_skill_names_str.' '.
+				$update_mentor_ids_str.' '.
+				$update_team_members_ids_str
+			);
+			*/
+
+			//TODO validate the parameters and make sure everything is ok
+			//if something fails make sure to add the error message somewhere
+
+
+			//TODO splitting the ids str array into something usable
+
+
+			//TODO implement this, and then redirect to the request url
+
+			redirect($postBackUrl);
+		}
+	}
+
+	public function leave()
+	{
+		if (!is_POST_request($this))
+		{
+			redirect('/');
+		}
+		else
+		{
+			//$this->output->set_output('received a valid POST request');
+
+			$postBackUrl = $this->input->post('pbUrl');
+			if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+
+			$projectId = $this->input->post('pid');
+			$currentUserId = getCurrentUserId($this);
+
+			$this->leaveProjectInternal($projectId, $currentUserId);
+
+			redirect($postBackUrl);
+		}
 	}
 
 /*
@@ -719,7 +800,23 @@ class ProjectController extends CI_Controller
 		$user_summ_vm3 = new SPW_User_Summary_View_Model();
 		$user_summ_vm3->user = $user3;
 
+		$user4 = new SPW_User_Model();
+		$user4->id = 4;
+		$user4->first_name = 'Ming';
+		$user4->last_name = 'Zhao';
+		$user4->picture = 'https://si0.twimg.com/profile_images/2623528696/iahn1tuacgx31qmlvia3.jpeg';
 
+		$user_summ_vm4 = new SPW_User_Summary_View_Model();
+		$user_summ_vm4->user = $user4;
+
+		$user5 = new SPW_User_Model();
+		$user5->id = getCurrentUserId($this);
+		$user5->first_name = 'John';
+		$user5->last_name = 'Siracusa';
+		$user5->picture = 'https://si0.twimg.com/profile_images/1501070030/John_2011_1_500x500_bigger.png';
+
+		$user_summ_vm5 = new SPW_User_Summary_View_Model();
+		$user_summ_vm5->user = $user5;
 
 
 		$project1 = new SPW_Project_Model();
@@ -732,7 +829,8 @@ class ProjectController extends CI_Controller
 		$project_summ_vm1->project = $project1;
 		$project_summ_vm1->term = $term1;
 		$project_summ_vm1->lSkills = $lSkills1;
-		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
+		$project_summ_vm1->lMentorSummaries = array($user_summ_vm1, $user_summ_vm4);
+		$project_summ_vm1->lTeamMemberSummaries = array($user_summ_vm4, $user_summ_vm5, $user_summ_vm1, $user_summ_vm3);
 		$project_summ_vm1->proposedBySummary = $user_summ_vm3;
 		$project_summ_vm1->displayJoin = false;
 		$project_summ_vm1->displayLeave = true;
@@ -753,10 +851,21 @@ class ProjectController extends CI_Controller
 	}
 	private function getSuggestedUsersForCurrentProjectInternalTest($project_id)
 	{
+		$user1 = new SPW_User_Model();
+		$user1->id = getCurrentUserId($this);
+		$user1->first_name = 'Phillippe';
+		$user1->last_name = 'Me';
+		$user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
+
+		$user_summ_vm1 = new SPW_User_Summary_View_Model();
+		$user_summ_vm1->user = $user1;
+
+
 		$user2 = new SPW_User_Model();
 		$user2->id = 1;
 		$user2->first_name = 'Lolo';
 		$user2->last_name = 'Gonzalez Sr.';
+		$user2->picture = 'https://si0.twimg.com/profile_images/362705903/dad_bigger.jpg';
 
 		$user_summ_vm2 = new SPW_User_Summary_View_Model();
 		$user_summ_vm2->user = $user2;
@@ -766,15 +875,70 @@ class ProjectController extends CI_Controller
 		$user4->id = 3;
 		$user4->first_name = 'Gregory';
 		$user4->last_name = 'Zhao Sr.';
+		$user4->picture = 'https://si0.twimg.com/profile_images/556789661/pigman_bigger.jpg';
 
 		$user_summ_vm4 = new SPW_User_Summary_View_Model();
 		$user_summ_vm4->user = $user4;
 
 		$suggestedUsers = array(
 				$user_summ_vm2,
+				$user_summ_vm1,
 				$user_summ_vm4
 			);
 
 		return $suggestedUsers;
+	}
+
+	private function isProjectClosedInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return true && false;
+		}
+		else
+		{
+			$term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_id);
+
+			if (isset($term))
+			{
+				$currentDate = date('Y-m-d');
+				if ($term->closed_requests > $currentDate)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	private function leaveProjectInternal($projectId, $currentUserId)
+	{
+		if (is_test($this))
+		{
+			return true;
+		}
+		else
+		{
+			//TODO validate that the current user belongs to the specified project 
+			//TODO validate that the current user was not the one who proposed the project
+
+			throw new Exception('not implemented');
+		}
+	}
+
+	private function getCurrentUserCanLeaveProjectInternal($project_id)
+	{
+		if (is_test($this))
+		{
+			return true;
+		}
+		else
+		{
+			//this should check whether the current user is the creator of the project and that sort of stuff
+			throw new Exception('not implemented');
+		}
 	}
 }
