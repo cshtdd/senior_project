@@ -26,7 +26,7 @@ class LoginController extends CI_Controller
 		$this->load->view('login_index');
 	}
 
-	public function oauth2()
+	public function gmail_oauth2()
 	{
 		$client = new OAuth2\Client(
 	        '10019035853.apps.googleusercontent.com',
@@ -48,7 +48,7 @@ class LoginController extends CI_Controller
 		$service->authorize();
 	}
 
-	public function oauth2_callback()
+	public function gmail_oauth2_callback()
 	{
 		$code = $this->input->get("code");
 
