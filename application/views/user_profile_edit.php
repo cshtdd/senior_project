@@ -65,10 +65,22 @@
 				</div>
 
 				<div class="spaced-top">
-					<?php if(isset($userDetails->user->summary_spw) && strlen($userDetails->user->summary_spw) > 0) {?>
+
 						<h4>Short Bio</h4>
-						<?php echo $userDetails->user->summary_spw ?>
-					<?php }?>
+
+						<?php 
+							echo form_textarea(array(
+								'id' => 'text-description',
+								'name' => 'text-description',
+								//'class' => 'input-large',
+								'rows' => '12',
+								'placeholder' => 'Enter a description for the project...',
+								'value' => $userDetails->user->summary_spw,
+								'required' => '',
+								'Title' => 'Project Description'
+							));
+						?>
+
 				</div>
 
 				<div class="spaced-top">
