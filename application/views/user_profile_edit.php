@@ -19,8 +19,6 @@
 
 			<div>
 
-				<?php echo anchor('/user/linkedIn_initiate', 'Sync with LinkedIn', array('class' => 'btn btn-primary pull-right'))  ?>
-
 				<div class="row-fluid">
 					<div class="span4 center-text">
 						<?php 
@@ -33,12 +31,14 @@
 
 					<div class="span8">
 
+						<?php echo anchor('/user/linkedIn_initiate', 'Sync with LinkedIn', array('class' => 'btn btn-primary btn-large pull-right'))  ?>
+
 						<?php 
 							echo form_input(array(
 								'id' => 'text-first-name',
 								'name' => 'text-first-name',
 								'type' => 'text',
-								'class' => 'input-large',
+								'class' => 'input-small',
 								'placeholder' => 'First Name...',
 								'value' => $userDetails->user->first_name,
 								'required' => '',
@@ -57,6 +57,29 @@
 								'required' => '',
 								'title' => 'Last Name'
 							));
+						?>
+
+						<?php 
+							foreach ($userDetails->lRoles as $iRole) 
+							{
+						?>
+								<label class="radio">
+								<?php
+									echo form_radio(array(
+										'id' => 'radio-role-'.$iRole->id,
+										'name' => 'radio-role',
+										'value' => $iRole->id,
+										'checked' => $iRole->id == $userDetails->role->id
+									));
+								?>
+								<?php echo $iRole->name ?>
+
+								<?php if (strtolower($iRole->name) == 'student') { ?>
+
+								<?php } ?>
+								</label>
+						<?php
+							}
 						?>
 
 
