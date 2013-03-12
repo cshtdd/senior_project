@@ -83,6 +83,16 @@
 
 				</div>
 
+				<?php 
+					echo form_submit(array(
+						'id' => 'btn-submit',
+						'name' => 'btn-submit',
+						'type' => 'Submit',
+						'class' => 'btn btn-large btn-primary pull-right',
+						'value' => 'Save Changes'
+					));
+				?>
+
 				<div class="spaced-top">
 					<?php if(isset($userDetails->user->summary_linkedIn) && strlen($userDetails->user->summary_linkedIn) > 0) {?>
 						<h4>Linked In Summary</h4>
@@ -108,16 +118,6 @@
 						</ul>
 					<?php } ?>
 				</div>
-
-				<?php 
-					echo form_submit(array(
-						'id' => 'btn-submit',
-						'name' => 'btn-submit',
-						'type' => 'Submit',
-						'class' => 'btn btn-large btn-primary pull-right',
-						'value' => 'Save Changes'
-					));
-				?>
 
 			</div>
 
