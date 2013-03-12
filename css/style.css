@@ -198,3 +198,13 @@ a:visited.myUserRemover
     width: 100px;
     height: 100px;
 }
+
+.spaced-top
+{
+    margin-top: 2em;
+}
+
+.spaced-top h4
+{
+    padding-bottom: 0.16em;
+}

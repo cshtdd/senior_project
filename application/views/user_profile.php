@@ -23,28 +23,28 @@
 
 		<?php echo $userDetails->term->description ?>
 
-		<div>
+		<div class="spaced-top">
 			<?php if (isset($userDetails->lSkills) && count($userDetails->lSkills) > 0) { ?>
 				<h4>Skills</h4>
 				<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lSkills) )?>
 			<?php }?>
 		</div>
 
-		<div>
+		<div class="spaced-top">
 			<?php if (isset($userDetails->lLanguages) && count($userDetails->lLanguages) > 0) { ?>
 				<h4>Languages</h4>
 				<?php $this->load->view('subviews/skills_list', array('lSkills' => $userDetails->lLanguages) )?>
 			<?php }?>
 		</div>
 
-		<div>
+		<div class="spaced-top">
 			<?php if(isset($userDetails->user->summary_spw) && strlen($userDetails->user->summary_spw) > 0) {?>
 				<h4>Short Bio</h4>
 				<?php echo $userDetails->user->summary_spw ?>
 			<?php }?>
 		</div>
 
-		<div>
+		<div class="spaced-top">
 			<?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) {	?>
 				<h4>Experiences</h4>
 				<ul>
