@@ -50,7 +50,11 @@
 	}
 ?>
 
-<h2>Edit Your Project</h2>
+<?php if (isset($creating_new) && $creating_new) { ?>
+	<h2>Create Project</h2>
+<?php } else { ?>
+	<h2>Edit Your Project</h2>
+<?php } ?>
 
 <div>
 	<?php 
@@ -117,36 +121,38 @@
 
 		Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
 
-		<div class="row-fluid"> 
-			<div class="span2">
-				<?php $this->load->view('subviews/user_summaries_full_list', array(
-					'listTitle' => 'Proposed By:',
-					'lUserSummaries' => array($projectDetails->proposedBySummary)
-				)) ?>
+		<?php if (!isset($creating_new)) { ?>
+			<div class="row-fluid"> 
+				<div class="span2">
+					<?php $this->load->view('subviews/user_summaries_full_list', array(
+						'listTitle' => 'Proposed By:',
+						'lUserSummaries' => array($projectDetails->proposedBySummary)
+					)) ?>
+				</div>
+
+				<div class="span8">
+					<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
+						'listTitle' => 'Mentors:',
+						'lUserSummaries' => $projectDetails->lMentorSummaries,
+						'errorMessage' => 'This team needs a mentor...',
+						'topView' => 'subviews/user_remove',
+						'noTopViewForCurrentUser' => true,
+						'bottomView' => '',
+						'prefix' => 'mnt'
+					)) ?>
+				</div>
 			</div>
 
-			<div class="span8">
-				<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
-					'listTitle' => 'Mentors:',
-					'lUserSummaries' => $projectDetails->lMentorSummaries,
-					'errorMessage' => 'This team needs a mentor...',
-					'topView' => 'subviews/user_remove',
-					'noTopViewForCurrentUser' => true,
-					'bottomView' => '',
-					'prefix' => 'mnt'
-				)) ?>
-			</div>
-		</div>
-
-		<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
-			'listTitle' => 'Team Members:',
-			'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
-			'errorMessage' => 'This team has no members',
-			'topView' => 'subviews/user_remove',
-			'noTopViewForCurrentUser' => true,
-			'bottomView' => '',
-			'prefix' => 'usr'
-		)) ?>
+			<?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
+				'listTitle' => 'Team Members:',
+				'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
+				'errorMessage' => 'This team has no members',
+				'topView' => 'subviews/user_remove',
+				'noTopViewForCurrentUser' => true,
+				'bottomView' => '',
+				'prefix' => 'usr'
+			)) ?>
+		<?php } ?>
 
 		<?php
 			echo form_hidden(array(
