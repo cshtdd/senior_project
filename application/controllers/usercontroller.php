@@ -250,6 +250,7 @@ class UserController extends CI_Controller
         $user1->first_name = 'Flash';
         $user1->last_name = 'Gordon';
         $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
+        $user1->summary_spw = 'Mobile oriented developer. Has worked for the biggest players in the field.';
 
 
         $skill1 = new SPW_Skill_Model();
