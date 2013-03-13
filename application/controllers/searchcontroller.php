@@ -28,13 +28,15 @@ class SearchController extends CI_Controller
         {
             $search_query = urldecode($search_param);
 
-            $lProjects = $this->getProjectsWithSearchParam($search_query);
-            $lUsers = $this->getUsersWithSearchParam($search_query);
+            $results_search = $this->getResultsWithSearchParam($search_query);
 
-            if (isset($lProjects) && count($lProjects) > 0)
+            //$lProjects = $this->getProjectsWithSearchParam($search_query);
+            //$lUsers = $this->getUsersWithSearchParam($search_query);
+
+            if (isset($results_search) && count($results_search) > 0)
             {
-                $data['lProjects'] = $lProjects;
-                $data['lUsers'] = $lUsers;
+                $data['lProjects'] = $results_search[0];
+                $data['lUsers'] = $results_search[1];
                 $data['no_results'] = false;
             }
         }
@@ -42,10 +44,17 @@ class SearchController extends CI_Controller
         $this->load->view('search_search', $data);
     }
 
-    private function getProjectsWithSearchParam($search_query)
+    private function getResultsWithSearchParam($search_query)
     {
+        $user_id = getCurrentUserId($this);
+
+        $results_search = array();
+        
         $lProjectsFound = array();
         $lProjectIds = array();
+
+        $lUsersFound = array();
+        $lUserIds = array();
 
         if (is_test($this))
         {
@@ -53,84 +62,105 @@ class SearchController extends CI_Controller
         }
         else
         {
-            $lProjectIds = $this->searchKeywordDatabaseQueriesForProjects($search_query);
+            $results_search = $this->searchKeywordDatabaseQueries($search_query);
 
-
-
-        }
-    }
-
-    private function getUsersWithSearchParam($search_query)
-    {
-        if (is_test($this))
-        {
-            return $this->getUsersWithSearchParamTest($search_query);
-        }
-        else
-        {
-            throw Exception('not implemented');
-        }
-    }
-
-    private function dumpQueryIdsOnArray($query)
-    {
-        $res = array();
-
-        if (isset($query))
-        {
-            foreach ($query->result() as $row)
+            if (isset($results_search[0]) && count($results_search[0]) > 0)
             {
-                $res[] = $row->id;
+                $lProjectIds = $results_search[0];
+                $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+                $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
             }
+
+            if (isset($results_search[1]) && count($results_search[1]) > 0)
+            {
+                $lUserIds = $results_search[1];
+                $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
+            }
+
+            $results_search[0] = $lProjectsFound;
+            $results_search[1] = $lUsersFound;
         }
+
+
+        //$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
+
+        return $results_search;
+    }
+
+	
+	private function searchKeywordDatabaseQueries($keyword)
+	{
+		$user_id = getCurrentUserId($this);
+		$listProjectsIds = array();
+		$lProjectsTmp = array();
+        $listUsersIds = array();
+        $lUsersTmp = array();
+
+		$listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword, $user_id);
+		$lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword, $user_id);
+		$listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
+
+        $listUsersIds = $this->SPW_User_Model->searchQueriesOnUserNamesForUsers($keyword, $user_id);
+
+        if (isset($listUsersIds) && (count($listUsersIds)>0))
+        {
+            $length = count($listUsersIds);
+
+            $belongProjectIds = array();
+
+            for ($i = 0; $i < $length; $i++)
+            {
+                $lProjectsTmp = $this->SPW_User_Model->userHaveProjects($listUsersIds[$i]);
+                $belongProjectIds = $this->combineListIds($belongProjectIds, $lProjectsTmp);
+            }
+
+            $listProjectsIds = $this->combineListIds($listProjectsIds, $belongProjectIds);
+        }
+
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnUserAttributesForUsers($keyword, $user_id);
+        $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
+
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnSkillsForUsers($keyword, $user_id);
+        $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
+
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnExperienceForUsers($keyword, $user_id);
+        $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
+
+        $res[0] = $listProjectsIds;
+        $res[1] = $listUsersIds;
 
         return $res;
-
     }
 
-    private function searchKeywordDatabaseQueriesForProjects($keyword)
-    {
-        $user_id = getCurrentUserId($this);
-        $listIds = array();
-
-        if ($this->SPW_User_Model->isUserAStudent($user_id))
-        {
-            $term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
-
-            $param[0] = $term->id;
-
-            $sql = 'select id
-                    from spw_project
-                    where (delivery_term = ?) and (status = 3) and
-                    ((title = '.$term->id.') or (description = '.$term->id.'))';
-
-            $query = $this->db->query($sql);
-
-            $listIds = $this->dumpQueryIdsOnArray($query);
-
-
-
-
-
-
-                    $full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
-        }
-        else
-        {
-
-        }
-    }
-
+   
     private function refineSearchQuery($lSearchQuery)
     {
+
 
     }
 
     private function combineListIds($list1, $list2)
     {
-        $res = array_unique(array_merge($list1, $list2));
-        sort($res);
-        return $res;
+        if (isset($list1) && isset($list2))
+        {
+            $res = array_unique(array_merge($list1, $list2));
+            sort($res);
+            return $res;
+        }
+        elseif (isset($list1) && !isset($list2)) 
+        {
+            sort($list1);
+            return $list1;
+        }
+        elseif (!isset($list1) && isset($list2))
+        {
+            sort($list2);
+            return $list2;
+        }
+        else
+        {
+            return NULL;
+        }    
     }
 
     private function getProjectsWithSearchParamTest($search_query)

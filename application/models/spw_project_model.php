@@ -256,6 +256,99 @@ class SPW_Project_Model extends CI_Model
 
 		return $lSuggestedIds;
 	}
+
+	/* searching for keyword in skill records */
+	public function searchQueriesOnSkillsForProjects($keyword, $user_id)
+	{
+		$keyword = '%'.$keyword.'%';
+
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+
+			$sql = "select spw_project.id
+					from spw_project, spw_skill, spw_skill_project
+					where (spw_skill_project.project = spw_project.id) and 
+					      (spw_skill_project.skill = spw_skill.id) and (spw_project.delivery_term = ?) and
+					      (spw_project.status = 3) and (spw_skill.name like ?)";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+
+			$sql = "select spw_project.id
+					from spw_project, spw_skill, spw_skill_project
+					where (spw_skill_project.project = spw_project.id) and 
+					      (spw_skill_project.skill = spw_skill.id) and
+					      (spw_project.status = 3) and (spw_skill.name like ?)";
+
+			$query = $this->db->query($sql, $param);
+		}
+
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	/* searching for keyword in project records */
+	public function searchQueriesOnProjectsForProjects($keyword, $user_id)
+	{
+		$keyword = '%'.$keyword.'%';
+
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+			$param[2] = $keyword;
+
+			$sql = "select id
+					from spw_project
+					where (delivery_term = ?) and (status = 3) and
+						  ((title like ?) or (description like ?))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+			$param[1] = $keyword;
+
+			$sql = "select id
+					from spw_project
+					where (status = 3) and
+						  ((title like ?) or (description like ?))";
+
+			$query = $this->db->query($sql, $param);
+		}
+
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	private function dumpQueryIdsOnArray($query)
+	{
+		$res = array();
+
+		if (isset($query))
+		{
+			foreach ($query->result() as $row)
+			{
+				$res[] = $row->id;
+			}
+		}
+
+		return $res;
+	}
 }
 	
 ?>
