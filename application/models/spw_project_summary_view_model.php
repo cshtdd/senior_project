@@ -184,7 +184,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				if (!($project_summ_vm->justList))
 				{
 					if (!$pastProjects)
-					{
+					{	
+						//if (in_array($lProjectIds[$i], $belongProjectIdsList))
 						if ($this->isProjectInList($belongProjectIdsList, $lProjectIds[$i]))
 						{
 							$project_summ_vm->displayLeave = TRUE;
