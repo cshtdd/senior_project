@@ -19,7 +19,7 @@
  *
  */
 	//for camilo only
-	//define('ENVIRONMENT', 'testing');
+	//define('ENVIRONMENT', 'views-testing');
 	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
@@ -37,11 +37,12 @@ if (defined('ENVIRONMENT'))
 		case 'development':
 			error_reporting(E_ALL);
 		break;
-	
-		case 'testing':
+
+		case 'views-testing':
 			error_reporting(E_ALL);
 		break;
 
+		case 'testing':
 		case 'production':
 			error_reporting(0);
 		break;
