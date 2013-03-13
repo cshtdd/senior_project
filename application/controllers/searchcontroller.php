@@ -60,7 +60,8 @@ class SearchController extends CI_Controller
 
         if (is_test($this))
         {
-            return $this->getProjectsWithSearchParamTest($search_query);
+            $results_search[0] = $this->getProjectsWithSearchParamTest($search_query);
+            $results_search[1] = $this->getUsersWithSearchParamTest($search_query);
         }
         else
         {
