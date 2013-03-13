@@ -124,9 +124,12 @@
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 
                 <div class="span2">
-                    <?php $this->load->view('subviews/user_summaries_full_list', array(
+                    <?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
                         'listTitle' => 'Proposed By:',
-                        'lUserSummaries' => array($projectDetails->proposedBySummary)
+                        'lUserSummaries' => array($projectDetails->proposedBySummary),
+                        'topView' => '',
+                        'bottomView' => '',
+                        'prefix' => 'prop'
                     )) ?>
                 </div>
 

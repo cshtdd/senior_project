@@ -21,31 +21,31 @@
                 <li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
                     data-userid="<?php echo $user_summary->user->id ?>"> 
 
-                    <?php
-                        if (isset($topView) && strlen($topView) > 0)
-                        {
-                            if (!isset($noTopViewForCurrentUser) || 
-                                !$noTopViewForCurrentUser ||
-                                getCurrentUserId($this) != $user_summary->user->id)
-                            { 
+                    <div class="usr-top-view-padding">
+                        <?php
+                            if (isset($topView) && strlen($topView) > 0 &&
+                                (!isset($noTopViewForCurrentUser) || 
+                                    !$noTopViewForCurrentUser || 
+                                    getCurrentUserId($this) != $user_summary->user->id))
+                            {
                                 $this->load->view($topView, array('user_summary' => $user_summary, 'prefix' => $prefix));
                             }
-                        }
-                    ?>
+                        ?>
+                    </div>
 
                     <?php $this->load->view('subviews/user_summary_full_name_image', array('user_summary' => $user_summary)) ?>
 
-                    <?php
-                        if (isset($bottomView) && strlen($bottomView) > 0)
-                        {
-                            if (!isset($noBottomViewForCurrentUser) || 
-                                !$noBottomViewForCurrentUser ||
-                                getCurrentUserId($this) != $user_summary->user->id)
-                            { 
+                    <div class="usr-bottom-view-padding">
+                        <?php
+                            if (isset($bottomView) && strlen($bottomView) > 0 &&
+                                (!isset($noBottomViewForCurrentUser) || 
+                                    !$noBottomViewForCurrentUser ||
+                                    getCurrentUserId($this) != $user_summary->user->id))
+                            {
                                 $this->load->view($bottomView, array('user_summary' => $user_summary, 'prefix' => $prefix));
                             }
-                        }
-                    ?>
+                        ?>
+                    </div>
                 </li>
     <?php   
             }
