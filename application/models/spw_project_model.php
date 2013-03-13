@@ -260,6 +260,8 @@ class SPW_Project_Model extends CI_Model
 	/* searching for keyword in skill records */
 	public function searchQueriesOnSkillsForProjects($keyword, $user_id)
 	{
+		$keyword = '%'.$keyword.'%';
+
 		if ($this->SPW_User_Model->isUserAStudent($user_id))
 		{
 			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
@@ -271,7 +273,7 @@ class SPW_Project_Model extends CI_Model
 					from spw_project, spw_skill, spw_skill_project
 					where (spw_skill_project.project = spw_project.id) and 
 					      (spw_skill_project.skill = spw_skill.id) and (spw_project.delivery_term = ?) and
-					      (spw_project.status = 3) and (spw_skill.name like '%?%')";
+					      (spw_project.status = 3) and (spw_skill.name like ?)";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -283,7 +285,7 @@ class SPW_Project_Model extends CI_Model
 					from spw_project, spw_skill, spw_skill_project
 					where (spw_skill_project.project = spw_project.id) and 
 					      (spw_skill_project.skill = spw_skill.id) and
-					      (spw_project.status = 3) and (spw_skill.name like '%?%')";
+					      (spw_project.status = 3) and (spw_skill.name like ?)";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -297,6 +299,8 @@ class SPW_Project_Model extends CI_Model
 	/* searching for keyword in project records */
 	public function searchQueriesOnProjectsForProjects($keyword, $user_id)
 	{
+		$keyword = '%'.$keyword.'%';
+
 		if ($this->SPW_User_Model->isUserAStudent($user_id))
 		{
 			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
@@ -308,7 +312,7 @@ class SPW_Project_Model extends CI_Model
 			$sql = "select id
 					from spw_project
 					where (delivery_term = ?) and (status = 3) and
-						  ((title like '%?%') or (description like '%?%'))";
+						  ((title like ?) or (description like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -320,7 +324,7 @@ class SPW_Project_Model extends CI_Model
 			$sql = "select id
 					from spw_project
 					where (status = 3) and
-						  ((title like '%?%') or (description like '%?%'))";
+						  ((title like ?) or (description like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}

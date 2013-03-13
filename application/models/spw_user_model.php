@@ -589,9 +589,49 @@ class SPW_User_Model extends CI_Model
 		return false;
 	}
 
-	/* searching for keyword in students records */
-	public function searchQueriesOnUsersForUsers($keyword, $user_id)
+	/* searching for keyword in students first name and last name records */
+	public function searchQueriesOnUserNamesForUsers($keyword, $user_id)
 	{
+		$keyword = '%'.$keyword.'%';
+
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+			$param[2] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user
+					where ((spw_user.graduation_term = ?) or (spw_user.graduation_term is null)) and ((spw_user.first_name like ?) or 
+						  (spw_user.last_name like ?))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+			$param[1] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user
+					where ((spw_user.first_name like ?) or (spw_user.last_name like ?))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	/* searching for keyword in students attributes records */
+	public function searchQueriesOnUserAttributesForUsers($keyword, $user_id)
+	{
+		$keyword = '%'.$keyword.'%';
+
 		if ($this->SPW_User_Model->isUserAStudent($user_id))
 		{
 			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
@@ -601,15 +641,13 @@ class SPW_User_Model extends CI_Model
 			$param[2] = $keyword;
 			$param[3] = $keyword;
 			$param[4] = $keyword;
-			$param[5] = $keyword;
-			$param[6] = $keyword;
 
 			$sql = "select spw_user.id
 					from spw_user
-					where (spw_user.graduation_term = ?) and ((spw_user.first_name like '%?%') or 
-						  (spw_user.last_name like '%?%') or (spw_user.summary_spw like '%?%') or 
-						  (spw_user.headline_linkedIn like '%?%') or (spw_user.summary_linkedIn like '%?%') or
-						  (spw_user.positions_linkedIn like '%?%'))";
+					where ((spw_user.graduation_term = ?) or (spw_user.graduation_term is null)) and 
+						  ((spw_user.summary_spw like ?) or 
+						  (spw_user.headline_linkedIn like ?) or (spw_user.summary_linkedIn like ?) or
+						  (spw_user.positions_linkedIn like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -619,15 +657,12 @@ class SPW_User_Model extends CI_Model
 			$param[1] = $keyword;
 			$param[2] = $keyword;
 			$param[3] = $keyword;
-			$param[4] = $keyword;
-			$param[5] = $keyword;
 
 			$sql = "select spw_user.id
-					from spw_user, spw_mentor_project
-					where (spw_mentor_project.mentor = spw_user.id) and ((spw_user.first_name like '%?%') or 
-						  (spw_user.last_name like '%?%') or (spw_user.summary_spw like '%?%') or 
-						  (spw_user.headline_linkedIn like '%?%') or (spw_user.summary_linkedIn like '%?%') or
-						  (spw_user.positions_linkedIn like '%?%'))";
+					from spw_user
+					where ((spw_user.summary_spw like ?) or 
+						  (spw_user.headline_linkedIn like ?) or (spw_user.summary_linkedIn like ?) or
+						  (spw_user.positions_linkedIn like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -641,6 +676,8 @@ class SPW_User_Model extends CI_Model
 	/* searching for keyword in experience records */
 	public function searchQueriesOnExperienceForUsers($keyword, $user_id)
 	{
+		$keyword = '%'.$keyword.'%';
+
 		if ($this->SPW_User_Model->isUserAStudent($user_id))
 		{
 			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
@@ -652,7 +689,7 @@ class SPW_User_Model extends CI_Model
 			$sql = "select spw_user.id
 					from spw_user, spw_experience
 					where (spw_experience.user = spw_user.id) and (spw_user.graduation_term = ?) and
-					      ((spw_experience.title like '%?%') or (spw_experience.description like '%?%'))";
+					      ((spw_experience.title like ?) or (spw_experience.description like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -664,7 +701,7 @@ class SPW_User_Model extends CI_Model
 			$sql = "select spw_user.id
 					from spw_user, spw_experience
 					where (spw_experience.user = spw_user.id) and
-					      ((spw_experience.title like '%?%') or (spw_experience.description like '%?%'))";
+					      ((spw_experience.title like ?) or (spw_experience.description like ?))";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -673,6 +710,8 @@ class SPW_User_Model extends CI_Model
 	/* searching for keyword in skill records */
 	public function searchQueriesOnSkillsForUsers($keyword, $user_id)
 	{
+		$keyword = '%'.$keyword.'%';
+
 		if ($this->SPW_User_Model->isUserAStudent($user_id))
 		{
 			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
@@ -684,7 +723,7 @@ class SPW_User_Model extends CI_Model
 					from spw_user, spw_skill, spw_skill_user
 					where (spw_skill_user.user = spw_user.id) and 
 					      (spw_skill_user.skill = spw_skill.id) and (spw_user.graduation_term = ?) and
-					      (spw_skill.name like '%?%')";
+					      (spw_skill.name like ?)";
 
 			$query = $this->db->query($sql, $param);
 		}
@@ -696,7 +735,7 @@ class SPW_User_Model extends CI_Model
 					from spw_user, spw_skill, spw_skill_user
 					where (spw_skill_user.user = spw_user.id) and 
 					      (spw_skill_user.skill = spw_skill.id) and
-					      (spw_skill.name like '%?%')";
+					      (spw_skill.name like ?)";
 
 			$query = $this->db->query($sql, $param);
 		}
