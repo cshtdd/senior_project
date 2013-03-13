@@ -65,7 +65,7 @@
 								{
 							?>
 								<div class="row-fluid role-term">
-									<div class="span2">
+									<div class="span4">
 										<label class="radio">
 										<?php
 											echo form_radio(array(
@@ -75,7 +75,11 @@
 												'checked' => $iRole->id == $userDetails->role->id
 											));
 										?>
-										<?php echo $iRole->name ?>
+										<?php
+											$roleNameStr = $iRole->name;
+											if (strtolower($iRole->name) == 'student') $roleNameStr = $roleNameStr.' graduating in ';
+											echo $roleNameStr;
+										?>
 										</label>
 									</div>
 
