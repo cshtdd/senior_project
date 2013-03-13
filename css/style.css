@@ -198,3 +198,45 @@ a:visited.myUserRemover
     width: 100px;
     height: 100px;
 }
+
+.user-img-large
+{
+    max-width: 100%;
+    /* max-width: 50px; */
+    max-height: 322px;
+}
+
+.spaced-top
+{
+    margin-top: 2em;
+}
+
+.spaced-top h4
+{
+    padding-bottom: 0.16em;
+}
+
+.login-service
+{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/*
+.radio 
+{
+  line-height: 30px;
+  min-height: 30px;
+  padding-top: 5px;
+}
+*/
+
+.role-term
+{
+    min-height: 40px;
+}
+
+.usr-top-view-padding
+{
+    min-height: 20px;
+}

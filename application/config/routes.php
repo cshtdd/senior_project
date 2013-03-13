@@ -9,7 +9,7 @@
 | and its corresponding controller class/method. The segments in a
 | URL normally follow this pattern:
 |
-|	example.com/class/method/id/
+|   example.com/class/method/id/
 |
 | In some instances, however, you may want to remap this relationship
 | so that a different class/function is called than the one
@@ -17,7 +17,7 @@
 |
 | Please see the user guide for complete details:
 |
-|	http://codeigniter.com/user_guide/general/routing.html
+|   http://codeigniter.com/user_guide/general/routing.html
 |
 | -------------------------------------------------------------------------
 | RESERVED ROUTES
@@ -25,13 +25,13 @@
 |
 | There area two reserved routes:
 |
-|	$route['default_controller'] = 'welcome';
+|   $route['default_controller'] = 'welcome';
 |
 | This route indicates which controller class should be loaded if the
 | URI contains no data. In the above example, the "welcome" class
 | would be loaded.
 |
-|	$route['404_override'] = 'errors/page_missing';
+|   $route['404_override'] = 'errors/page_missing';
 |
 | This route will tell the Router what URI segments to use if those provided
 | in the URL cannot be matched to a valid route.
@@ -47,11 +47,15 @@ $route['(?i)(me)'] = 'usercontroller/current_user';
 $route['(?i)(user)'] = 'usercontroller/current_user';
 //I NEED THIS this is where the user profile links point to
 //whatever the reason to previously remove this escapes my knowledge
+$route['(?i)(user)/linkedIn_initiate'] = 'usercontroller/linkedIn_initiate';
+$route['(?i)(user)/linkedIn_callback'] = 'usercontroller/linkedIn_callback';
+$route['(?i)(user)/linkedIn_sync'] = 'usercontroller/linkedIn_sync';
 $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
-//$route['(?i)(user)/(:any)'] = 'usercontroller/$2';
+
 
 
 $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
+$route['(?i)(project)/(create)'] = 'projectcontroller/create_new_project';
 $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
 
