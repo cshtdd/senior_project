@@ -34,7 +34,7 @@ class SearchController extends CI_Controller
 			if (isset($lProjects) && count($lProjects) > 0)
 			{
 				$data['lProjects'] = $lProjects;
-				$data['lUsers'] = $l
+				$data['lUsers'] = $lUsers;
 				$data['no_results'] = false;
 			}
 		}
@@ -57,6 +57,10 @@ class SearchController extends CI_Controller
 
 
 
+
+
+			$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
+
 		}
 	}
 
@@ -65,54 +69,29 @@ class SearchController extends CI_Controller
 		
 	}
 
-	private function dumpQueryIdsOnArray($query)
-	{
-		$res = array();
-
-		if (isset($query))
-		{
-			foreach ($query->result() as $row)
-			{
-				$res[] = $row->id;
-			}
-		}
-
-		return $res;
-
-	}
+	
 
 	private function searchKeywordDatabaseQueriesForProjects($keyword)
 	{
 		$user_id = getCurrentUserId($this);
 		$listIds = array();
+		$lTmp = array();
 
-		if ($this->SPW_User_Model->isUserAStudent($user_id))
-		{
-			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+		$listIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword, $user_id);
 
-			$param[0] = $term->id;
+		$lTmp = $this->SPW_Project_Model->searchQueriesOnUsersForProjects($keyword, $user_id);
 
-			$sql = 'select id
-					from spw_project
-					where (delivery_term = ?) and (status = 3) and
-					((title = '.$term->id.') or (description = '.$term->id.'))';
-
-			$query = $this->db->query($sql);
-
-			$listIds = $this->dumpQueryIdsOnArray($query);
+		$listIds = $this->combineListIds($listIds, $lTmp);
 
 
+		
 
 
-
-
-					$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
-		}
-		else
-		{
-
-		}
 	}
+
+
+	
+
 
 	private function refineSearchQuery($lSearchQuery)
 	{

@@ -438,6 +438,223 @@ class SPW_User_Model extends CI_Model
 		return $lSuggestedIds;
 	}
 
+	/* checks if a user can invite another user to join to a project, if he has a project, 
+	   and is a mentor or student */
+	public function canInviteUser($current_user_id, $invited_user_id)
+	{
+		$currentUserBelongProjects = $this->userHaveProjects($current_user_id);
+
+		$currentDate = date('Y-m-d');
+
+		if (isset($currentUserBelongProjects) && (count($currentUserBelongProjects) > 0))
+		{
+			$isCurrentUserStudent = $this->isUserAStudent($current_user_id);
+			$isInvitedUserStudent = $this->isUserAStudent($invited_user_id);
+
+			if ($isCurrentUserStudent)
+			{
+				$currentUserGraduationTerm = $this->getUserGraduationTerm($current_user_id);
+
+				if ($currentUserGraduationTerm->closed_requests > $currentDate)
+				{
+					if ($isInvitedUserStudent)
+					{
+						$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
+
+						if ($currentUserGraduationTerm->id == $invitedUserGraduationTerm->id)
+							return true;
+					}
+					else
+					{
+						return true;
+					}	
+				}
+			}
+			else
+			{
+				if ($isInvitedUserStudent)
+				{
+					$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
+
+					return $this->checkUserInvitedToProjectValid($currentUserBelongProjects, $invitedUserGraduationTerm);
+				}
+				else
+				{
+					return $this->checkProjectValid($currentUserBelongProjects);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private function checkUserInvitedToProjectValid($lProjectIds, $userTerm)
+	{
+		$length = count($lProjectIds);
+
+		$currentDate = date('Y-m-d');
+
+		for ($i = 0; $i<$length; $i++)
+		{
+			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lProjectIds[$i]);
+
+			if (($projectTerm->id == $userTerm->id) && ($projectTerm->closed_requests > $currentDate))
+				return true;
+		}
+
+		return false;
+	}
+
+	private function checkProjectValid($lProjectIds)
+	{
+		$length = count($lProjectIds);
+
+		$currentDate = date('Y-m-d');
+
+		for ($i = 0; $i<$length; $i++)
+		{
+			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lProjectIds[$i]);
+
+			if ($projectTerm->closed_requests > $currentDate)
+				return true;
+		}
+
+		return false;
+	}
+
+	/* searching for keyword in students records */
+	public function searchQueriesOnUsersForUsers($keyword, $user_id)
+	{
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+			$param[2] = $keyword;
+			$param[3] = $keyword;
+			$param[4] = $keyword;
+			$param[5] = $keyword;
+			$param[6] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user
+					where (spw_user.graduation_term = ?) and ((spw_user.first_name like '%?%') or 
+						  (spw_user.last_name like '%?%') or (spw_user.summary_spw like '%?%') or 
+						  (spw_user.headline_linkedIn like '%?%') or (spw_user.summary_linkedIn like '%?%') or
+						  (spw_user.positions_linkedIn like '%?%'))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+			$param[1] = $keyword;
+			$param[2] = $keyword;
+			$param[3] = $keyword;
+			$param[4] = $keyword;
+			$param[5] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user, spw_mentor_project
+					where (spw_mentor_project.mentor = spw_user.id) and ((spw_user.first_name like '%?%') or 
+						  (spw_user.last_name like '%?%') or (spw_user.summary_spw like '%?%') or 
+						  (spw_user.headline_linkedIn like '%?%') or (spw_user.summary_linkedIn like '%?%') or
+						  (spw_user.positions_linkedIn like '%?%'))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	/* searching for keyword in experience records */
+	public function searchQueriesOnExperienceForUsers($keyword, $user_id)
+	{
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+			$param[2] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user, spw_experience
+					where (spw_experience.user = spw_user.id) and (spw_user.graduation_term = ?) and
+					      ((spw_experience.title like '%?%') or (spw_experience.description like '%?%'))";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+			$param[1] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user, spw_experience
+					where (spw_experience.user = spw_user.id) and
+					      ((spw_experience.title like '%?%') or (spw_experience.description like '%?%'))";
+
+			$query = $this->db->query($sql, $param);
+		}
+	}
+
+	/* searching for keyword in skill records */
+	public function searchQueriesOnSkillsForUsers($keyword, $user_id)
+	{
+		if ($this->SPW_User_Model->isUserAStudent($user_id))
+		{
+			$term = $this->SPW_User_Model->getUserGraduationTerm($user_id);
+
+			$param[0] = $term->id;
+			$param[1] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user, spw_skill, spw_skill_user
+					where (spw_skill_user.user = spw_user.id) and 
+					      (spw_skill_user.skill = spw_skill.id) and (spw_user.graduation_term = ?) and
+					      (spw_skill.name like '%?%')";
+
+			$query = $this->db->query($sql, $param);
+		}
+		else
+		{
+			$param[0] = $keyword;
+
+			$sql = "select spw_user.id
+					from spw_user, spw_skill, spw_skill_user
+					where (spw_skill_user.user = spw_user.id) and 
+					      (spw_skill_user.skill = spw_skill.id) and
+					      (spw_skill.name like '%?%')";
+
+			$query = $this->db->query($sql, $param);
+		}
+
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	private function dumpQueryIdsOnArray($query)
+	{
+		$res = array();
+
+		if (isset($query))
+		{
+			foreach ($query->result() as $row)
+			{
+				$res[] = $row->id;
+			}
+		}
+
+		return $res;
+	}
+
 }
 	
 ?>
