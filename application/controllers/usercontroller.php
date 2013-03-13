@@ -58,6 +58,44 @@ class UserController extends CI_Controller
 		$this->profile($current_user_id);
 	} 
 
+    public function update()
+    {
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            //TODO redirect to login page if not logged in
+
+            $currentUserId = getCurrentUserId($this); 
+
+            $updatedFirstName = $this->input->post('text-first-name');
+            $updatedLastName = $this->input->post('text-last-name');
+            $updatedSPWSummary = $this->input->post('text-description');
+            $updatedRoleId = $this->input->post('radio-role');
+
+            //only consider this if the role is a student
+            $updatedTermId = $this->input->post('dropdown-term');
+
+            //TODO validate the data against XSS and CSRF and SQL Injection
+
+            /*
+            $this->output->set_output(
+                $updatedFirstName.' '.
+                $updatedLastName.' '.
+                $updatedSPWSummary.' '.
+                $updatedRoleId.' '.
+                $updatedTermId
+            );
+            */
+
+            //TODO update the user data to the DB
+
+            redirect('/me');
+        }
+    }
+
     public function invite()
     {
         if (!is_POST_request($this))
