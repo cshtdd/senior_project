@@ -28,6 +28,8 @@ class SearchController extends CI_Controller
         {
             $search_query = urldecode($search_param);
 
+            $search_query = strtolower($search_query);
+
             $results_search = $this->getResultsWithSearchParam($search_query);
 
             //$lProjects = $this->getProjectsWithSearchParam($search_query);
@@ -62,27 +64,57 @@ class SearchController extends CI_Controller
         }
         else
         {
-            $results_search = $this->searchKeywordDatabaseQueries($search_query);
+            $res = $this->refineSearchQuery(array($search_query));
 
-            if (isset($results_search[0]) && count($results_search[0]) > 0)
+            if (isset($res) && (count($res) > 0))
             {
-                $lProjectIds = $results_search[0];
-                $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-                $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
-            }
+                $search_query = $res[0];
+                $results_search = $this->searchKeywordDatabaseQueries($search_query);
 
-            if (isset($results_search[1]) && count($results_search[1]) > 0)
-            {
-                $lUserIds = $results_search[1];
-                $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
-            }
+                if (count($results_search) > 0)
+                {
+                    if (isset($results_search[0]) && count($results_search[0]) > 0)
+                        $lProjectIds = $results_search[0];
 
-            $results_search[0] = $lProjectsFound;
-            $results_search[1] = $lUsersFound;
+                    if (isset($results_search[1]) && count($results_search[1]) > 0)
+                        $lUserIds = $results_search[1];
+                }
+                
+                $full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
+
+                $length = count($full_search_query);
+
+                if (isset($full_search_query) && ($length > 1))
+                {
+                    $lProjectsTmp = array();
+                    $lUsersTmp = array();
+                    for ($i = 0; $i < $length; $i++)
+                    {
+                        $results_search = $this->searchKeywordDatabaseQueries($full_search_query[$i]);
+
+                        $lProjectsTmp = $results_search[0];
+                        $lUsersTmp = $results_search[1];
+
+                        $lProjectIds = $this->combineListIds($lProjectIds, $lProjectsTmp);
+                        $lUserIds = $this->combineListIds($lUserIds, $lUsersTmp);
+                    }
+                }
+
+                if (isset($lProjectIds) && count($lProjectIds))
+                {
+                    $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+                    $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
+                }
+       
+                if (isset($lUserIds) && count($lUserIds))
+                {
+                    $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
+                }
+                
+                $results_search[0] = $lProjectsFound;
+                $results_search[1] = $lUsersFound;    
+            }
         }
-
-
-        //$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
 
         return $results_search;
     }
