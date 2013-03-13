@@ -59,13 +59,12 @@
 							));
 						?>
 
-						<div>
 
 							<?php 
 								foreach ($userDetails->lRoles as $iRole) 
 								{
 							?>
-								<div class="row">
+								<div class="row-fluid">
 									<div class="span2">
 										<label class="radio">
 										<?php
@@ -100,8 +99,6 @@
 							<?php
 								}
 							?>
-
-						</div>
 
 
 						<?php echo $userDetails->role->name ?>
