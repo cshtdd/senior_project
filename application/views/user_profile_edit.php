@@ -59,39 +59,49 @@
 							));
 						?>
 
-						<?php 
-							foreach ($userDetails->lRoles as $iRole) 
-							{
-						?>
-								<label class="radio">
-								<?php
-									echo form_radio(array(
-										'id' => 'radio-role-'.$iRole->id,
-										'name' => 'radio-role',
-										'value' => $iRole->id,
-										'checked' => $iRole->id == $userDetails->role->id
-									));
-								?>
-								<?php echo $iRole->name ?>
+						<div>
 
-								<?php 
-									if (strtolower($iRole->name) == 'student') 
-									{ 
-										$arrTermsOptions = array();
+							<?php 
+								foreach ($userDetails->lRoles as $iRole) 
+								{
+							?>
+								<div class="row">
+									<div class="span2">
+										<label class="radio">
+										<?php
+											echo form_radio(array(
+												'id' => 'radio-role-'.$iRole->id,
+												'name' => 'radio-role',
+												'value' => $iRole->id,
+												'checked' => $iRole->id == $userDetails->role->id
+											));
+										?>
+										<?php echo $iRole->name ?>
+										</label>
+									</div>
 
-										foreach ($userDetails->lTerms as $iTerm) 
-										{
-											//echo $iTerm->id.' '.$iTerm->name;
-											$arrTermsOptions[$iTerm->id] = $iTerm->name;
-										}
+									<div class="span4">
+										<?php 
+											if (strtolower($iRole->name) == 'student') 
+											{ 
+												$arrTermsOptions = array();
 
-										echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
-								 	} 
-								?>
-								</label>
-						<?php
-							}
-						?>
+												foreach ($userDetails->lTerms as $iTerm) 
+												{
+													//echo $iTerm->id.' '.$iTerm->name;
+													$arrTermsOptions[$iTerm->id] = $iTerm->name;
+												}
+
+												echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
+										 	} 
+										?>
+									</div>
+								</div>
+							<?php
+								}
+							?>
+
+						</div>
 
 
 						<?php echo $userDetails->role->name ?>
