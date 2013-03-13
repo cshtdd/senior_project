@@ -61,61 +61,52 @@
 						?>
 
 
-							<?php 
-								foreach ($userDetails->lRoles as $iRole) 
-								{
-							?>
-								<div class="row-fluid role-term">
-									<div class="span4">
-										<label class="radio">
-										<?php
-											echo form_radio(array(
-												'id' => 'radio-role-'.$iRole->id,
-												'name' => 'radio-role',
-												'value' => $iRole->id,
-												'checked' => $iRole->id == $userDetails->role->id
-											));
-										?>
-										<?php
-											$roleNameStr = $iRole->name;
-											if (strtolower($iRole->name) == 'student') $roleNameStr = $roleNameStr.' graduating in ';
-											echo $roleNameStr;
-										?>
-										</label>
+							<div>
+								<h4>Your Role</h4>
+								<?php 
+									foreach ($userDetails->lRoles as $iRole) 
+									{
+								?>
+									<div class="row-fluid role-term">
+										<div class="span4">
+											<label class="radio">
+											<?php
+												echo form_radio(array(
+													'id' => 'radio-role-'.$iRole->id,
+													'name' => 'radio-role',
+													'value' => $iRole->id,
+													'checked' => $iRole->id == $userDetails->role->id
+												));
+											?>
+											<?php
+												$roleNameStr = $iRole->name;
+												if (strtolower($iRole->name) == 'student') $roleNameStr = $roleNameStr.' graduating in ';
+												echo $roleNameStr;
+											?>
+											</label>
+										</div>
+
+										<div class="span4">
+											<?php 
+												if (strtolower($iRole->name) == 'student') 
+												{ 
+													$arrTermsOptions = array();
+
+													foreach ($userDetails->lTerms as $iTerm) 
+													{
+														//echo $iTerm->id.' '.$iTerm->name;
+														$arrTermsOptions[$iTerm->id] = $iTerm->name;
+													}
+
+													echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
+											 	} 
+											?>
+										</div>
 									</div>
-
-									<div class="span4">
-										<?php 
-											if (strtolower($iRole->name) == 'student') 
-											{ 
-												$arrTermsOptions = array();
-
-												foreach ($userDetails->lTerms as $iTerm) 
-												{
-													//echo $iTerm->id.' '.$iTerm->name;
-													$arrTermsOptions[$iTerm->id] = $iTerm->name;
-												}
-
-												echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
-										 	} 
-										?>
-									</div>
-								</div>
-							<?php
-								}
-							?>
-
-
-						<?php echo $userDetails->role->name ?>
-
-						<?php 
-							if (isset($userDetails->user->graduation_term) &&
-								isset($userDetails->user->graduation_term->name) && 
-								strlen($userDetails->user->graduation_term->name) > 0) {
-						?>
-							Graduating In
-							<?php echo $userDetails->user->graduation_term->name ?>
-						<?php } ?>
+								<?php
+									}
+								?>
+							</div>
 					</div>
 				</div>
 
