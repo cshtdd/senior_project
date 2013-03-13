@@ -28,6 +28,8 @@ class SearchController extends CI_Controller
         {
             $search_query = urldecode($search_param);
 
+            $search_query = strtolower($search_query);
+
             $results_search = $this->getResultsWithSearchParam($search_query);
 
             //$lProjects = $this->getProjectsWithSearchParam($search_query);
@@ -63,27 +65,51 @@ class SearchController extends CI_Controller
         }
         else
         {
-            $results_search = $this->searchKeywordDatabaseQueries($search_query);
+                $results_search = $this->searchKeywordDatabaseQueries($search_query);
 
-            if (isset($results_search[0]) && count($results_search[0]) > 0)
-            {
-                $lProjectIds = $results_search[0];
-                $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-                $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
-            }
+                if (count($results_search) > 0)
+                {
+                    if (isset($results_search[0]) && count($results_search[0]) > 0)
+                        $lProjectIds = $results_search[0];
 
-            if (isset($results_search[1]) && count($results_search[1]) > 0)
-            {
-                $lUserIds = $results_search[1];
-                $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
-            }
+                    if (isset($results_search[1]) && count($results_search[1]) > 0)
+                        $lUserIds = $results_search[1];
+                }
+                
+                $full_search_query = $this->refineSearchQuery($search_query);
 
-            $results_search[0] = $lProjectsFound;
-            $results_search[1] = $lUsersFound;
+                $length = count($full_search_query);
+
+                if (isset($full_search_query) && ($length > 0))
+                {
+                    $lProjectsTmp = array();
+                    $lUsersTmp = array();
+                    for ($i = 0; $i < $length; $i++)
+                    {
+                        $results_search = $this->searchKeywordDatabaseQueries($full_search_query[$i]);
+
+                        $lProjectsTmp = $results_search[0];
+                        $lUsersTmp = $results_search[1];
+
+                        $lProjectIds = $this->combineListIds($lProjectIds, $lProjectsTmp);
+                        $lUserIds = $this->combineListIds($lUserIds, $lUsersTmp);
+                    }
+                }
+
+                if (isset($lProjectIds) && count($lProjectIds))
+                {
+                    $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+                    $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
+                }
+       
+                if (isset($lUserIds) && count($lUserIds))
+                {
+                    $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
+                }
+                
+                $results_search[0] = $lProjectsFound;
+                $results_search[1] = $lUsersFound;       
         }
-
-
-        //$full_search_query = $this->refineSearchQuery(explode(' ', $search_query));
 
         return $results_search;
     }
@@ -134,10 +160,19 @@ class SearchController extends CI_Controller
     }
 
    
-    private function refineSearchQuery($lSearchQuery)
+    private function refineSearchQuery($searchQuery)
     {
+        $lSearchQueries = explode(' ', $searchQuery);
+        $res = array();
+        $length = count($lSearchQueries);
 
+        for ($i = 0; $i < $length; $i++)
+        {
+            if (!$this->isStopWord($lSearchQueries[$i]))
+                $res[] = $lSearchQueries[$i];
+        }
 
+        return $res;  
     }
 
     private function combineListIds($list1, $list2)
@@ -344,5 +379,49 @@ class SearchController extends CI_Controller
                 $user_summ_vm4
             );
         return $result;
+    }
+
+    private function isStopWord($word)
+    {
+        $stopWords = array('a','about','above','above','across','after','afterwards','again','against',
+                           'all','almost','alone','along','already','also','although','always','am','among',
+                           'amongst','amoungst','amount','an','and','another','any','anyhow','anyone',
+                           'anything','anyway','anywhere','are','around','as','at','back','be','became',
+                           'because','become','becomes','becoming','been','before','beforehand','behind',
+                           'being','below','beside','besides','between','beyond','bill','both','bottom',
+                           'but','by','call','can','cannot','cant','co','con','could','couldnt','cry',
+                           'de','describe','detail','do','done','down','due','during','each','eg','eight',
+                           'either','eleven','else','elsewhere','empty','enough','etc','even','ever','every',
+                           'everyone','everything','everywhere','except','few','fifteen','fify','fill','find',
+                           'fire','first','five','for','former','formerly','forty','found','four','from',
+                           'front','full','further','get','give','go','had','has','hasnt','have','he',
+                           'hence','her','here','hereafter','hereby','herein','hereupon','hers','herself',
+                           'him','himself','his','how','however','hundred','ie','if','in','inc','indeed',
+                           'interest','into','is','it','its','itself','keep','last','latter','latterly',
+                           'least','less','ltd','made','many','may','me','meanwhile','might','mill','mine',
+                           'more','moreover','most','mostly','move','much','must','my','myself','name',
+                           'namely','neither','never','nevertheless','next','nine','no','nobody','none',
+                           'noone','nor','not','nothing','now','nowhere','of','off','often','on','once',
+                           'one','only','onto','or','other','others','otherwise','our','ours','ourselves',
+                           'out','over','own','part','per','perhaps','please','put','rather','re','same',
+                           'see','seem','seemed','seeming','seems','serious','several','she','should','show',
+                           'side','since','sincere','six','sixty','so','some','somehow','someone','something',
+                           'sometime','sometimes','somewhere','still','such','system','take','ten','than',
+                           'that','the','their','them','themselves','then','thence','there','thereafter',
+                           'thereby','therefore','therein','thereupon','these','they','thickv','thin','third',
+                           'this','those','though','three','through','throughout','thru','thus','to','together',
+                           'too','top','toward','towards','twelve','twenty','two','un','under','until','up',
+                           'upon','us','very','via','was','we','well','were','what','whatever','when','whence',
+                           'whenever','where','whereafter','whereas','whereby','wherein','whereupon','wherever',
+                           'whether','which','while','whither','who','whoever','whole','whom','whose','why',
+                           'will','with','within','without','would','yet','you','your','yours','yourself',
+                           'yourselves');
+        if (isset($word))
+        {
+            if (in_array($word, $stopWords))
+                return true;
+        }
+ 
+        return false;
     }
 }
