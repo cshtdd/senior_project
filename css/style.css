@@ -221,3 +221,17 @@ a:visited.myUserRemover
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+
+/*
+.radio 
+{
+  line-height: 30px;
+  min-height: 30px;
+  padding-top: 5px;
+}
+*/
+
+.role-term
+{
+    min-height: 40px;
+}

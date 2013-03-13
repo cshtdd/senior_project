@@ -64,7 +64,7 @@
 								foreach ($userDetails->lRoles as $iRole) 
 								{
 							?>
-								<div class="row-fluid">
+								<div class="row-fluid role-term">
 									<div class="span2">
 										<label class="radio">
 										<?php
