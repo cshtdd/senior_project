@@ -1,6 +1,5 @@
 <?php $this->load->view("template_header"); ?>
 
-<h2>User Details</h2>
 
 <?php 
 	if ($no_results) 
@@ -12,6 +11,10 @@
 	else 
 	{
 ?>
+
+		<?php echo anchor('/user/linkedIn_initiate', 'Sync with LinkedIn', array('class' => 'btn btn-primary btn-large pull-right'))  ?>
+
+		<h2>User Details</h2>
 
 		<?php echo form_open('usercontroller/update', array(
 			'id' => 'form-update-user'
@@ -30,8 +33,6 @@
 					</div>
 
 					<div class="span8">
-
-						<?php echo anchor('/user/linkedIn_initiate', 'Sync with LinkedIn', array('class' => 'btn btn-primary btn-large pull-right'))  ?>
 
 						<?php 
 							echo form_input(array(
