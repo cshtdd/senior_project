@@ -37,7 +37,7 @@
 
 			<div class="login-service">
 				<a href="<?php echo base_url('/login/google_oauth2')?>">
-				<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" alt="FIU Email Login"/>
+					<?php echo img(array('src' => '/img/fiu_login.png', 'alt' => 'Panther Mail Login'))?>
 				</a>
 			</div>
 
