@@ -143,7 +143,38 @@ class SPW_User_Model extends CI_Model
  		return $this->db->insert_id();
  	}
  	
+ 	public function is_linkedin_registered($id)
+	{
+		$query = $this->db
+					   ->where('linkedin_id',$id)
+					   ->get('spw_user');
+
+		if($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+			   return $row->id;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public function create_new_linkedin_user($email_address, $given_name, $family_name,$linkedin_id)
+	{
+		$data = array(
+ 		   'email' =>  $email_address ,
+ 		   'first_name' => $given_name, 
+ 		   'last_name' => $family_name,
+ 		   'linkedin_id' => $linkedin_id,
+ 		);
  
+ 		$this->db->insert('spw_user', $data);
+ 		return $this->db->insert_id();
+	}
+
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
 	{

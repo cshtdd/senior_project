@@ -202,7 +202,7 @@ class UserController extends CI_Controller
         
         $link = "https://api.linkedin.com/uas/oauth/authorize?oauth_token=". $token['linkedin']['oauth_token']; 
 
-        $this->session->set_flashdata('linkedIn_sync', 'true'); 
+        $this->session->set_flashdata('linkedIn_sync', 'false'); 
 
         redirect($link);
 	}
@@ -269,6 +269,7 @@ class UserController extends CI_Controller
 
             $user_profile = (object)array(
                     'id'                    => $user->id,
+                    'email'                 => $user->emailAddress,
                     'first_name'            => $user->firstName,
                     'last_name'             => $user->lastName,
                     'picture'               => $user->pictureUrl,
@@ -288,14 +289,14 @@ class UserController extends CI_Controller
                 $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
 
                  if($spw_id == 0){
-                    $spw_id  = $this->spw_user_model->create_new_linkedin_user($email, $given_name, $family_name, $id);
+                    $spw_id  = $this->spw_user_model->create_new_linkedin_user( $user_profile->email,  $user_profile->first_name,  $user_profile->last_name,  $user_profile->id);
                     $is_linkedin_registered = false;
                 }
 
                 $sess_array = array(
                             'id' => $spw_id,
-                            'linked_id' => $id, 
-                            'email' => $email, 
+                            'linkedIn_id' => $user_profile->id, 
+                            'email' => $user_profile->email, 
                             'using' => 'linkedin'
                         );
 
@@ -309,6 +310,7 @@ class UserController extends CI_Controller
 
             } else {
                 //TODO: Update LinkedIn Profile for Logged In student
+
             }
         }else{
             echo "Bad Request";
