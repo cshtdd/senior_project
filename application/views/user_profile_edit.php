@@ -27,7 +27,8 @@
 						<?php 
 							echo img(array(
 								'src' => $userDetails->user->picture,
-								'class' => 'user-img-large'
+								'class' => 'user-img-large',
+								'alt' => $userDetails->getFullName()
 							))
 						?>
 					</div>

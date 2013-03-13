@@ -11,7 +11,8 @@
 
 			echo img(array(
 				'src' => $imgUrl,
-				'class' => 'user-img'
+				'class' => 'user-img',
+				'alt' => $user_summary->getFullName()
 			));
 
 		echo '</a>';

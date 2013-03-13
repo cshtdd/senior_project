@@ -37,25 +37,25 @@
 
 			<div class="login-service">
 				<a href="<?php echo base_url('/login/google_oauth2')?>">
-				<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" />
+				<img src="https://www.google.com/a/cpanel/fiu.edu/images/logo.gif?service=mail" alt="FIU Email Login"/>
 				</a>
 			</div>
 
 			<div class="login-service">
 				<a href="<?php echo base_url('/login/google_oauth2')?>">
-					<?php echo img(array('src' => '/img/google_login.png'))?>
+					<?php echo img(array('src' => '/img/google_login.png', 'alt' => 'Google Login'))?>
 				</a>
 			</div>
 
 			<div class="login-service">
 				<a href="<?php echo base_url('/login/fb_oauth2')?>">
-					<?php echo img(array('src' => '/img/fb_login.png'))?>
+					<?php echo img(array('src' => '/img/fb_login.png', 'alt' => 'Facebook Login'))?>
 				</a>
 			</div>
 
 			<div class="login-service">
 				<a href="<?php echo base_url('/login/linkedIn_initiate')?>">
-					<?php echo img(array('src' => '/img/linkedin_login.png'))?>
+					<?php echo img(array('src' => '/img/linkedin_login.png', 'alt' => 'LinkedIn Login'))?>
 				</a>
 			</div>
 		</div>
