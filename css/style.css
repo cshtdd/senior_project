@@ -256,3 +256,15 @@ a:visited.myUserRemover
     max-width: 20px;
     max-height: 20px;
 }
+
+.img-header-profile-big
+{
+    max-width: 40px;
+    max-height: 40px;
+    margin-right: 10px;
+}
+
+.block-text
+{
+    display: block;
+}

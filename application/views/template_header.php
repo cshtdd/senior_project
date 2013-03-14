@@ -1,3 +1,5 @@
+<?php $this->load->helper('nav_top') ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -108,13 +110,33 @@
 
                     --> 
 
+
                         <li class="<?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
                             <a id="link-profile" href="<?php echo base_url().'me' ?>" role="button" class="dropdown-toggle" data-toggle="dropdown">
                                 <?php echo getCurrentUserHeaderName($this)?> <b class="caret"></b>
                             
                             <ul class="dropdown-menu" role="menu" aria-labelledby="link-profile">
                                 <li role="presentation">
-                                    <a role="menuitem" tabindex="-1" href="<?php echo base_url().'me' ?>"><?php echo getCurrentUserHeaderName($this)?></a>                                    
+                                    <a role="menuitem" tabindex="-1" href="<?php echo base_url().'me' ?>">
+
+                                        <div>
+                                            <div class="pull-right"> 
+                                                <?php echo getCurrentUserHeaderFullName($this)?>
+                                                <small class="block-text">View Profile</small>                                                
+                                            </div>
+                                            <?php 
+                                                $imgSrc = getCurrentUserHeaderImg($this);
+                                                if (isset($imgSrc))
+                                                {
+                                                    echo img(array(
+                                                            'src' => $imgSrc,
+                                                            'alt' => 'User Profile Image',
+                                                            'class' => 'img-header-profile-big img-polaroid'
+                                                        ));
+                                                }
+                                            ?>
+                                        </div>
+                                    </a>                                    
                                 </li>
                                 <li role="presentation" class="divider"></li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo base_url().'logout' ?>">Logout</a></li>
