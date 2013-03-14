@@ -55,8 +55,10 @@
                         'id' => 'text-search-top',
                         'name' => 'q',
                         'type' => 'text',
-                        'class' => 'span2',
-                        'placeholder' => 'just search...'
+                        'class' => 'span4',
+                        'placeholder' => 'search for people, skills, projects and terms...',
+                        'required' => '',
+                        'title' => 'search criteria'
                     ));
 
                     echo form_button(array(
