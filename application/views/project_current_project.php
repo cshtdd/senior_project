@@ -1,5 +1,9 @@
 <?php $this->load->view("template_header"); ?>
 
+<?php echo anchor('project/create', 'Create New Project', array(
+        'class' => 'btn btn-primary btn-large pull-right'
+)) ?>
+
 <?php if ($no_results) { ?>
 
     <p>

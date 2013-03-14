@@ -245,3 +245,8 @@ a:visited.myUserRemover
 {
     vertical-align: top; 
 }
+
+.hor-margin
+{
+    margin-left: 5px;
+}
