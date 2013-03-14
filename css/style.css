@@ -240,3 +240,8 @@ a:visited.myUserRemover
 {
     min-height: 20px;
 }
+
+.top-align
+{
+    vertical-align: top; 
+}
