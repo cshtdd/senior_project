@@ -19,8 +19,8 @@
  *
  */
     //for camilo only
-    //define('ENVIRONMENT', 'views-testing');
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'views-testing');
+    //define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
