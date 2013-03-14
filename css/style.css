@@ -250,3 +250,9 @@ a:visited.myUserRemover
 {
     margin-left: 5px;
 }
+
+.img-header-profile
+{
+    max-width: 20px;
+    max-height: 20px;
+}
