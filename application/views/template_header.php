@@ -42,11 +42,15 @@
             <?php if ( !stristr(uri_string(), 'login') ) { ?>
 
                 <?php
+                    function isActiveNavItem($targetUrl)
+                    {
+                        return trim(strtolower(uri_string())) == trim(strtolower($targetUrl));
+                    }
                     function get_nav_item_class($targetUrl)
                     {
                         $li_class_str = '';
 
-                        if( trim(strtolower(uri_string())) == trim(strtolower($targetUrl)) )
+                        if( isActiveNavItem($targetUrl) )
                         {
                             $li_class_str = 'class="active"';
                         }
@@ -73,7 +77,51 @@
                 <ul class="nav pull-right">
                     <?php if (isUserLoggedIn($this)) { ?>
 
-                        <?php echo get_nav_item('logout', 'Logout') ?> 
+                        <!-- <?php echo get_nav_item('logout', 'Logout') ?>  -->
+
+                    <!--
+                        <li class="dropdown">
+                          <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                            Dropdown <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="http://google.com">Action</a>
+                                <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                                    Camilo <b class="caret"></b>
+                                </a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                          </ul>
+                        </li>
+
+                    -->
+
+                    <!--
+
+                    <?php echo anchor('me', getCurrentUserHeaderName($this), array(
+                                'class' => 'dropdown-toggle',
+                                'role' => 'button',
+                                'data-toggle' => 'dropdown'
+                            ))?>
+
+                    --> 
+
+                        <li class="<?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
+                            <a id="link-profile" href="<?php echo base_url().'me' ?>" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                                <?php echo getCurrentUserHeaderName($this)?> <b class="caret"></b>
+                            
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="link-profile">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="<?php echo base_url().'me' ?>"><?php echo getCurrentUserHeaderName($this)?></a>                                    
+                                </li>
+                                <li role="presentation" class="divider"></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo base_url().'logout' ?>">Logout</a></li>
+                            </ul>
+                          </a>
+
+                        </li>
 
                     <?php } else { ?>
 
