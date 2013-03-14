@@ -74,7 +74,7 @@
 
 
         <?php
-            function get_nav_item($targetUrl, $displayText)
+            function get_nav_item_class($targetUrl)
             {
                 $li_class_str = '';
 
@@ -83,7 +83,15 @@
                     $li_class_str = 'class="active"';
                 }
 
-                return '<li '.$li_class_str.'>'.anchor($targetUrl, $displayText).'</li>';
+                return $li_class_str;
+            }
+            function get_nav_item_Internal($targetUrl, $innerHTML)
+            {
+                return '<li '.get_nav_item_class($targetUrl).'>'.$innerHTML.'</li>';
+            }
+            function get_nav_item($targetUrl, $displayText)
+            {
+                return get_nav_item_Internal($targetUrl, anchor($targetUrl, $displayText));
             }
         ?>
 
