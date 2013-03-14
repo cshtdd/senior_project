@@ -46,4 +46,34 @@ if ( !function_exists('isUserLoggedIn'))
     }
 }
 
+if ( !function_exists('getCurrentUserHeaderName'))
+{
+    function getCurrentUserHeaderName($sender_controller)
+    {
+        if (is_test($sender_controller))
+        {
+            return 'Camilo';
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
+}
+
+if ( !function_exists('getCurrentUserHeaderImg'))
+{
+    function getCurrentUserHeaderImg($sender_controller)
+    {
+        if (is_test($sender_controller))
+        {
+            return 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
+}
+
 ?>
