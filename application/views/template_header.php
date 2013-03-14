@@ -121,7 +121,7 @@
 
                                         <div>
                                             <div class="pull-right"> 
-                                                <?php echo getCurrentUserHeaderFullName($this)?>
+                                                <strong><?php echo getCurrentUserHeaderFullName($this)?></strong>
                                                 <small class="block-text">View Profile</small>                                                
                                             </div>
                                             <?php 
