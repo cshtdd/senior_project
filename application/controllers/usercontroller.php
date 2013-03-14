@@ -3,9 +3,9 @@
 class UserController extends CI_Controller 
 {
     
-	public function __construct()
-	{
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
         $this->load->helper('request');
 
@@ -18,13 +18,13 @@ class UserController extends CI_Controller
         $this->load->model('SPW_User_Summary_View_Model');
         $this->load->model('SPW_User_Details_View_Model');
 
-		//$this->output->cache(60);
-	}
+        //$this->output->cache(60);
+    }
 
 
-	public function profile($user_id='')
-	{
-		//$this->output->set_output('user profile '.$user_id);
+    public function profile($user_id='')
+    {
+        //$this->output->set_output('user profile '.$user_id);
         $currentUserId = getCurrentUserId($this);
         $user_details = $this->getUserDetailsInternal($user_id);
 
@@ -50,13 +50,51 @@ class UserController extends CI_Controller
         $data['title'] = 'User Details';
 
         $this->load->view($resulting_view_name, $data);
-	}
+    }
 
-	public function current_user()
-	{
-		$current_user_id = getCurrentUserId($this);
-		$this->profile($current_user_id);
-	} 
+    public function current_user()
+    {
+        $current_user_id = getCurrentUserId($this);
+        $this->profile($current_user_id);
+    } 
+
+    public function update()
+    {
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            //TODO redirect to login page if not logged in
+
+            $currentUserId = getCurrentUserId($this); 
+
+            $updatedFirstName = $this->input->post('text-first-name');
+            $updatedLastName = $this->input->post('text-last-name');
+            $updatedSPWSummary = $this->input->post('text-description');
+            $updatedRoleId = $this->input->post('radio-role');
+
+            //only consider this if the role is a student
+            $updatedTermId = $this->input->post('dropdown-term');
+
+            //TODO validate the data against XSS and CSRF and SQL Injection
+
+            /*
+            $this->output->set_output(
+                $updatedFirstName.' '.
+                $updatedLastName.' '.
+                $updatedSPWSummary.' '.
+                $updatedRoleId.' '.
+                $updatedTermId
+            );
+            */
+
+            //TODO update the user data to the DB
+
+            redirect('/me');
+        }
+    }
 
     public function invite()
     {
@@ -83,72 +121,72 @@ class UserController extends CI_Controller
     public function parse_positions($positions)
     {
 
-    	$positions = $positions->values; 
-    	$result =  array();
+        $positions = $positions->values; 
+        $result =  array();
 
-    	for($i = 0; $i < count($positions); $i++)
-    	{
-    		$current_position = $positions[$i];
+        for($i = 0; $i < count($positions); $i++)
+        {
+            $current_position = $positions[$i];
 
-    		$end_date;
-    		if($current_position->isCurrent) 
-    		{
-    			$end_date = (object)array();
-    		}else{
-    			$end_date =  $current_position->endDate;
-    		}
+            $end_date;
+            if($current_position->isCurrent) 
+            {
+                $end_date = (object)array();
+            }else{
+                $end_date =  $current_position->endDate;
+            }
 
-    		$result[$i] = (object) array( 
-										'company_name' 		=> $current_position->company->name,
-										'company_industry' 	=> $current_position->company->industry,
-										'start_date'        => $current_position->startDate,
-										'end_date'	        => $end_date,
-										'title'				=> $current_position->title,
-										'summary'			=> $current_position->summary,
-										);
-    	}
+            $result[$i] = (object) array( 
+                                        'company_name'      => $current_position->company->name,
+                                        'company_industry'  => $current_position->company->industry,
+                                        'start_date'        => $current_position->startDate,
+                                        'end_date'          => $end_date,
+                                        'title'             => $current_position->title,
+                                        'summary'           => $current_position->summary,
+                                        );
+        }
 
-    	return $result;
+        return $result;
     }
 
     public function parse_skills($skills)
     {
-		
-    	$skills = $skills->values; 
-    	$result =  array();
+        
+        $skills = $skills->values; 
+        $result =  array();
 
-    	for($i = 0; $i < count($skills); $i++)
-    	{
-    		$current_skill = $skills[$i];
+        for($i = 0; $i < count($skills); $i++)
+        {
+            $current_skill = $skills[$i];
 
-    		$result[$i] = (object) array( 
-										'name' => $current_skill->skill->name,
-										);
-    	}
+            $result[$i] = (object) array( 
+                                        'name' => $current_skill->skill->name,
+                                        );
+        }
 
-    	return $result;
+        return $result;
     }
 
     public function parse_languages($languages)
     {
-    	$languages = $languages->values; 
-    	$result =  array();
+        $languages = $languages->values; 
+        $result =  array();
 
-    	for($i = 0; $i < count($languages); $i++)
-    	{
-    		$current_language = $languages[$i];
+        for($i = 0; $i < count($languages); $i++)
+        {
+            $current_language = $languages[$i];
 
-    		$result[$i] = (object) array( 
-										'name' => $current_language->language->name,
-										);
-    	}
+            $result[$i] = (object) array( 
+                                        'name' => $current_language->language->name,
+                                        );
+        }
 
-    	return $result;
+        return $result;
     }
 
     public function linkedIn_initiate()
-	{
-	 	// setup before redirecting to Linkedin for authentication.
+    {
+        // setup before redirecting to Linkedin for authentication.
          $linkedin_config = array(
              'appKey'       => '1ky0pyoc0rpe',
              'appSecret'    => '7WIPfrEkya3QT3LR',
@@ -167,7 +205,7 @@ class UserController extends CI_Controller
         $this->session->set_flashdata('linkedIn_sync', 'false'); 
 
         redirect($link);
-	}
+    }
 
     public function linkedIn_sync()
     {
@@ -193,7 +231,7 @@ class UserController extends CI_Controller
     }
 
 
-	public  function linkedIn_cancel() {
+    public  function linkedIn_cancel() {
     
         echo 'Linkedin user cancelled login';            
     }
@@ -217,17 +255,17 @@ class UserController extends CI_Controller
         $response = $this->linkedin->retrieveTokenAccess($oauth_token, $oauth_token_secret, $oauth_verifier);
         
         if($response['success'] === TRUE) {
-        	
-	        $oauth_expires_in = $response['linkedin']['oauth_expires_in'];
-	        $oauth_authorization_expires_in = $response['linkedin']['oauth_authorization_expires_in'];
-	        
+            
+            $oauth_expires_in = $response['linkedin']['oauth_expires_in'];
+            $oauth_authorization_expires_in = $response['linkedin']['oauth_authorization_expires_in'];
+            
             $this->session->keep_flashdata('linkedIn_sync');
 
-	        $response = $this->linkedin->setTokenAccess($response['linkedin']);
+            $response = $this->linkedin->setTokenAccess($response['linkedin']);
             $this->session->keep_flashdata('linkedIn_sync');
-	        $profile = $this->linkedin->profile('~:(id,first-name,last-name,picture-url,headline,email-address,summary,skills,languages,positions)');
+            $profile = $this->linkedin->profile('~:(id,first-name,last-name,picture-url,headline,email-address,summary,skills,languages,positions)');
 
-	        $user = json_decode($profile['linkedin']);
+            $user = json_decode($profile['linkedin']);
 
             $user_profile = (object)array(
                     'id'                    => $user->id,

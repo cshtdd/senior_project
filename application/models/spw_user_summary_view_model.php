@@ -17,7 +17,7 @@ class SPW_User_Summary_View_Model extends CI_Model
 		return ucwords($this->user->first_name.' '.$this->user->last_name);
 	}
 
-	public function prepareUsersDataToShow($lUserIds)
+	public function prepareUsersDataToShow($current_user_id, $lUserIds)
 	{
 		$length = count($lUserIds);
 
@@ -41,18 +41,7 @@ class SPW_User_Summary_View_Model extends CI_Model
 				$user = $row;
 				$user_summ_vm->user = $user;
 
-				$user_summ_vm->invite = false;
-
-				$term = $this->SPW_User_Model->getUserGraduationTerm($user->id);
-
-				if (isset($term))
-				{
-					$currentDate = date('Y-m-d');
-					if ($term->closed_requests > $currentDate)
-					{
-						$user_summ_vm->invite = true;
-					}
-				}
+				$user_summ_vm->invite = $user->canInviteUser($current_user_id, $lUserIds[$i]);
 			}
 			else
 			{
