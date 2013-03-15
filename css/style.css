@@ -299,3 +299,8 @@ a:visited.myUserRemover
     border-radius: 4px;
     border: 1px solid #e3e3e3;
 }
+
+form.inline
+{
+    display: inline;
+}

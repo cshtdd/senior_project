@@ -9,43 +9,44 @@
     <ul id="list-notifications" class="unstyled">
         <?php foreach ($lNotifications as $iNotification) { ?>
             <li class="alert alert-block <?php echo $iNotification->alertClass ?>">
-                <!-- <?php echo $iNotification->id ?> -->
-                <?php echo $iNotification->message ?>
+                <div class="row-fluid">
 
+                    <div class="span10">
+                        <p>
+                            <!-- <?php echo $iNotification->id ?> -->
+                            <?php echo $iNotification->message ?>
+                        </p>
+                    </div>
 
-                <?php if ($iNotification->displayTwoButtons) { ?>
+                    <?php if ($iNotification->displayTwoButtons) { ?>
 
-                    <!--
-                    <?php echo $iNotification->buttonLeftText ?>
-                    <?php echo $iNotification->getLeftButtonAction() ?>
+                        <div class="span1">
+                            <?php $this->load->view('subviews/notification_button', array(
+                                    'form_action' => $iNotification->getRightButtonAction(),
+                                    'btn_text' => $iNotification->buttonRightText,
+                                    'btn_class' => 'btn btn-success'
+                                ))?>
+                        </div>
 
-                    <?php echo $iNotification->buttonRightText ?>
-                    <?php echo $iNotification->getRightButtonAction() ?>
-                    -->
+                        <div class="span1">
+                            <?php $this->load->view('subviews/notification_button', array(
+                                    'form_action' => $iNotification->getLeftButtonAction(),
+                                    'btn_text' => $iNotification->buttonLeftText,
+                                    'btn_class' => 'btn btn-warning'
+                                ))?>
+                        <div>         
 
-                    <?php $this->load->view('subviews/notification_button', array(
-                            'form_action' => $iNotification->getLeftButtonAction(),
-                            'btn_text' => $iNotification->buttonLeftText
-                        ))?>
+                    <?php } else { ?>
 
-                    <?php $this->load->view('subviews/notification_button', array(
-                            'form_action' => $iNotification->getRightButtonAction(),
-                            'btn_text' => $iNotification->buttonRightText
-                        ))?>
+                        <div class="span1 offset1">
+                            <?php $this->load->view('subviews/notification_button', array(
+                                    'form_action' => $iNotification->getSingleButtonAction(),
+                                    'btn_text' => $iNotification->buttonText
+                                ))?>
+                        </div>
 
-                <?php } else { ?>
-
-                    <!--
-                        <?php echo $iNotification->buttonText ?>
-                        <?php echo $iNotification->getSingleButtonAction() ?>
-                    -->
-
-                    <?php $this->load->view('subviews/notification_button', array(
-                            'form_action' => $iNotification->getSingleButtonAction(),
-                            'btn_text' => $iNotification->buttonText
-                        ))?>
-
-                <?php } ?>
+                    <?php } ?>
+                </div>
             </li>
         <?php } ?>
     </ul>
