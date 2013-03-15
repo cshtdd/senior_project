@@ -29,17 +29,17 @@ class SPW_Notification_View_Model extends CI_Model
 
     public function getSingleButtonAction()
     {
-        return $buttonActionWithoutParameters.$id;
+        return $this->buttonActionWithoutParameters.$this->id;
     }
 
     public function getLeftButtonAction()
     {
-        return $buttonLeftActionWithoutParameters.$id;
+        return $this->buttonLeftActionWithoutParameters.$this->id;
     }
 
     public function getRightButtonAction()
     {
-        return $buttonRightActionWithoutParameters.$id;
+        return $this->buttonRightActionWithoutParameters.$this->id;
     }
 }
     
