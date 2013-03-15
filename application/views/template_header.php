@@ -113,7 +113,7 @@
 
                         <li class="<?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
                             <a id="link-profile" href="<?php echo base_url().'me' ?>" role="button" class="dropdown-toggle" data-toggle="dropdown">
-                                <?php echo getCurrentUserHeaderName($this)?> <b class="caret"></b>
+                                <i class="icon-user"></i> <b class="caret"></b>
                             
                             <ul class="dropdown-menu" role="menu" aria-labelledby="link-profile">
                                 <li role="presentation">
