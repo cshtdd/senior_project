@@ -8,6 +8,7 @@ class SPW_Notification_View_Model extends CI_Model
     //the message to display
     public $message;
 
+    public $alertClass = 'alert-info';
 
     public $buttonText = 'Hide';
     public $buttonActionWithoutParameters = 'notificationscontroller/hide_notification/';
