@@ -124,6 +124,26 @@
                                         </div>
                                     </a>                                    
                                 </li>
+
+                                <?php 
+                                    $notificationsCount = getPendingNotificationsCount($this);
+                                    if ($notificationsCount > 0)
+                                    {
+                                ?>
+                                        <li role="presentation">
+                                            <a role="menuitem" tabindex="-1" href="<?php echo base_url().'notifications' ?>">
+
+                                                
+                                                <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                                Notifications Pending                                             
+                                            
+
+                                            </a>
+                                        </li>
+                                <?php
+                                    }
+                                ?>
+
                                 <li role="presentation" class="divider"></li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="<?php echo base_url().'logout' ?>">Logout</a></li>
                             </ul>
