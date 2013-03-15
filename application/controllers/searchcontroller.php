@@ -381,6 +381,7 @@ class SearchController extends CI_Controller
 
         $user_summ_vm2 = new SPW_User_Summary_View_Model();
         $user_summ_vm2->user = $user2;
+        $user_summ_vm2->invite = true;
 
         $user3 = new SPW_User_Model();
         $user3->id = 2;
@@ -390,6 +391,7 @@ class SearchController extends CI_Controller
 
         $user_summ_vm3 = new SPW_User_Summary_View_Model();
         $user_summ_vm3->user = $user3;
+        $user_summ_vm3->invite = true;
 
         $user4 = new SPW_User_Model();
         $user4->id = 3;

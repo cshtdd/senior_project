@@ -777,6 +777,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm1 = new SPW_User_Summary_View_Model();
         $user_summ_vm1->user = $user1;
+        $user_summ_vm1->invite = true; 
 
 
         $user2 = new SPW_User_Model();
@@ -787,6 +788,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm2 = new SPW_User_Summary_View_Model();
         $user_summ_vm2->user = $user2;
+        $user_summ_vm2->invite = true; 
 
 
         $user4 = new SPW_User_Model();
@@ -797,6 +799,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm4 = new SPW_User_Summary_View_Model();
         $user_summ_vm4->user = $user4;
+        $user_summ_vm4->invite = true;
 
         $suggestedUsers = array(
                 $user_summ_vm2,

@@ -42,8 +42,12 @@
                 'id' => 'btn-leave',
                 'name' => 'btn-submit',
                 'type' => 'Submit',
-                'class' => 'btn btn-warning btn-large pull-right',
+                'class' => 'btn btn-warning btn-large pull-right hor-margin',
                 'value' => 'Leave Project'
+            ));
+
+        echo anchor('project/create', 'Create New Project', array(
+            'class' => 'btn btn-primary btn-large pull-right hor-margin'
             ));
 
         echo form_close();
