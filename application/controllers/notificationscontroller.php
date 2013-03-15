@@ -53,6 +53,14 @@ class NotificationsController extends CI_Controller
             //TODO with the notification Id take the appropriate action
 
             $this->output->set_output('notification accepted');
+
+
+            //redirect back to the previous page
+            $pbUrl = $this->input->post('pbUrl');
+            if (isset($pbUrl) && strlen($pbUrl))
+            {
+                redirect($pbUrl);
+            }
         }
     }
 
@@ -67,6 +75,13 @@ class NotificationsController extends CI_Controller
             //TODO with the notification Id take the appropriate action
 
             $this->output->set_output('notification rejected');
+
+            //redirect back to the previous page
+            $pbUrl = $this->input->post('pbUrl');
+            if (isset($pbUrl) && strlen($pbUrl))
+            {
+                redirect($pbUrl);
+            }
         }
     }
 
@@ -81,6 +96,13 @@ class NotificationsController extends CI_Controller
             //TODO with the notification Id take the appropriate action
 
             $this->output->set_output('notification hidden');
+
+            //redirect back to the previous page
+            $pbUrl = $this->input->post('pbUrl');
+            if (isset($pbUrl) && strlen($pbUrl))
+            {
+                redirect($pbUrl);
+            }
         }
     }
 
