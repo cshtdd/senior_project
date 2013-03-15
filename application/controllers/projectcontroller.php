@@ -439,8 +439,9 @@ class ProjectController extends CI_Controller
         }
         else
         {
+            $user_id = getCurrentUserId($this);
             $lProjectIds = $this->SPW_Project_Model->getPastProjects();
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, NULL, TRUE);
+            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, NULL, TRUE);
             return $lProjects;
         }
     }

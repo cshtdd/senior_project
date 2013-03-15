@@ -88,7 +88,7 @@ class HomeController extends CI_Controller
         else
         {
             $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-            return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectsIds, $belongProjectIdsList, FALSE);
+            return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectsIds, $belongProjectIdsList, FALSE);
         }
     }
 
