@@ -1,4 +1,5 @@
 <?php $this->load->helper('nav_top') ?>
+<?php $this->load->helper('notifications') ?>
 
 <!DOCTYPE html>
 <html>
@@ -119,10 +120,26 @@
                         <?php echo get_nav_item('login', 'Login') ?> 
 
                     <?php } ?>
+
+
+                    <?php 
+                        $notificationsCount = getPendingNotificationsCount($this);
+                        if ($notificationsCount > 0)
+                        {
+                    ?>
+                            <li <?php echo get_nav_item_class('notifications') ?> >
+                                <a href="<?php echo base_url().'notifications' ?>">
+                                    <i class="icon-envelope"></i>
+                                    <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                </a>
+                            </li>
+                    <?php
+                        }
+                    ?>
+                    
                 </ul>
 
 
-                
 
                 <?php echo form_open('searchcontroller/search_string', array( 
                     'class' => 'navbar-search pull-right', 
@@ -143,7 +160,7 @@
                                 'id' => 'text-search-top',
                                 'name' => 'q',
                                 'type' => 'text',
-                                'class' => 'span3 search-query',
+                                'class' => 'span2 search-query',
                                 'placeholder' => 'search for people, skills, projects and terms...',
                                 'required' => '',
                                 'title' => 'search criteria',
@@ -165,5 +182,5 @@
           </div>
         </div>
 
-        <div id="main-content">
+        <div id="main-content">         
 
