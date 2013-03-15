@@ -100,18 +100,24 @@ class NotificationsController extends CI_Controller
         $notification_vm1 = new SPW_Notification_View_Model();
         $notification_vm1->id = 1;
         $notification_vm1->message = 'Lolo Gonzalez wants to join your team';
+        $notification_vm1->displayTwoButtons = true;
+
 
         $notification_vm2 = new SPW_Notification_View_Model();
         $notification_vm2->id = 2;
         $notification_vm2->message = 'Kyle Broflovsky left your team';
 
+
         $notification_vm3 = new SPW_Notification_View_Model();
         $notification_vm3->id = 3;
         $notification_vm3->message = 'You have been invited to join the Facebook Moodle integration project';
+        $notification_vm3->displayTwoButtons = true;
+
 
         $notification_vm4 = new SPW_Notification_View_Model();
         $notification_vm4->id = 4;
         $notification_vm4->message = 'Your new project NASA in FIU has been approved';
+
 
         $lNotifications = array(
                 $notification_vm1,
