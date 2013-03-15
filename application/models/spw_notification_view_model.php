@@ -2,7 +2,10 @@
 
 class SPW_Notification_View_Model extends CI_Model
 {
+    //these are the only two fields that should be passed when creating this object
+    //the notification Id
     public $id;
+    //the message to display
     public $message;
 
 
