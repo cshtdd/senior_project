@@ -17,11 +17,11 @@ class SPW_Notification_View_Model extends CI_Model
     //or just the close
     public $displayTwoButtons;
 
-    public $buttonLeftText = 'Accept';
-    public $buttonLeftActionWithoutParameters = 'notificationscontroller/accept_notification/';
+    public $buttonLeftText = 'Reject';
+    public $buttonLeftActionWithoutParameters = 'notificationscontroller/reject_notification/';
 
-    public $buttonRightText = 'Reject';
-    public $buttonRightActionWithoutParameters = 'notificationscontroller/reject_notification/';
+    public $buttonRightText = 'Accept';
+    public $buttonRightActionWithoutParameters = 'notificationscontroller/accept_notification/';
 
     public function __construct()
     {
