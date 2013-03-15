@@ -1,4 +1,4 @@
-<ul class="project_list unstyled">
+<ul class="project_list unstyled <?php echo isset($list_class) && strlen($list_class) > 0 ? $list_class : '' ?>  ">
     <?php if (isset($list_title) && strlen($list_title) > 0) { ?>
         <lh><h2><?php echo $list_title ?></h2></lh>
     <?php } ?>

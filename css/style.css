@@ -290,3 +290,12 @@ a:visited.myUserRemover
     right: 0;
 }
 */
+
+.suggested-projects
+{
+    background-color: #ebff00;
+    background-color: rgba(235, 255, 0, 0.15);
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #e3e3e3;
+}
