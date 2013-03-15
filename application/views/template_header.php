@@ -84,7 +84,7 @@
                         if ($notificationsCount > 0)
                         {
                     ?>
-                            <li <?php echo get_nav_item_class('notifications') ?> >
+                            <li id="notifications-badge" <?php echo get_nav_item_class('notifications') ?> >
                                 <a href="<?php echo base_url().'notifications' ?>">
                                     <i class="icon-envelope"></i>
                                     <span class="badge badge-important"><?php echo $notificationsCount ?></span>
