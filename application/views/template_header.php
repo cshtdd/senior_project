@@ -152,6 +152,9 @@
                     <?php } ?>
                 </ul>
 
+
+                
+
                 <?php echo form_open('searchcontroller/search_string', array(
                     //'class' => 'search-form form-inline navbar-search pull-right', 
                     'class' => 'navbar-search pull-right', 
@@ -177,10 +180,30 @@
                                 'content' => 'Search'
                             ));
                             */
+                            
+                            echo form_button(array(
+                                'id' => 'btn-search-top',
+                                'type' => 'Submit',
+                                'class' => 'btn btn-link',
+                                'content' => '<i class="icon-search"></i>'
+                            ));                             
 
                         ?>
                     </div>
-                <?php echo form_close() ?>                
+                <?php echo form_close() ?>     
+
+                
+
+            <!--
+                <form class="form-search js-search-form" action="/search" id="global-nav-search">                    
+                    <input class="search-input" type="text" id="search-query" placeholder="Search" name="q">
+                    <span class="search-icon js-search-action">
+                      <button type="submit" class="icon nav-search btn btn-link" tabindex="-1">
+                        <i class="icon-search"></i>                        
+                      </button>
+                    </span>                    
+                </form>     
+            -->
 
             <?php } ?>
           </div>
