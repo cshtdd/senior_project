@@ -7,7 +7,7 @@ class NotificationsController extends CI_Controller
     {
         parent::__construct();
 
-        $this->load->helper('notification_summary_view_model');
+        $this->load->model('SPW_Notification_View_Model');
         $this->load->helper('request');
         //$this->output->cache(60);
     }
