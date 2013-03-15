@@ -10,7 +10,7 @@ class SPW_Notification_View_Model extends CI_Model
 
     public $alertClass = 'alert-info';
 
-    public $buttonText = 'Hide';
+    public $buttonText = 'Dismiss';
     public $buttonActionWithoutParameters = 'notificationscontroller/hide_notification/';
 
     //wether we are going to display the accept/reject buttons
