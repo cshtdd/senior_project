@@ -78,6 +78,22 @@
                 </ul>
 
                 <ul class="nav pull-right">
+
+                    <?php 
+                        $notificationsCount = getPendingNotificationsCount($this);
+                        if ($notificationsCount > 0)
+                        {
+                    ?>
+                            <li <?php echo get_nav_item_class('notifications') ?> >
+                                <a href="<?php echo base_url().'notifications' ?>">
+                                    <i class="icon-envelope"></i>
+                                    <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                </a>
+                            </li>
+                    <?php
+                        }
+                    ?>
+
                     <?php if (isUserLoggedIn($this)) { ?>                      
 
 
@@ -119,23 +135,7 @@
 
                         <?php echo get_nav_item('login', 'Login') ?> 
 
-                    <?php } ?>
-
-
-                    <?php 
-                        $notificationsCount = getPendingNotificationsCount($this);
-                        if ($notificationsCount > 0)
-                        {
-                    ?>
-                            <li <?php echo get_nav_item_class('notifications') ?> >
-                                <a href="<?php echo base_url().'notifications' ?>">
-                                    <i class="icon-envelope"></i>
-                                    <span class="badge badge-important"><?php echo $notificationsCount ?></span>
-                                </a>
-                            </li>
-                    <?php
-                        }
-                    ?>
+                    <?php } ?>                    
                     
                 </ul>
 
