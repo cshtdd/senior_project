@@ -393,6 +393,38 @@ class SPW_User_Model extends CI_Model
 		return NULL;
 	}
 
+	public function getStudentIdsFromListIds($lUser)
+	{
+		$res = array();
+		if (isset($lUser) && count($lUser)>0)
+		{
+			$length = count($lUser);
+			for ($i = 0; $i < $length; $i++)
+			{
+				if ($this->isUserAStudent($lUser[$i]))
+					$res[] = $lUser[$i];
+			}
+		}
+
+		return $res;
+	}
+
+	public function getMentorIdsFromListIds($lUser)
+	{
+		$res = array();
+		if (isset($lUser) && count($lUser)>0)
+		{
+			$length = count($lUser);
+			for ($i = 0; $i < $length; $i++)
+			{
+				if ($this->isUserPossibleMentor($lUser[$i]))
+					$res[] = $lUser[$i];
+			}
+		}
+
+		return $res;
+	}
+
 	/* return the id of the projects the user belong or false if does not have a project */
 	public function userHaveProjects($user_id)
 	{
@@ -417,7 +449,7 @@ class SPW_User_Model extends CI_Model
 
 		if ($query->num_rows() > 0)
 		{
-			$res = array();
+			//$res = array();
 
 			foreach ($query->result() as $row)
 			{
@@ -425,37 +457,6 @@ class SPW_User_Model extends CI_Model
 			}
 
 			return $res;
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-
-	/* checks if the user is going to graduate on the current term */
-	public function isUserGraduating($user_id)
-	{
-		$sql = 'select id
-				from spw_term
-				where (start_date <= NOW()) and (end_date > NOW())';
-		$query = $this->db->query($sql);
-		if ($query->num_rows() > 0)
-		{
-			$param[0] = $user_id;
-			$row = $query->row(0);
-			$param[1] = $row->id;
-			$sql1 = 'select id
-					 from spw_user
-					 where (id = ?) and (graduation_term = ?)';
-			$query1 = $this->db->query($sql1, $param);
-			if ($query1->num_rows() > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
 		}
 		else
 		{
@@ -685,7 +686,68 @@ class SPW_User_Model extends CI_Model
 			return NULL;
 	}
 
-	private function dumpQueryIdsOnArray($query)
+	/* checks whether the user can leave a project or not */
+	public function canUserLeaveProject($user_id, $project_id)
+	{
+		$param[0] = $project_id;
+
+		$sql = 'select proposed_by
+				from spw_project
+				where id = ?';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() == 1)
+		{
+			foreach ($query->result() as $row)
+				$proposedBy = $row->proposed_by;
+
+			if ($user_id == $proposedBy)
+				return false;
+			else
+				return true;
+		}
+		else
+			return NULL; //the project does not exist
+	}
+
+	public function leaveProjectOnDatabase($user_id, $project_id)
+    {
+    	$proj = new SPW_Project_Model();
+
+    	$user_belong_project = $proj->doesUserBelongToProject($user_id ,$project_id);
+            
+        if (isset($user_belong_project) && $user_belong_project) 
+        {
+            $can_leave = $this->canUserLeaveProject($user_id, $project_id);
+
+            if (isset($can_leave) && $can_leave)
+            {
+                $param[0] = $user_id;
+                $param[1] = $project_id;
+        
+        		if ($this->SPW_User_Model->isUserAStudent($user_id))
+        		{ 
+            		$sql = 'update spw_user
+                    		set project = NULL
+                    		where id = ?';
+        		}
+        		else
+        		{
+            		$sql = 'delete
+                    		from spw_mentor_project
+                    		where (mentor = ?) and (project = ?)';
+        		}
+
+        		$query = $this->db->query($sql, $param);  
+                return true;
+            }
+        }
+
+        return false;    
+    }
+
+	/* takes any array of ids and dump it in an array of ids */
+	public function dumpQueryIdsOnArray($query)
 	{
 		$res = array();
 

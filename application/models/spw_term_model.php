@@ -48,7 +48,10 @@ class SPW_Term_Model extends CI_Model
 		$query = $this->db->query($sql, $param);
 
 		if ($query->num_rows() > 0)
-			return $this->dumpQueryIdsOnArray($query);
+		{
+			$user = new SPW_User_Model();
+			return $user->dumpQueryIdsOnArray($query);
+		}
 		else
 			return NULL;
 	}
@@ -67,24 +70,12 @@ class SPW_Term_Model extends CI_Model
 		$query = $this->db->query($sql, $param);
 
 		if ($query->num_rows() > 0)
-			return $this->dumpQueryIdsOnArray($query);
+		{
+			$user = new SPW_User_Model();
+			return $user->dumpQueryIdsOnArray($query);
+		}
 		else
 			return NULL;
-	}
-
-	private function dumpQueryIdsOnArray($query)
-	{
-		$res = array();
-
-		if (isset($query))
-		{
-			foreach ($query->result() as $row)
-			{
-				$res[] = $row->id;
-			}
-		}
-
-		return $res;
 	}
 }
 	

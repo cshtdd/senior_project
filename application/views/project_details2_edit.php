@@ -170,14 +170,33 @@
 </div>
 
 <?php 
-    if (isset($suggested_users) && count($suggested_users) > 0)
+    if (isset($suggested_mentors) && count($suggested_mentors) > 0)
     {
 ?>
         <hr>
 <?php
         $this->load->view('subviews/user_summaries_full_list_edit_project', array(
-            'listTitle' => 'These people would be great for your team',
-            'lUserSummaries' => $suggested_users,
+            'listTitle' => 'These mentors would be great for your team',
+            'lUserSummaries' => $suggested_mentors,
+            'errorMessage' => '',
+            'topView' => '',
+            'bottomView' => 'subviews/user_invite',
+            'noBottomViewForCurrentUser' => true,
+            'prefix' => 'sugg'
+        ));
+
+    }
+?>
+
+<?php 
+    if (isset($suggested_students) && count($suggested_students) > 0)
+    {
+?>
+        <hr>
+<?php
+        $this->load->view('subviews/user_summaries_full_list_edit_project', array(
+            'listTitle' => 'These students would be great for your team',
+            'lUserSummaries' => $suggested_students,
             'errorMessage' => '',
             'topView' => '',
             'bottomView' => 'subviews/user_invite',

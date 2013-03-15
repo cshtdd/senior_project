@@ -85,7 +85,10 @@ class ProjectController extends CI_Controller
         $current_project_ids = $this->getBelongProjectIds();
         $project_details = $this->getProjectDetailsInternal($project_id);
 
-        $isMyProject = in_array($project_id, $current_project_ids);
+        if (isset($current_project_ids) && (count($current_project_ids)>0))
+            $isMyProject = in_array($project_id, $current_project_ids);
+        else
+            $isMyProject = false;
 
         //don't allow details edit after close date
         $isProjectClosed = $this->isProjectClosedInternal($project_id);
@@ -99,14 +102,13 @@ class ProjectController extends CI_Controller
             $resulting_view_name = 'project_details2_edit';
 
             //get the people suggestion for the current project
-            $data['suggested_users'] = $this->getSuggestedUsersForCurrentProjectInternal($project_id);
+            $data['suggested_mentors'] = $this->getSuggestedMentorsForCurrentProjectInternal($project_id);
+            $data['suggested_students'] = $this->getSuggestedStudentsForCurrentProjectInternal($project_id);
             $data['can_leave_project'] = $this->getCurrentUserCanLeaveProjectInternal($project_id);
         }
         else
         {
             $resulting_view_name = 'project_details2';
-
-
         }
 
 
@@ -242,181 +244,6 @@ class ProjectController extends CI_Controller
         $data['creating_new'] = true;
 
         $this->load->view('project_details2_edit', $data);
-    }
-
-/*
-    private function singleProjectDetailsInternal($project_id, $isCurrentUserProject)
-    {
-        throw new Exception('not implemented');
-    }
-*/
-
-    private function detailsInternal($project_ids, $belongProject=false)
-    {
-        $lProjects = array();
-        $lAlikeStudents = array();
-        $lAlikeMentors = array();
-        $lEditable = array();
-        $message = '';
-
-        $no_results = false;
-
-        if ($belongProject)
-        {
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $project_ids, FALSE);
-
-            $title = 'My Project(s) Details';
-            if (!isset($project_ids))
-            {
-                $no_results = true;
-                if ($this->SPW_User_Model->isUserAStudent(getCurrentUserId($this)))
-                {
-                    $term = $this->SPW_User_Model->getUserGraduationTerm(getCurrentUserId($this));
-                    $closedRequestsDate = date('D, d M Y', strtotime($term->closed_requests));
-                    $message = 'You have not joined to a project yet. Please do so before '.$closedRequestsDate;
-                }
-                else
-                {
-                    $message = 'You have not joined to a project yet...';
-                }
-            }
-
-            $length = count($project_ids);
-
-            for ($i = 0; $i < $length; $i++)
-            {
-                $lStudents = array();
-                $lStudentIds = $this->SPW_Project_Model->getSuggestedStudentsGivenMyProject($project_ids[$i]);
-
-                $term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_ids[$i]);
-
-                if (isset($term))
-                {
-                    $currentDate = date('Y-m-d');
-                    if ($term->closed_requests > $currentDate)
-                    {
-                        $lEditable[$i] = true;
-                    }
-                    else
-                    {
-                        $lEditable[$i] = false;
-                    }
-                }
-
-                if (isset($lStudentIds))
-                {
-                    for ($j = 0; $j < count($lStudentIds); $j++)
-                    {
-                        $userSumm = new SPW_User_Summary_View_Model();
-                        $userSumm->user = $this->SPW_User_Model->getUserInfo($lStudentIds[$j]);
-                        $lStudents[] = $userSumm;
-                    }
-                }
-                else
-                {
-                    $lStudents = NULL;
-                }
-
-                $lAlikeStudents[$i] = $lStudents;
-
-                $lMentors = array();
-                $lMentorIds = $this->SPW_Project_Model->getSuggestedMentorsGivenMyProject($project_ids[$i]);
-
-                if (isset($lMentorIds))
-                {
-                    for ($j = 0; $j < count($lMentorIds); $j++)
-                    {
-                        $userSumm = new SPW_User_Summary_View_Model();
-                        $userSumm->user = $this->SPW_User_Model->getUserInfo($lMentorIds[$j]);
-                        $lMentors[] = $userSumm;
-                    }
-                }
-                else
-                {
-                    $lMentors = NULL;
-                }
-
-                $lAlikeMentors[$i] = $lMentors;
-            }
-
-        }
-        else
-        {
-            $lBelongProjects = $this->getBelongProjectIds();
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $lBelongProjects, FALSE);
-            $title = 'Project Details';
-
-            $currentUserBelongProjectIds = $this->SPW_User_Model->userHaveProjects(getCurrentUserId($this));
-
-            if ($this->SPW_Project_Summary_View_Model->isProjectInList($currentUserBelongProjectIds, $project_ids[0]))
-            {
-                $term = $this->SPW_Project_Model->getProjectDeliveryTerm($project_ids[0]);
-
-                if (isset($term))
-                {
-                    $currentDate = date('Y-m-d');
-                    if ($term->closed_requests > $currentDate)
-                    {
-                        $lEditable[0] = true;
-                    }
-                    else
-                    {
-                        $lEditable[0] = false;
-                    }
-                }
-
-                $lStudents = array();
-                $lStudentIds = $this->SPW_Project_Model->getSuggestedStudentsGivenMyProject($project_ids[0]);
-                if (count($lStudentIds) > 0)
-                {
-                    for ($j = 0; $j < count($lStudentIds); $j++)
-                    {
-                        $userSumm = new SPW_User_Summary_View_Model();
-                        $userSumm->user = $this->SPW_User_Model->getUserInfo($lStudentIds[$j]);
-                        $lStudents[] = $userSumm;
-                    }
-                }
-                else
-                {
-                    $lStudents = NULL;
-                }
-
-                $lMentors = array();
-                $lMentorIds = $this->SPW_Project_Model->getSuggestedMentorsGivenMyProject($project_ids[0]);
-                if (count($lMentorIds) > 0)
-                {
-                    for ($j = 0; $j < count($lMentorIds); $j++)
-                    {
-                        $userSumm = new SPW_User_Summary_View_Model();
-                        $userSumm->user = $this->SPW_User_Model->getUserInfo($lMentorIds[$j]);
-                        $lMentors[] = $userSumm;
-                    }
-                }
-                else
-                {
-                    $lMentors = NULL;
-                }
-            }
-            else
-            {
-                $lEditable[0] = false;
-                $lStudents = NULL;
-                $lMentors = NULL;
-            }
-
-            $lAlikeStudents[0] = $lStudents;
-            $lAlikeMentors[0] = $lMentors;
-        }
-
-        $data['title'] = $title;
-        $data['lEditable'] = $lEditable;
-        $data['no_results'] = $no_results;
-        $data['message'] = $message; 
-        $data['lProjects'] = $lProjects;
-        $data['lAlikeStudents'] = $lAlikeStudents;
-        $data['lAlikeMentors'] = $lAlikeMentors;
-
-        $this->load->view('project_detail_index', $data);
     }
 
     private function getBelongProjectIds()
@@ -579,8 +406,9 @@ class ProjectController extends CI_Controller
             return $this->getCurrentProjectsSummariesWithIdsInternalTest($project_ids);
         }
         else
-        {
-            return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($project_ids, $project_ids, FALSE);
+        {   
+            $user_id = getCurrentUserId($this);
+            return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $project_ids, $project_ids, FALSE);
         }
     }
     private function getCurrentProjectsSummariesWithIdsInternalTest($project_ids)
@@ -651,7 +479,10 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            throw new Exception('Not implemented');
+            $user_id = getCurrentUserId($this);
+            $listSuggestedProjectIds = $this->SPW_User_Model->getSuggestedProjectsGivenCurrentUser($user_id);
+            $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+            return $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $listSuggestedProjectIds, $belongProjectIdsList, FALSE);
         }
     }
     
@@ -791,7 +622,15 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            throw new Exception('Not implemented');
+            $lProjectIds = array();
+            $user_id = getCurrentUserId($this);
+            $lProjectIds[] = $project_id;
+            $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
+            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, FALSE);
+            if (isset($lProjects) && (count($lProjects) == 1))
+                return $lProjects[0];
+            else
+                return NULL;
         }
     }
     private function getProjectDetailsInternalTest($project_id)
@@ -888,7 +727,8 @@ class ProjectController extends CI_Controller
         return $project_summ_vm1;
     }
 
-    private function getSuggestedUsersForCurrentProjectInternal($project_id)
+    /* gets a list of SPW_User_Summary_View_Model of suggested students */
+    private function getSuggestedStudentsForCurrentProjectInternal($project_id)
     {
         if (is_test($this))
         {
@@ -896,9 +736,37 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            throw new Exception('Not implemented');
+            $user_id = getCurrentUserId($this);
+            $lStudents = array();
+            $lStudentIds = $this->SPW_Project_Model->getSuggestedStudentsGivenMyProject($project_id);
+            $lStudents = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lStudentIds);
+            if (isset($lStudents) && (count($lStudents) > 0))
+                return $lStudents;
+            else
+                return NULL;
         }
     }
+
+    /* gets a list of SPW_User_Summary_View_Model of suggested mentors */
+    private function getSuggestedMentorsForCurrentProjectInternal($project_id)
+    {
+        if (is_test($this))
+        {
+            return $this->getSuggestedUsersForCurrentProjectInternalTest($project_id);
+        }
+        else
+        {
+            $user_id = getCurrentUserId($this);
+            $lMentors = array();
+            $lMentorIds = $this->SPW_Project_Model->getSuggestedMentorsGivenMyProject($project_id);
+            $lMentors = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lMentorIds);
+            if (isset($lMentors) && (count($lMentors) > 0))
+                return $lMentors;
+            else
+                return NULL;
+        }
+    }
+
     private function getSuggestedUsersForCurrentProjectInternalTest($project_id)
     {
         $user1 = new SPW_User_Model();
@@ -964,7 +832,7 @@ class ProjectController extends CI_Controller
         }
     }
 
-    private function leaveProjectInternal($projectId, $currentUserId)
+    private function leaveProjectInternal($projectId, $user_id)
     {
         if (is_test($this))
         {
@@ -972,10 +840,7 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            //TODO validate that the current user belongs to the specified project 
-            //TODO validate that the current user was not the one who proposed the project
-
-            throw new Exception('not implemented');
+            return $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
         }
     }
 
@@ -987,8 +852,8 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            //this should check whether the current user is the creator of the project and that sort of stuff
-            throw new Exception('not implemented');
+            $user_id = getCurrentUserId($this);
+            return $this->SPW_User_Model->canUserLeaveProject($user_id, $project_id);
         }
     }
 }

@@ -40,7 +40,8 @@ class SearchController extends CI_Controller
             if (isset($results_search) && count($results_search) > 0)
             {
                 $data['lProjects'] = $results_search[0];
-                $data['lUsers'] = $results_search[1];
+                $data['lMentors'] = $results_search[1];
+                $data['lStudents'] = $results_search[2];
                 $data['no_results'] = false;
             }
         }
@@ -57,8 +58,9 @@ class SearchController extends CI_Controller
         $lProjectsFound = array();
         $lProjectIds = array();
 
-        $lUsersFound = array();
         $lUserIds = array();
+        $lMentorsFound = array();
+        $lStudentsFound = array();
 
         if (is_test($this))
         {
@@ -104,13 +106,28 @@ class SearchController extends CI_Controller
                     $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, FALSE);
                 }
        
-                if (isset($lUserIds) && count($lUserIds))
+                $lMentorIds = array();
+                $lStudentIds = array();
+
+                if (isset($lUserIds) && count($lUserIds)>0)
                 {
-                    $lUsersFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lUserIds);
+                    $lMentorIds = $this->SPW_User_Model->getMentorIdsFromListIds($lUserIds);
+                    $lStudentIds = $this->SPW_User_Model->getStudentIdsFromListIds($lUserIds);
+
+                    if (isset($lMentorIds) && count($lMentorIds)>0)
+                    {
+                        $lMentorsFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lMentorIds);
+                    }
+
+                    if (isset($lStudentIds) && count($lStudentIds)>0)
+                    {
+                        $lStudentsFound = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($user_id, $lStudentIds);
+                    }   
                 }
                 
                 $results_search[0] = $lProjectsFound;
-                $results_search[1] = $lUsersFound;       
+                $results_search[1] = $lMentorsFound;
+                $results_search[2] = $lStudentsFound;  
         }
 
         return $results_search;
