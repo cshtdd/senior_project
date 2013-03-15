@@ -19,7 +19,8 @@
                 $userIdsArray[] = $user_summary->user->id;
     ?>
                 <li id="<?php echo $prefix.'-item-'.$user_summary->user->id ?>" 
-                    data-userid="<?php echo $user_summary->user->id ?>"> 
+                    data-userid="<?php echo $user_summary->user->id ?>"
+                    class="top-align"> 
 
                     <div class="usr-top-view-padding">
                         <?php
