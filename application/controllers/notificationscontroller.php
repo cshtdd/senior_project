@@ -6,6 +6,9 @@ class NotificationsController extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
+        $this->load->helper('notification_summary_view_model');
+        $this->load->helper('request');
         //$this->output->cache(60);
     }
 
@@ -18,20 +21,43 @@ class NotificationsController extends CI_Controller
 
     public function accept_notification($notificationId)
     {
-        //with the notification Id take the appropriate action
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            //TODO with the notification Id take the appropriate action
 
-        $this->output->set_output('notification accepted');
+            $this->output->set_output('notification accepted');
+        }
     }
 
     public function reject_notification($notificationId)
     {
-        //with the notification Id take the appropriate action
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            //TODO with the notification Id take the appropriate action
 
-        $this->output->set_output('notification rejected');
+            $this->output->set_output('notification rejected');
+        }
     }
 
     public function hide_notification($notificationId)
     {
-        $this->output->set_output('notification hidden');
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            //TODO with the notification Id take the appropriate action
+
+            $this->output->set_output('notification hidden');
+        }
     }
 }
