@@ -271,9 +271,15 @@ a:visited.myUserRemover
     display: block;
 }
 
-#text-search-top
+#text-search-top 
 {
     padding-right: 30px;
+}
+
+#text-search-top:focus
+{
+    margin-right: 30px; 
+    padding-right: 0;
 }
 
 #btn-search-top
