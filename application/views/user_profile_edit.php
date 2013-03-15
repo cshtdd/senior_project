@@ -26,11 +26,41 @@
                     <div class="span4 center-text">
                         <?php 
                             echo img(array(
+                                'id' => 'img-user-profile',
                                 'src' => $userDetails->user->picture,
                                 'class' => 'user-img-large',
                                 'alt' => $userDetails->getFullName()
-                            ))
+                            ));
+
+                            /* this field contains the image url that needs to be stored in the DB */
+                            echo form_hidden(array('hidden-img-src' => $userDetails->user->picture));
                         ?>
+                        <p id="link-change-image-container">
+                            <a id="link-change-image" href="#">Click to change image</a>
+                        </p>
+
+                        <div id="text-img-url-container">
+                            <p>
+                                <?php 
+                                    echo form_input(array(
+                                        'id' => 'text-img-url',
+                                        'name' => 'text-img-url',
+                                        'type' => 'text',
+                                        'class' => 'input-large',
+                                        'placeholder' => 'http://example.com/img1.png',
+                                        'value' => $userDetails->user->picture,
+                                        'title' => 'Profile Image',
+                                        'required' => ''
+                                    ));
+                                ?>
+                            </p>
+
+                            <p>
+                                <a id="link-change-image-cancel" href="#">Cancel</a>
+                                <a id="link-change-image-ok" href="#">OK</a>
+                            </p>
+                        </div>
+
                     </div>
 
                     <div class="span8">
@@ -184,6 +214,40 @@
             </div>
 
         <?php echo form_close() ?>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#text-img-url-container').hide();
+
+                $('#link-change-image').click(function(e){
+                    e.preventDefault();
+
+                    $('#link-change-image-container').hide();
+                    $('#text-img-url-container').show();
+                });
+
+                $('#link-change-image-cancel').click(function(e){
+                    e.preventDefault();
+
+                    $('#text-img-url-container').hide();
+                    $('#link-change-image-container').show();
+                });
+
+                $('#link-change-image-ok').click(function(e){
+                    e.preventDefault();
+
+                    var newImgSrc = $('#text-img-url').val();
+
+                    //alert(newImgSrc);
+
+                    $('#img-user-profile').attr('src', newImgSrc);
+                    $('input[name=hidden-img-src]').val(newImgSrc);
+
+                    $('#text-img-url-container').hide();
+                    $('#link-change-image-container').show();
+                });
+            });
+        </script>
 <?php 
     }
 ?>
