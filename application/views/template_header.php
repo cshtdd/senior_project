@@ -124,8 +124,7 @@
 
                 
 
-                <?php echo form_open('searchcontroller/search_string', array(
-                    //'class' => 'search-form form-inline navbar-search pull-right', 
+                <?php echo form_open('searchcontroller/search_string', array( 
                     'class' => 'navbar-search pull-right', 
                     'id' => 'search-form-top',
                     'method' => 'GET')) ?>
@@ -150,15 +149,6 @@
                                 'title' => 'search criteria',
                                 'value' => $searchParam
                             ));
-
-                            /*
-                            echo form_button(array(
-                                'id' => 'btn-search-top',
-                                'type' => 'Submit',
-                                'class' => 'btn',
-                                'content' => 'Search'
-                            ));
-                            */
                             
                             echo form_button(array(
                                 'id' => 'btn-search-top',
@@ -171,39 +161,9 @@
                     </div>
                 <?php echo form_close() ?>     
 
-                
-
-            <!--
-                <form class="form-search js-search-form" action="/search" id="global-nav-search">                    
-                    <input class="search-input" type="text" id="search-query" placeholder="Search" name="q">
-                    <span class="search-icon js-search-action">
-                      <button type="submit" class="icon nav-search btn btn-link" tabindex="-1">
-                        <i class="icon-search"></i>                        
-                      </button>
-                    </span>                    
-                </form>     
-            -->
-
             <?php } ?>
           </div>
         </div>
 
         <div id="main-content">
 
-        <!--
-            <?php
-                echo 'lolo';
-
-                $uri = uri_string();
-                $pos = stripos($uri, 'search/');
-                if (isset($pos) && $pos === 0)
-                {
-                    $searchParam = urldecode(substr($uri, strlen('search/')));
-                    echo 'we are on search => '.$searchParam;
-                }
-                else
-                {
-                    echo 'we are not on search';
-                }
-            ?>
-        -->
