@@ -202,5 +202,12 @@
           </div>
         </div>
 
-        <div id="main-content">         
+        <div id="main-content">     
+
+        <?php if (isFlashMessageAvailable($this)){ ?>
+            <div class="alert">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <?php echo getFlashMessage($this) ?>
+            </div>
+        <?php } ?>
 
