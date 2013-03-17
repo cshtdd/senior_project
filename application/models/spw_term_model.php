@@ -37,11 +37,9 @@ class SPW_Term_Model extends CI_Model
 	//get all valid terms
 	public function getAllValidTerms()
 	{
-		$param[0] = date('Y-m-d');
-
 		$sql = 'select *
 				from spw_term
-				where (end_date > ?)';
+				where (end_date > NOW())';
 		$query = $this->db->query($sql);
 
 		$termNum = $query->num_rows();
@@ -102,6 +100,7 @@ class SPW_Term_Model extends CI_Model
 		else
 			return NULL;
 	}
+
 	public function getFutureTerms()
 	{
 		$queryStr = ' select * 
