@@ -3,8 +3,11 @@
 class SPW_Experience_Model extends CI_Model
 {
 	public $id;
-	public $title;
-	public $description;
+	public $company_name;
+	public $company_industry;
+	public $start_date;
+	public $end_date;
+	public $title; 
 
 	public function __construct()
 	{
