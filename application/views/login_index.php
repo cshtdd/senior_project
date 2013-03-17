@@ -54,7 +54,7 @@
             </div>
 
             <div class="login-service">
-                <a href="<?php echo base_url('/login/linkedIn_initiate')?>">
+                <a href="<?php echo base_url('/user/linkedIn_initiate')?>">
                     <?php echo img(array('src' => '/img/linkedin_login.png', 'alt' => 'LinkedIn Login'))?>
                 </a>
             </div>
