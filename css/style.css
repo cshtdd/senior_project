@@ -240,3 +240,67 @@ a:visited.myUserRemover
 {
     min-height: 20px;
 }
+
+.top-align
+{
+    vertical-align: top; 
+}
+
+.hor-margin
+{
+    margin-left: 5px;
+}
+
+/*
+.img-header-profile
+{
+    max-width: 20px;
+    max-height: 20px;
+}
+*/
+
+.img-header-profile-big
+{
+    max-width: 40px;
+    max-height: 40px;
+    margin-right: 10px;
+}
+
+.block-text
+{
+    display: block;
+}
+
+/* I won't spend more time on this */
+/*
+#text-search-top 
+{
+    padding-right: 30px;
+}
+
+#text-search-top:focus
+{
+    margin-right: 30px; 
+    padding-right: 0;
+}
+
+#btn-search-top
+{
+    position: absolute;
+    right: 0;
+}
+*/
+
+.suggested-projects
+{
+    background-color: #007AFF; /*#ebff00;*/
+    background-color: rgba(0, 122, 255, 0.05); /*rgba(235, 255, 0, 0.15);*/
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #e3e3e3;
+}
+
+form.inline
+{
+    display: inline;
+}

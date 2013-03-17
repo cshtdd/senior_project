@@ -34,6 +34,58 @@ class SPW_Term_Model extends CI_Model
 		return NULL;
 	}
 
+	public function searchQueriesOnTermForUsers($keyword)
+	{
+		$keyword = '%'.$keyword.'%';
+		
+		$param[0] = $keyword;
+		$param[1] = $keyword;
+
+		$sql = "select spw_project.id
+				from spw_project, spw_term
+				where (spw_project.delivery_term = spw_term.id) and (spw_project.status = 3)
+					   and ((spw_term.name like ?) or (spw_term.description like ?))";
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	public function searchQueriesOnTermForProjects($keyword)
+	{
+		$keyword = '%'.$keyword.'%';
+		
+		$param[0] = $keyword;
+		$param[1] = $keyword;
+
+		$sql = "select spw_user.id
+				from spw_user, spw_term
+				where (spw_user.graduation_term = spw_term.id)
+					   and ((spw_term.name like ?) or (spw_term.description like ?))";
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+			return $this->dumpQueryIdsOnArray($query);
+		else
+			return NULL;
+	}
+
+	private function dumpQueryIdsOnArray($query)
+	{
+		$res = array();
+
+		if (isset($query))
+		{
+			foreach ($query->result() as $row)
+			{
+				$res[] = $row->id;
+			}
+		}
+
+		return $res;
+	}
 	public function getFutureTerms()
 	{
 		$queryStr = ' select * 

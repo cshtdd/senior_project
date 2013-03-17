@@ -74,6 +74,7 @@ class UserController extends CI_Controller
             $updatedLastName = $this->input->post('text-last-name');
             $updatedSPWSummary = $this->input->post('text-description');
             $updatedRoleId = $this->input->post('radio-role');
+            $updatedUserPictureUrl = $this->input->post('hidden-img-src');            
 
             //only consider this if the role is a student
             $updatedTermId = $this->input->post('dropdown-term');
@@ -86,7 +87,8 @@ class UserController extends CI_Controller
                 $updatedLastName.' '.
                 $updatedSPWSummary.' '.
                 $updatedRoleId.' '.
-                $updatedTermId
+                $updatedTermId.' '.
+                $updatedUserPictureUrl
             );
             */
 

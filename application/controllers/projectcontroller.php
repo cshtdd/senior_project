@@ -169,6 +169,7 @@ class ProjectController extends CI_Controller
 
             //TODO implement this, and then redirect to the request url
 
+            setFlashMessage($this, 'Your project was updated');
             redirect($postBackUrl);
         }
     }
@@ -439,8 +440,9 @@ class ProjectController extends CI_Controller
         }
         else
         {
+            $user_id = getCurrentUserId($this);
             $lProjectIds = $this->SPW_Project_Model->getPastProjects();
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, NULL, TRUE);
+            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, NULL, TRUE);
             return $lProjects;
         }
     }
@@ -908,6 +910,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm1 = new SPW_User_Summary_View_Model();
         $user_summ_vm1->user = $user1;
+        $user_summ_vm1->invite = true; 
 
 
         $user2 = new SPW_User_Model();
@@ -918,6 +921,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm2 = new SPW_User_Summary_View_Model();
         $user_summ_vm2->user = $user2;
+        $user_summ_vm2->invite = true; 
 
 
         $user4 = new SPW_User_Model();
@@ -928,6 +932,7 @@ class ProjectController extends CI_Controller
 
         $user_summ_vm4 = new SPW_User_Summary_View_Model();
         $user_summ_vm4->user = $user4;
+        $user_summ_vm4->invite = true;
 
         $suggestedUsers = array(
                 $user_summ_vm2,

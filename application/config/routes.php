@@ -40,6 +40,8 @@
 
 $route['(?i)(about)'] = 'staticpagescontroller/about';
 
+$route['(?i)(notifications)'] = 'notificationscontroller/display_notifications';
+
 $route['(?i)(search)'] = 'searchcontroller/search/';
 $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 

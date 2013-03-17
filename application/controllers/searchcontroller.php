@@ -30,6 +30,8 @@ class SearchController extends CI_Controller
 
             $search_query = strtolower($search_query);
 
+            $search_query = trim($search_query);
+
             $results_search = $this->getResultsWithSearchParam($search_query);
 
             //$lProjects = $this->getProjectsWithSearchParam($search_query);
@@ -99,7 +101,7 @@ class SearchController extends CI_Controller
                 if (isset($lProjectIds) && count($lProjectIds))
                 {
                     $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-                    $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, FALSE);
+                    $lProjectsFound = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, FALSE);
                 }
        
                 if (isset($lUserIds) && count($lUserIds))
@@ -114,7 +116,6 @@ class SearchController extends CI_Controller
         return $results_search;
     }
 
-	
 	private function searchKeywordDatabaseQueries($keyword)
 	{
 		$user_id = getCurrentUserId($this);
@@ -123,11 +124,14 @@ class SearchController extends CI_Controller
         $listUsersIds = array();
         $lUsersTmp = array();
 
-		$listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword, $user_id);
-		$lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword, $user_id);
+		$listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword);
+		$lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword);
 		$listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
 
-        $listUsersIds = $this->SPW_User_Model->searchQueriesOnUserNamesForUsers($keyword, $user_id);
+        $lProjectsTmp = $this->SPW_Term_Model->searchQueriesOnTermForUsers($keyword);
+        $listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
+
+        $listUsersIds = $this->SPW_User_Model->searchQueriesOnUserNamesForUsers($keyword);
 
         if (isset($listUsersIds) && (count($listUsersIds)>0))
         {
@@ -144,13 +148,16 @@ class SearchController extends CI_Controller
             $listProjectsIds = $this->combineListIds($listProjectsIds, $belongProjectIds);
         }
 
-        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnUserAttributesForUsers($keyword, $user_id);
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnUserAttributesForUsers($keyword);
         $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
 
-        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnSkillsForUsers($keyword, $user_id);
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnSkillsForUsers($keyword);
         $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
 
-        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnExperienceForUsers($keyword, $user_id);
+        $lUsersTmp = $this->SPW_User_Model->searchQueriesOnExperienceForUsers($keyword);
+        $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
+
+        $lUsersTmp = $this->SPW_Term_Model->searchQueriesOnTermForProjects($keyword);
         $listUsersIds = $this->combineListIds($listUsersIds, $lUsersTmp);
 
         $res[0] = $listProjectsIds;
@@ -162,14 +169,18 @@ class SearchController extends CI_Controller
    
     private function refineSearchQuery($searchQuery)
     {
-        $lSearchQueries = explode(' ', $searchQuery);
         $res = array();
+
+        $lSearchQueries = explode(' ', $searchQuery);
+
         $length = count($lSearchQueries);
 
         for ($i = 0; $i < $length; $i++)
         {
             if (!$this->isStopWord($lSearchQueries[$i]))
+            {
                 $res[] = $lSearchQueries[$i];
+            }
         }
 
         return $res;  
@@ -353,6 +364,7 @@ class SearchController extends CI_Controller
 
         $user_summ_vm2 = new SPW_User_Summary_View_Model();
         $user_summ_vm2->user = $user2;
+        $user_summ_vm2->invite = true;
 
         $user3 = new SPW_User_Model();
         $user3->id = 2;
@@ -362,6 +374,7 @@ class SearchController extends CI_Controller
 
         $user_summ_vm3 = new SPW_User_Summary_View_Model();
         $user_summ_vm3->user = $user3;
+        $user_summ_vm3->invite = true;
 
         $user4 = new SPW_User_Model();
         $user4->id = 3;

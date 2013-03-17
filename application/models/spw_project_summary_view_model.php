@@ -70,7 +70,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
 	}
 
 	/* this function fills a list of projects with their data */
-	public function prepareProjectsDataToShow($lProjectIds, $belongProjectIdsList, $pastProjects)
+	public function prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, $pastProjects)
 	{
 		$length = count($lProjectIds);
 
@@ -102,7 +102,17 @@ class SPW_Project_Summary_View_Model extends CI_Model
 					$currentDate = date('Y-m-d');
 					if ($term->closed_requests > $currentDate)
 					{
-						$project_summ_vm->justList = false;
+						$tempUser = new SPW_User_Model();
+
+						if ($tempUser->isUserAStudent($user_id))
+						{
+							$currentUserTerm = $tempUser->getUserGraduationTerm($user_id);
+
+							if ($currentUserTerm->id == $term->id)
+								$project_summ_vm->justList = false;
+						}
+						else
+							$project_summ_vm->justList = false; 
 					}
 
 					$project_summ_vm->term = $term;

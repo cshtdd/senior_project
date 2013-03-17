@@ -8,12 +8,20 @@
 
 
     <?php if (isset($lSuggestedProjects) && count($lSuggestedProjects) > 0) { ?>
-        <?php $this->load->view('subviews/project_summary_list', array('lProjects' => $lSuggestedProjects, 'list_title' => 'Suggested Projects') ) ?>
+        <?php $this->load->view('subviews/project_summary_list', array(
+            'lProjects' => $lSuggestedProjects, 
+            'list_title' => 'Suggested Projects',
+            'list_class' => 'suggested-projects'
+        ) ) ?>
         <hr>
     <?php } ?>
 
     <?php if (isset($lRegularProjects) && count($lRegularProjects) > 0) { ?>
-        <?php $this->load->view('subviews/project_summary_list', array('lProjects' => $lRegularProjects, 'list_title' => '') )?>
+        <?php $this->load->view('subviews/project_summary_list', array(
+            'lProjects' => $lRegularProjects, 
+            'list_title' => '',
+            'list_class' => ''
+        ) )?>
     <?php } ?>
 
 <?php }?>
