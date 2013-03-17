@@ -136,6 +136,161 @@ class SPW_Project_Model extends CI_Model
 		return $res;
 	}
 
+	//checks if the closed_requests is on
+	public function isProjectClosed($term)
+	{
+		if (isset($term))
+            {
+                $currentDate = date('Y-m-d');
+                if ($term->closed_requests > $currentDate)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+	}
+
+	/* return a SPW_Project_Model info corresponding to the project id */
+	public function getProjectInfo($project_id)
+	{
+		$param[0] = $project_id;
+		
+		$sql = 'select *
+				from spw_project
+				where (id = ?)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row(0, 'SPW_Project_Model');
+			return $row;
+		}
+
+		return NULL;
+	}
+
+	/* return a SPW_Term_Model info corresponding to the project id */
+	public function getProjectTermInfo($project_Id)
+	{
+		$param[0] = $project_Id;
+
+		$sql = 'select spw_term.*
+		        from spw_term, spw_project
+		        where (spw_project.id = ?) and (spw_project.delivery_term = spw_term.id)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+		{
+			$res = $query->row(0, 'SPW_Term_Model');
+
+			return $res;
+		}
+
+		return NULL;
+	}
+
+	//get the students info that belong to the project
+	public function getStudentsListForProject($project_id)
+	{
+		$param[0] = $project_id;
+
+		$sql = 'select spw_user.*
+				from spw_role_user, spw_user
+				where (spw_user.project = ?) and (spw_role_user.user = spw_user.id) and 
+					  (spw_role_user.role = 5)';
+		$query = $this->db->query($sql, $param);
+
+		$studentsNum = $query->num_rows();
+		$lStudentsSumm = array();
+		if ($studentsNum > 0)
+		{
+			for ($j = 0; $j < $studentsNum; $j++)
+			{
+				$row = $query->row($j, 'SPW_User_Model');
+				$user_summ_vm = new SPW_User_Summary_View_Model();
+				$user_summ_vm->user = $row;
+				$lStudentsSumm[] = $user_summ_vm;
+			}
+		}
+
+		return $lStudentsSumm;
+	}
+
+	//get the proposed_by user info of the project
+	public function getProposedByOfProject($project_id)
+	{
+		$param[0] = $project_id;
+
+		$sql = 'select spw_user.*
+				from spw_user, spw_project
+				where (spw_project.id = ?) and (spw_user.id = spw_project.proposed_by)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows() > 0)
+		{
+			$row = $query->row(0, 'SPW_User_Model');
+			$proposedBySumm = new SPW_User_Summary_View_Model();
+			$proposedBySumm->user = $row;
+
+			return $proposedBySumm;
+		}
+
+		return NULL;
+	}
+
+	//get list of skills info of the project
+	public function getProjectListOfSkills($project_id)
+	{
+		$param[0] = $project_id;
+
+		$sql = 'select spw_skill.*
+				from spw_skill, spw_skill_project
+				where (spw_skill_project.project = ?) and (spw_skill.id = spw_skill_project.skill)';
+		$query = $this->db->query($sql, $param);
+
+		$skillNum = $query->num_rows();
+		$lSkills = array();
+		if ($skillNum > 0)
+		{
+			for ($j = 0; $j < $skillNum; $j++)
+			{
+				$row = $query->row($j, 'SPW_Skill_Model');
+				$lSkills[] = $row;
+			}
+		}
+
+		return $lSkills;
+	}
+
+	//get the users that belong to the project as mentors
+	public function getMentorsListForProject($project_id)
+	{
+		$param[0] = $project_id;
+
+		$sql = 'select spw_user.*
+				from spw_user, spw_mentor_project
+				where (spw_mentor_project.project = ?) and (spw_mentor_project.mentor = spw_user.id)';
+		$query = $this->db->query($sql, $param);
+
+		$mentorsNum = $query->num_rows();
+		$lMentorsSumm = array();
+		if ($mentorsNum > 0)
+		{
+			for ($j = 0; $j < $mentorsNum; $j++)
+			{
+				$row = $query->row($j, 'SPW_User_Model');
+				$user_summ_vm = new SPW_User_Summary_View_Model();
+				$user_summ_vm->user = $row;
+				$lMentorsSumm[] = $user_summ_vm;
+			}
+		}
+
+		return $lMentorsSumm;
+	}
+
 	/* checks whether a user id belongs to the given project */
 	public function doesUserBelongToProject($user_id ,$project_id)
 	{

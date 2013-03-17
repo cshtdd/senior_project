@@ -15,6 +15,7 @@
             'lUserSummaries' => $lMentors,
             'errorMessage' => '',
             'noTopViewForCurrentUser' => true,
+            'bottomView' => 'subviews/user_invite',
             'noBottomViewForCurrentUser' => true,
             'prefix' => 'usr'
         )) ?>

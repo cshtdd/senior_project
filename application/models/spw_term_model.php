@@ -34,6 +34,31 @@ class SPW_Term_Model extends CI_Model
 		return NULL;
 	}
 
+	//get all valid terms
+	public function getAllValidTerms()
+	{
+		$param[0] = date('Y-m-d');
+
+		$sql = 'select *
+				from spw_term
+				where (end_date > ?)';
+		$query = $this->db->query($sql);
+
+		$termNum = $query->num_rows();
+		$lTerms = array();
+
+		if ($termNum > 0)
+        {
+        	for ($j = 0; $j < $termNum; $i++)
+        	{
+        		$row = $query->row($j, 'SPW_Term_Model');
+				$lTerms[] = $row;
+        	}
+        }
+
+        return $lTerms;
+	}
+
 	public function searchQueriesOnTermForUsers($keyword)
 	{
 		$keyword = '%'.$keyword.'%';

@@ -210,6 +210,94 @@ class SPW_User_Model extends CI_Model
 		return NULL;
 	}
 
+	//get list of skills info of the user
+	public function getUserListOfSkills($user_id)
+	{
+		$param[0] = $user_id;
+
+		$sql = 'select spw_skill.*
+				from spw_skill, spw_skill_user
+				where (spw_skill_user.user = ?) and (spw_skill.id = spw_skill_user.skill)';
+		$query = $this->db->query($sql, $param);
+		$skillNum = $query->num_rows();
+		$lSkills = array();
+		if ($skillNum > 0)
+		{
+			for ($j = 0; $j < $skillNum; $j++)
+			{
+				$row = $query->row($j, 'SPW_Skill_Model');
+				$lSkills[] = $row;
+			}
+		}
+
+		return $lSkills;
+	}
+
+	//get list of esperiences info of the user
+	public function getUserListOfExperiences($user_id)
+	{
+		$param[0] = $user_id;
+
+		$sql = 'select *
+				from spw_experience
+				where (user = ?)';
+		$query = $this->db->query($sql, $param);
+		$experienceNum = $query->num_rows();
+		$lExperiences = array();
+		if ($experienceNum > 0)
+		{
+			for ($j = 0; $j < $experienceNum; $j++)
+			{
+				$row = $query->row($j, 'SPW_Experience_Model');
+				$lExperiences[] = $row;
+			}
+		}
+
+		return $lExperiences;
+	}
+
+	//get list of languages info of the user
+	public function getUserListOfLanguages($user_id)
+	{
+		$param[0] = $user_id;
+
+        $sql = 'select spw_language.*
+        		from spw_language, spw_language_user
+        		where (spw_language_user.user = ?) and (spw_language.id = spw_language_user.language)';
+        $query = $this->db->query($sql, $param);
+        $languageNum = $query->num_rows();
+        $lLanguages = array();
+        if ($languageNum > 0)
+        {
+        	for ($j = 0; $j < $languageNum; $i++)
+        	{
+        		$row = $query->row($j, 'SPW_Language_Model');
+				$lLanguages[] = $row;
+        	}
+        }
+
+        return $lLanguages;
+    }
+
+    //get the role info of the user
+    public function getUserRole($user_id)
+    {
+    	$param[0] = $user_id;
+
+        $sql = 'select spw_role.*
+        		from spw_role, spw_role_user
+        		where (spw_role_user.user = ?) and (spw_role.id = spw_role_user.role)';
+        $query = $this->db->query($sql, $param);
+
+        if ($query->num_rows() > 0)
+        {
+        	$role = $query->row(0, 'SPW_Role_Model');
+        	return $role;
+        }
+
+        return NULL;
+    }
+
 	/* return the list of suggested projects IDs with the highest matches having in
 	   count that the project delivery_term is the same as the user, is not yet the 
 	   closed_requests date and the project have been aproved */
@@ -553,15 +641,17 @@ class SPW_User_Model extends CI_Model
 				}
 				else
 				{
+					$invitedUserBelongProjects = $this->userHaveProjects($invited_user_id);
+
 					if ($isInvitedUserStudent)
 					{
 						$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
 
-						return $this->checkUserInvitedToProjectValid($currentUserBelongProjects, $invitedUserGraduationTerm);
+						return $this->canMentorInviteStudentToProjectValid($currentUserBelongProjects, $invitedUserBelongProjects, $invitedUserGraduationTerm);
 					}
 					else
 					{
-						return $this->checkProjectValid($currentUserBelongProjects);
+						return $this->canMentorInviteMentorToProjectValid($currentUserBelongProjects, $invitedUserBelongProjects);
 					}
 				}
 			}
@@ -570,35 +660,47 @@ class SPW_User_Model extends CI_Model
 		return false;
 	}
 
-	private function checkUserInvitedToProjectValid($lProjectIds, $userTerm)
+	private function canMentorInviteStudentToProjectValid($lMentorProjectIds, $lStudentProjectId, $studentTerm)
 	{
-		$length = count($lProjectIds);
+		$length = count($lMentorProjectIds);
 
 		$currentDate = date('Y-m-d');
 
 		for ($i = 0; $i<$length; $i++)
 		{
-			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lProjectIds[$i]);
+			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lMentorProjectIds[$i]);
 
-			if (($projectTerm->id == $userTerm->id) && ($projectTerm->closed_requests > $currentDate))
-				return true;
+			if (($projectTerm->id == $studentTerm->id) && ($projectTerm->closed_requests > $currentDate))
+			{
+				if (isset($lStudentProjectId) && (count($lStudentProjectId)>0))
+				{
+					if ($lStudentProjectId[0] != $lMentorProjectIds[$i])
+						return true;
+				}
+			}
 		}
 
 		return false;
 	}
 
-	private function checkProjectValid($lProjectIds)
+	private function canMentorInviteMentorToProjectValid($lMentorProjectIds, $lInvitedMentorProjectIds)
 	{
-		$length = count($lProjectIds);
+		$length = count($lMentorProjectIds);
 
 		$currentDate = date('Y-m-d');
 
 		for ($i = 0; $i<$length; $i++)
 		{
-			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lProjectIds[$i]);
+			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lMentorProjectIds[$i]);
 
 			if ($projectTerm->closed_requests > $currentDate)
-				return true;
+			{
+				if (isset($lInvitedMentorProjectIds) && (count($lInvitedMentorProjectIds)>0))
+				{
+					if (!in_array($lMentorProjectIds[$i], $lInvitedMentorProjectIds))
+						return true;
+				}
+			}		
 		}
 
 		return false;
@@ -659,7 +761,8 @@ class SPW_User_Model extends CI_Model
 		$sql = "select spw_user.id
 				from spw_user, spw_experience
 				where (spw_experience.user = spw_user.id) and
-					  ((spw_experience.title like ?) or (spw_experience.description like ?))";
+					  ((spw_experience.title like ?) or (spw_experience.summary like ?) or
+					  	(spw_experience.company_name like ?) or (spw_experience.company_industry like ?))";
 
 		$query = $this->db->query($sql, $param);
 
@@ -765,6 +868,8 @@ class SPW_User_Model extends CI_Model
 
 		return $res;
 	}
+
+
 
 }
 	
