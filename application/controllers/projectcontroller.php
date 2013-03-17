@@ -171,6 +171,7 @@ class ProjectController extends CI_Controller
 
             //TODO implement this, and then redirect to the request url
 
+            setFlashMessage($this, 'Your project was updated');
             redirect($postBackUrl);
         }
     }
