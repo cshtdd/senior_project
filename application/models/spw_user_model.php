@@ -175,6 +175,59 @@ class SPW_User_Model extends CI_Model
  		return $this->db->insert_id();
 	}
 
+	public function create_linkedin_profile($spw_id, $user_profile)
+	{
+		
+		$this->load->model('spw_skill_model');
+		$this->load->model('spw_skill_user_model');
+		foreach ($user_profile->skills as $key => $value) {
+			$skill_id = $this->spw_skill_model->get_skill_by_name($value->name);
+			$this->spw_skill_user_model->insert($spw_id,$skill_id);
+		}
+		
+		$this->load->model('spw_language_model');
+		$this->load->model('spw_language_user_model');
+		foreach ($user_profile->languages as $key => $value) {
+			$language_id = $this->spw_language_model->get_language_by_name($value->name);
+			if($language_id != -1)
+				$this->spw_language_user_model->insert($spw_id,$language_id);
+			
+		}
+
+        $this->load->model('spw_experience_model');
+		foreach ($user_profile->positions_linkedIn as $key => $value) {
+			$this->spw_experience_model->insert($spw_id,$value);
+		}
+
+		$data = array(
+			'picture' => $user_profile->picture,
+			'headline_linkedIn'=> $user_profile->headline_linkedIn,
+			'summary_linkedIn' => $user_profile->summary_linkedIn,
+		);
+
+		$this->db->where('id',$spw_id);
+		$this->db->update('spw_user', $data);
+		
+	}
+    
+    
+	public function update_linkedin_profile($spw_id, $user_profile)
+	{
+		
+		$this->load->model('spw_skill_user_model');
+		$this->spw_skill_user_model->delete_skills_for_user($spw_id);
+
+		$this->load->model('spw_language_user_model');
+		$this->spw_language_user_model->delete_languages_for_user($spw_id);		
+
+		$this->load->model('spw_experience_model');
+		$this->spw_experience_model->delete($spw_id);		
+
+		$this->create_linkedin_profile($spw_id, $user_profile);
+		
+	}
+    
+
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
 	{

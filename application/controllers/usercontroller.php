@@ -128,18 +128,20 @@ class UserController extends CI_Controller
         {
             $current_position = $positions[$i];
 
+            $start_date = $current_position->startDate->year.'-'.$current_position->startDate->month; 
+
             $end_date;
             if($current_position->isCurrent) 
             {
-                $end_date = (object)array();
+                $end_date = null;
             }else{
-                $end_date =  $current_position->endDate;
+                $end_date =  $current_position->endDate->year.'-'.$current_position->endDate->month;
             }
 
             $result[$i] = (object) array( 
                                         'company_name'      => $current_position->company->name,
                                         'company_industry'  => $current_position->company->industry,
-                                        'start_date'        => $current_position->startDate,
+                                        'start_date'        => $start_date,
                                         'end_date'          => $end_date,
                                         'title'             => $current_position->title,
                                         'summary'           => $current_position->summary,
@@ -279,16 +281,15 @@ class UserController extends CI_Controller
                     'skills'                => $this->parse_skills($user->skills),
                     'languages'             => $this->parse_languages($user->languages),
                 );
+            
+            $this->load->model('spw_user_model');
+            $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
 
             if($this->session->flashdata('linkedIn_sync') == 'false')
             {
                 $is_linkedin_registered = true;
 
-                $this->load->model('spw_user_model');
-            
-                $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
-
-                 if($spw_id == 0){
+                if($spw_id == 0){
                     $spw_id  = $this->spw_user_model->create_new_linkedin_user( $user_profile->email,  $user_profile->first_name,  $user_profile->last_name,  $user_profile->id);
                     $is_linkedin_registered = false;
                 }
@@ -305,11 +306,15 @@ class UserController extends CI_Controller
                 if($is_linkedin_registered){
                     redirect('home','refresh');
                 }else{
-                    redirect('user','refresh');
+                    //is a new user
+                    $this->spw_user_model->create_linkedin_profile($spw_id, $user_profile);
+                    $this->profile();
                 }
 
             } else {
                 //TODO: Update LinkedIn Profile for Logged In student
+                 $this->spw_user_model->update_linkedin_profile($spw_id, $user_profile);
+                 $this->profile();
 
             }
         }else{
@@ -346,34 +351,36 @@ class UserController extends CI_Controller
     private function get_all_available_terms()
     {
         $this->load->helper('date');
-        echo now();
-        die();
+        $this->load->model('spw_term_model');
+
+        $result_terms = array();
+        $terms = $this->spw_term_model->getFutureTerms();
+
+        foreach ($terms as $row) {
+            $term = new SPW_Term_Model();
+            $term->id = $row['id'];
+            $term->name = $row['name'];
+            $term->description = $row['description'];
+            $term->start_date = $row['start_date'];
+            $term->end_date = $row['end_date'];
+
+            array_push($result_terms, $term); 
+        }
+
+        return $terms;
+    }
+
+    private function get_profile()
+    {
+        $this->load->model('spw_user_model');
+        return $this->spw_user_model->get_profile_by_id();
     }
 
     private function getUserDetails($user_id)
     {
-        $term1 = new SPW_Term_Model();
-        $term1->id = 1;
-        $term1->name = 'Spring 2013';
-        $term1->description = 'Spring 2013';
-        $term1->start_date = '1-8-2013';
-        $term1->end_date = '4-26-2013';
-
-        $term2 = new SPW_Term_Model();
-        $term2->id = 2;
-        $term2->name = 'Summer 2013';
-        $term2->description = 'Summer 2013';
-        $term2->start_date = '4-26-2013';
-        $term2->end_date = '1-8-2013';
-
-        $term3 = new SPW_Term_Model();
-        $term3->id = 3;
-        $term3->name = 'Fall 2013';
-        $term3->description = 'Fall 2013';
-        $term3->start_date = '1-8-2013';
-        $term3->end_date = '12-28-2013';
-
         $lTerms = $this->get_all_available_terms();
+
+        $user = $this->get_profile();
 
         $user1 = new SPW_User_Model();
         $user1->id = $user_id;
@@ -382,7 +389,7 @@ class UserController extends CI_Controller
         $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
         $user1->summary_spw = 'Mobile oriented developer. Has worked for the biggest players in the field.';
         $user1->summary_linkedIn = 'Worked as a security expert at LinkedIn right after they lost all of their passwords';
-        $user1->graduation_term = $term1;
+        $user1->graduation_term = $lTerms[0];
 
         $skill1 = new SPW_Skill_Model();
         $skill1->id = 0;
