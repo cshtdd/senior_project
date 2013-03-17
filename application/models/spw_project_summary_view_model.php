@@ -121,10 +121,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$param[0] = $project->id;
 				//get list of skills info of the project
 				$sql2 = 'select spw_skill.*
-						 from spw_skill, (select skill
-						 				  from spw_skill_project
-						 				  where (project = ?)) as sIds
-						 where (spw_skill.id = sIds.skill)';
+						 from spw_skill, spw_skill_project
+						 where (spw_skill_project.project = ?) and (spw_skill.id = spw_skill_project.skill)';
 				$query2 = $this->db->query($sql2, $param);
 				$skillNum = $query2->num_rows();
 				$lSkills = array();
@@ -160,10 +158,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
 
 				//get the proposed_by user info of the project
 				$sql4 = 'select spw_user.*
-						 from spw_user, (select proposed_by
-						 	             from spw_project
-						 	             where (id = ?)) as uId
-						 where (spw_user.id = uId.proposed_by)';
+						 from spw_user, spw_project
+						 where (spw_project.id = ?) and (spw_user.id = spw_project.proposed_by)';
 				$query4 = $this->db->query($sql4, $param);
 				$row = $query4->row(0, 'SPW_User_Model');
 				$proposedBySumm = new SPW_User_Summary_View_Model();
@@ -171,11 +167,10 @@ class SPW_Project_Summary_View_Model extends CI_Model
 				$project_summ_vm->proposedBySummary = $proposedBySumm;
 
 				//get the students info that belong to the project
-				$sql5 = 'select allUsersBelong.*
-						 from spw_role_user, (select *
-						 					  from spw_user
-						 					  where (project = ?)) as allUsersBelong
-						 where (spw_role_user.user = allUsersBelong.id) and (spw_role_user.role = 5)';
+				$sql5 = 'select spw_user.*
+						 from spw_role_user, spw_user
+						 where (spw_user.project = ?) and (spw_role_user.user = spw_user.id) and 
+						 	   (spw_role_user.role = 5)';
 				$query5 = $this->db->query($sql5, $param);
 				$studentsNum = $query5->num_rows();
 				$lStudentsSumm = array();

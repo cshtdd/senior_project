@@ -23,6 +23,7 @@ class SPW_User_Model extends CI_Model
 	public $project;
 	public $google_id;
 	public $linkedin_id;
+	public $facebook_id;
 
 	public function __construct()
 	{
@@ -510,55 +511,58 @@ class SPW_User_Model extends CI_Model
 	   and is a mentor or student */
 	public function canInviteUser($current_user_id, $invited_user_id)
 	{
-		$currentUserBelongProjects = $this->userHaveProjects($current_user_id);
-
-		$currentDate = date('Y-m-d');
-
-		if (isset($currentUserBelongProjects) && (count($currentUserBelongProjects) > 0))
+		if ($current_user_id != $invited_user_id)
 		{
-			$isCurrentUserStudent = $this->isUserAStudent($current_user_id);
-			$isInvitedUserStudent = $this->isUserAStudent($invited_user_id);
+			$currentUserBelongProjects = $this->userHaveProjects($current_user_id);
 
-			if ($isCurrentUserStudent)
+			$currentDate = date('Y-m-d');
+
+			if (isset($currentUserBelongProjects) && (count($currentUserBelongProjects) > 0))
 			{
-				$currentUserGraduationTerm = $this->getUserGraduationTerm($current_user_id);
+				$isCurrentUserStudent = $this->isUserAStudent($current_user_id);
+				$isInvitedUserStudent = $this->isUserAStudent($invited_user_id);
 
-				if ($currentUserGraduationTerm->closed_requests > $currentDate)
+				if ($isCurrentUserStudent)
+				{
+					$currentUserGraduationTerm = $this->getUserGraduationTerm($current_user_id);
+
+					if ($currentUserGraduationTerm->closed_requests > $currentDate)
+					{
+						if ($isInvitedUserStudent)
+						{
+							$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
+
+							if ($currentUserGraduationTerm->id == $invitedUserGraduationTerm->id)
+							{
+								$invitedUserBelongProjects = $this->userHaveProjects($invited_user_id);
+
+								if (isset($invitedUserBelongProjects) && (count($invitedUserBelongProjects)>0))
+								{
+									if ($invitedUserBelongProjects[0] == $currentUserBelongProjects[0])
+										return false;
+								}
+
+								return true;
+							}
+						}
+						else
+						{
+							return true;
+						}	
+					}
+				}
+				else
 				{
 					if ($isInvitedUserStudent)
 					{
 						$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
 
-						if ($currentUserGraduationTerm->id == $invitedUserGraduationTerm->id)
-						{
-							$invitedUserBelongProjects = $this->userHaveProjects($invited_user_id);
-
-							if (isset($invitedUserBelongProjects) && (count($invitedUserBelongProjects)>0))
-							{
-								if ($invitedUserBelongProjects[0] == $currentUserBelongProjects[0])
-									return false;
-								else
-									return true;
-							}
-						}
+						return $this->checkUserInvitedToProjectValid($currentUserBelongProjects, $invitedUserGraduationTerm);
 					}
 					else
 					{
-						return true;
-					}	
-				}
-			}
-			else
-			{
-				if ($isInvitedUserStudent)
-				{
-					$invitedUserGraduationTerm = $this->getUserGraduationTerm($invited_user_id);
-
-					return $this->checkUserInvitedToProjectValid($currentUserBelongProjects, $invitedUserGraduationTerm);
-				}
-				else
-				{
-					return $this->checkProjectValid($currentUserBelongProjects);
+						return $this->checkProjectValid($currentUserBelongProjects);
+					}
 				}
 			}
 		}
