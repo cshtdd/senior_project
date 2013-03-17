@@ -9,6 +9,24 @@ class SPW_Language_Model extends CI_Model
 	{
 		parent::__construct();
 	}
+
+	public function get_language_by_name($language_name)
+	{
+		$query = $this->db
+					   ->where('name',$language_name)
+					   ->get('spw_language');
+
+		if($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+			   return $row->id;
+			}
+		}else
+		{
+			return -1;
+		}
+	}
 }
 	
 ?>

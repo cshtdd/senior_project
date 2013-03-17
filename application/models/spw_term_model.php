@@ -102,6 +102,22 @@ class SPW_Term_Model extends CI_Model
 		else
 			return NULL;
 	}
+	public function getFutureTerms()
+	{
+		$queryStr = ' select * 
+					  from spw_term
+					  where end_date > NOW()	
+					';
+
+		$query = $this->db->query($queryStr); 			
+					
+		if($query->num_rows() > 0)
+		{
+			return $query->result_array();
+		}
+		
+		return NULL;
+	}
 }
 	
 ?>
