@@ -186,7 +186,7 @@
             'topView' => '',
             'bottomView' => 'subviews/user_invite',
             'noBottomViewForCurrentUser' => true,
-            'prefix' => 'sugg'
+            'prefix' => 'suggm'
         ));
 
     }
@@ -205,7 +205,7 @@
             'topView' => '',
             'bottomView' => 'subviews/user_invite',
             'noBottomViewForCurrentUser' => true,
-            'prefix' => 'sugg'
+            'prefix' => 'suggs'
         ));
 
     }
