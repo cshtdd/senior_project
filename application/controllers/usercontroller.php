@@ -310,13 +310,13 @@ class UserController extends CI_Controller
                 }else{
                     //is a new user
                     $this->spw_user_model->create_linkedin_profile($spw_id, $user_profile);
-                    $this->profile();
+                    $this->profile($spw_id);
                 }
 
             } else {
                 //TODO: Update LinkedIn Profile for Logged In student
                  $this->spw_user_model->update_linkedin_profile($spw_id, $user_profile);
-                 $this->profile();
+                 $this->profile($spw_id);
 
             }
         }else{

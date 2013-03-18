@@ -12,7 +12,7 @@
     {
 ?>
 
-        <?php echo anchor('/user/linkedIn_initiate', 'Sync with LinkedIn', array('class' => 'btn btn-primary btn-large pull-right'))  ?>
+        <?php echo anchor('/user/linkedIn_sync', 'Sync with LinkedIn', array('class' => 'btn btn-primary btn-large pull-right'))  ?>
 
         <h2>User Details</h2>
 
