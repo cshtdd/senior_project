@@ -10,7 +10,13 @@ if ( !function_exists('getCurrentUserHeaderName'))
         }
         else
         {
-            throw new Exception('not implemented');
+            $CI = get_instance();
+
+            $CI->load->model('spw_user_model');
+
+            $session_data = $sender_controller->session->userdata('logged_in');
+            $user_id = $session_data['id'];
+            return $CI->spw_user_model->get_first_name($user_id);
         }
     }
 }
@@ -25,7 +31,13 @@ if ( !function_exists('getCurrentUserHeaderImg'))
         }
         else
         {
-            throw new Exception('not implemented');
+            $CI = get_instance();
+
+            $CI->load->model('spw_user_model');
+
+            $session_data = $sender_controller->session->userdata('logged_in');
+            $user_id = $session_data['id'];
+            return $CI->spw_user_model->get_picture($user_id);
         }
     }
 }
@@ -40,7 +52,13 @@ if ( !function_exists('getCurrentUserHeaderFullName'))
         }
         else
         {
-            throw new Exception('not implemented');
+            $CI = get_instance();
+
+            $CI->load->model('spw_user_model');
+
+            $session_data = $sender_controller->session->userdata('logged_in');
+            $user_id = $session_data['id'];
+            return $CI->spw_user_model->get_fullname($user_id);
         }
     }
 }

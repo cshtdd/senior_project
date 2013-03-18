@@ -24,6 +24,15 @@ class SPW_Experience_Model extends CI_Model
 		parent::__construct();
 	}
 
+	public function get_positions_by_user($user_id)
+	{
+		$query = $this->db
+					   ->where('user',$user_id)
+					   ->get('spw_experience');
+
+		return $query->result();
+	}
+
 	public function insert($spw_id,$position_obj)
 	{
 		$data = array(

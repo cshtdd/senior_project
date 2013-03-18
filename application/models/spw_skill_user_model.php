@@ -8,6 +8,16 @@ class SPW_Skill_User_Model extends CI_Model
 		parent::__construct();
 	}
 
+	public function get_skills_for_user($user_id)
+	{
+		$query = $this->db
+					   ->where('user',$user_id)
+					   ->select('skill')
+					   ->get('spw_skill_user');
+
+		return $query->result();
+	}
+	
 	public function insert($spw_id, $skill_id)
 	{
 		$data = array(
@@ -23,6 +33,8 @@ class SPW_Skill_User_Model extends CI_Model
 		$this->db->where('user', $spw_id);
 		$this->db->delete('spw_skill_user');
 	}
+
+	
 
 }
 	
