@@ -113,8 +113,9 @@ class UserController extends CI_Controller
             {
                 $currentUser = getCurrentUserId($this);
                 $invitedUser = $this->input->post('uid');
+                $invitedProject = $this->input->post('pid');
 
-               inviteUserInternal($currentUser, $invitedUser);
+               inviteUserInternal($currentUser, $invitedUser, $invitedProject);
             }
             else
             {
@@ -328,11 +329,14 @@ class UserController extends CI_Controller
         }                  
     }
 
-    private function inviteUserInternal($currentUserId, $invitedUserId)
+    private function inviteUserInternal($currentUserId, $invitedUserId, $invitedProject)
     {
         if (is_test($this))
         {
-            $this->output->set_output('Current User '.$currentUser.' InvitedUser '.$invitedUser);
+            $this->output->set_output(
+                'Current User '.$currentUser.
+                ' InvitedUser '.$invitedUser.
+                ' Invited to project '.$invitedProject);
             return true;
         }
         else
