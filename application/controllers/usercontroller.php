@@ -8,6 +8,7 @@ class UserController extends CI_Controller
         parent::__construct();
 
         $this->load->helper('request');
+        $this->load->helper('invitation');
 
         $this->load->model('SPW_Term_Model');
         $this->load->model('SPW_Skill_Model');
@@ -111,11 +112,18 @@ class UserController extends CI_Controller
         {
             if (isUserLoggedIn($this))
             {
-                $currentUser = getCurrentUserId($this);
-                $invitedUser = $this->input->post('uid');
-                $invitedProject = $this->input->post('pid');
+                $currentUserId = getCurrentUserId($this);
+                $invitedUserId = $this->input->post('uid');
+                $invitedProjectId = $this->input->post('pid');
 
-               inviteUserInternal($currentUser, $invitedUser, $invitedProject);
+                //if the projectId parameter was not specified
+                //we'll get any project (usually there's only one) from the current user
+                if (!isset($invitedProjectId) || strlen($invitedProjectId) == 0) 
+                {
+                    $invitedProjectId = getAnyProjectIdForCurrentUser($this);
+                }
+
+               inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
             }
             else
             {
