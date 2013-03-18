@@ -18,6 +18,9 @@ class UserController extends CI_Controller
         $this->load->model('SPW_User_Summary_View_Model');
         $this->load->model('SPW_User_Details_View_Model');
 
+        $this->load->helper('project_summary_view_model');
+        load_project_summary_models($this);
+
         //$this->output->cache(60);
     }
 
@@ -459,7 +462,10 @@ class UserController extends CI_Controller
         
         $role = new SPW_Role_Model();
         $role->id = $role->id;
-        $role->name = $role->name; 
+        $role->name = $role->name;
+
+        $current_user_id = getCurrentUserId($this);
+        $invite = $this->SPW_User_Model->canInviteUser($current_user_id, $user_id);
 
         $userDetailsViewModel = new SPW_User_Details_View_Model();
         $userDetailsViewModel->user = $user;
