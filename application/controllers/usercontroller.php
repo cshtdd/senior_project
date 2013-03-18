@@ -283,12 +283,13 @@ class UserController extends CI_Controller
                     'skills'                => $this->parse_skills($user->skills),
                     'languages'             => $this->parse_languages($user->languages),
                 );
-            
+
             $this->load->model('spw_user_model');
-            $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
+            $spw_id = getCurrentUserId($this);
 
             if($this->session->flashdata('linkedIn_sync') == 'false')
-            {
+            {   
+                 $spw_id = $this->spw_user_model->is_linkedin_registered($user_profile->id);
                 $is_linkedin_registered = true;
 
                 if($spw_id == 0){
