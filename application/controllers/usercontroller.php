@@ -10,17 +10,18 @@ class UserController extends CI_Controller
         $this->load->helper('request');
         $this->load->helper('invitation');
 
-        $this->load->model('SPW_Term_Model');
-        $this->load->model('SPW_Skill_Model');
+        $this->load->helper('project_summary_view_model');
+        load_project_summary_models($this);
+
+        //these models are loaded in the load_project_summary_models method
+        //$this->load->model('SPW_Term_Model');
+        //$this->load->model('SPW_Skill_Model');
         $this->load->model('SPW_Experience_Model');
         $this->load->model('SPW_Language_Model');
         $this->load->model('SPW_Role_Model');
-        $this->load->model('SPW_User_Model');
-        $this->load->model('SPW_User_Summary_View_Model');
+        //$this->load->model('SPW_User_Model');
+        //$this->load->model('SPW_User_Summary_View_Model');
         $this->load->model('SPW_User_Details_View_Model');
-
-        $this->load->helper('project_summary_view_model');
-        load_project_summary_models($this);
 
         //$this->output->cache(60);
     }
