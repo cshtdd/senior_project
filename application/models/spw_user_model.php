@@ -763,7 +763,8 @@ class SPW_User_Model extends CI_Model
 
 		for ($i = 0; $i<$length; $i++)
 		{
-			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lMentorProjectIds[$i]);
+			$tempProject = new SPW_Project_Model();
+			$projectTerm = $tempProject->getProjectDeliveryTerm($lMentorProjectIds[$i]);
 
 			if (($projectTerm->id == $studentTerm->id) && ($projectTerm->closed_requests > $currentDate))
 			{
@@ -786,7 +787,8 @@ class SPW_User_Model extends CI_Model
 
 		for ($i = 0; $i<$length; $i++)
 		{
-			$projectTerm = $this->SPW_Project_Model->getProjectDeliveryTerm($lMentorProjectIds[$i]);
+			$tempProject = new SPW_Project_Model();
+			$projectTerm = $tempProject->getProjectDeliveryTerm($lMentorProjectIds[$i]);;
 
 			if ($projectTerm->closed_requests > $currentDate)
 			{
@@ -852,6 +854,8 @@ class SPW_User_Model extends CI_Model
 
 		$param[0] = $keyword;
 		$param[1] = $keyword;
+		$param[2] = $keyword;
+		$param[3] = $keyword;
 
 		$sql = "select spw_user.id
 				from spw_user, spw_experience
