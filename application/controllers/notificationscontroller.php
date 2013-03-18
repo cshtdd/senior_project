@@ -9,7 +9,6 @@ class NotificationsController extends CI_Controller
 
         $this->load->model('SPW_Notification_View_Model');
         $this->load->helper('request');
-        //$this->output->cache(60);
     }
 
     public function display_notifications()
@@ -50,10 +49,11 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            //TODO with the notification Id take the appropriate action
+            
+            $this->load->model('spw_notification_model');
+            $this->spw_notification_model->set_notification_to_read($notificationId);
 
             $this->output->set_output('notification accepted');
-
 
             //redirect back to the previous page
             $pbUrl = $this->input->post('pbUrl');
@@ -72,7 +72,8 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            //TODO with the notification Id take the appropriate action
+            $this->load->model('spw_notification_model');
+            $this->spw_notification_model->set_notification_to_read($notificationId);
 
             $this->output->set_output('notification rejected');
 
@@ -93,7 +94,8 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            //TODO with the notification Id take the appropriate action
+            $this->load->model('spw_notification_model');
+            $this->spw_notification_model->set_notification_to_read($notificationId);
 
             $this->output->set_output('notification hidden');
 
@@ -114,9 +116,39 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            return $this->getPendingNotificationsForUser($userId);
         }
     }
+
+    private function isALeaveMsg($msg)
+    {
+        if(strpos($msg, 'leave') != false){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private function getPendingNotificationsForUser($userId)
+    {
+        $this->load->model('swp_notification_model');
+        $query = $this->get_notifications_by_user($user_id); 
+
+        $notifications = array();
+        foreach ($query->result() as $row)
+        {
+            $notification = new SPW_Notification_View_Model();
+            $notification->id = $row->id;
+            $msg = $row->body;
+            $notification->message = $msg;
+            $notification->displayTwoButtons = !isALeaveMsg($msg);
+            array_push($notifications, $notification);
+        }
+
+        return $notifications;
+    }
+
+
     private function getPendingNotificationsForUserInternalTest($userId)
     {
         $notification_vm1 = new SPW_Notification_View_Model();

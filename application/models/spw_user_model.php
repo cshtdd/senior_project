@@ -228,6 +228,47 @@ class SPW_User_Model extends CI_Model
 		
 	}
     
+    public function get_profile_by_id($user_id)
+	{
+		$query = $this->db
+					   ->where('id',$user_id)
+					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn')
+					   ->get('spw_user');
+
+		return $query->result()[0];
+	}
+
+	public function get_first_name($user_id)
+	{
+		$query = $this->db
+					   ->where('id',$user_id)
+					   ->select('first_name')
+					   ->get('spw_user');
+
+		return $query->result()[0]->first_name;
+	}
+
+	public function get_fullname($user_id)
+	{
+		$query = $this->db
+					   ->where('id',$user_id)
+					   ->select('first_name, last_name')
+					   ->get('spw_user');
+
+		$result_obj = $query->result()[0];
+		return $result_obj->first_name." ".$result_obj->last_name;
+	}
+
+	public function get_picture($user_id)
+	{
+		$query = $this->db
+					   ->where('id',$user_id)
+					   ->select('picture')
+					   ->get('spw_user');
+
+		return $query->result()[0]->picture;
+	}
+
 
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
@@ -245,6 +286,7 @@ class SPW_User_Model extends CI_Model
 		
 		return NULL;
 	}
+
 
 	/* return a SPW_User_Model info corresponding to the user id */
 	public function getUserInfo($user_id)

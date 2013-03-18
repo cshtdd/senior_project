@@ -27,6 +27,16 @@ class SPW_Language_Model extends CI_Model
 			return -1;
 		}
 	}
+
+	public function get_languagename($id)
+	{
+		$query = $this->db
+					   ->where('id',$id)
+					   ->select('name')
+					   ->get('spw_language');
+
+		return $query->result()[0]->name;
+	}
 }
 	
 ?>

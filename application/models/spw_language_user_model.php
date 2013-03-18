@@ -8,6 +8,16 @@ class SPW_Language_User_Model extends CI_Model
 		parent::__construct();
 	}
 
+	public function get_languages_for_user($user_id)
+	{
+		$query = $this->db
+					   ->where('user',$user_id)
+					   ->select('language')
+					   ->get('spw_language_user');
+
+		return $query->result();
+	}
+
 	public function insert($spw_id, $language_id)
 	{
 		$data = array(
