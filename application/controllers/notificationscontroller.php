@@ -51,7 +51,10 @@ class NotificationsController extends CI_Controller
         {
             
             $this->load->model('spw_notification_model');
-            $this->spw_notification_model->set_notification_to_read($notificationId);
+            if (!is_test($this))
+            {
+                $this->spw_notification_model->set_notification_to_read($notificationId);
+            }
 
             $this->output->set_output('notification accepted');
 
@@ -73,7 +76,11 @@ class NotificationsController extends CI_Controller
         else
         {
             $this->load->model('spw_notification_model');
-            $this->spw_notification_model->set_notification_to_read($notificationId);
+
+            if (!is_test($this))
+            {
+                $this->spw_notification_model->set_notification_to_read($notificationId);
+            }
 
             $this->output->set_output('notification rejected');
 
@@ -95,8 +102,11 @@ class NotificationsController extends CI_Controller
         else
         {
             $this->load->model('spw_notification_model');
-            $this->spw_notification_model->set_notification_to_read($notificationId);
-
+            if (!is_test($this))
+            {
+                $this->spw_notification_model->set_notification_to_read($notificationId);
+            }
+            
             $this->output->set_output('notification hidden');
 
             //redirect back to the previous page

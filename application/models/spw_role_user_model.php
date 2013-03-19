@@ -16,7 +16,7 @@ class SPW_Role_User_Model extends CI_Model
 
 		if($query->num_rows() > 0)
 		{
-			return $query->result()[0];	
+			return $query->row();	
 		}else{
 			return null;
 		}

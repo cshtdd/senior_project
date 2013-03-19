@@ -58,7 +58,14 @@ class SPW_Skill_Model extends CI_Model
 					   ->select('name')
 					   ->get('spw_skill');
 
-		return $query->result()[0]->name;
+		if ($query->num_rows() > 0)
+		{
+			return $query->row()->name;
+		}
+		else
+		{
+			throw new Exception('Skill Id not found');
+		}
 	}
 
 }

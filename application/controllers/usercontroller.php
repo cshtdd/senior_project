@@ -8,18 +8,21 @@ class UserController extends CI_Controller
         parent::__construct();
 
         $this->load->helper('request');
-
-        $this->load->model('SPW_Term_Model');
-        $this->load->model('SPW_Skill_Model');
-        $this->load->model('SPW_Experience_Model');
-        $this->load->model('SPW_Language_Model');
-        $this->load->model('SPW_Role_Model');
-        $this->load->model('SPW_User_Model');
-        $this->load->model('SPW_User_Summary_View_Model');
-        $this->load->model('SPW_User_Details_View_Model');
+        $this->load->helper('invitation');
+        $this->load->helper('flash_message');
 
         $this->load->helper('project_summary_view_model');
         load_project_summary_models($this);
+
+        //these models are loaded in the load_project_summary_models method
+        //$this->load->model('SPW_Term_Model');
+        //$this->load->model('SPW_Skill_Model');
+        $this->load->model('SPW_Experience_Model');
+        $this->load->model('SPW_Language_Model');
+        $this->load->model('SPW_Role_Model');
+        //$this->load->model('SPW_User_Model');
+        //$this->load->model('SPW_User_Summary_View_Model');
+        $this->load->model('SPW_User_Details_View_Model');
 
         //$this->output->cache(60);
     }
@@ -111,10 +114,19 @@ class UserController extends CI_Controller
         {
             if (isUserLoggedIn($this))
             {
-                $currentUser = getCurrentUserId($this);
-                $invitedUser = $this->input->post('uid');
+                $currentUserId = getCurrentUserId($this);
+                $invitedUserId = $this->input->post('uid');
+                $invitedProjectId = $this->input->post('pid');
 
-               inviteUserInternal($currentUser, $invitedUser);
+                //if the projectId parameter was not specified
+                //we'll get any project (usually there's only one) from the current user
+                if (!isset($invitedProjectId) || strlen($invitedProjectId) == 0) 
+                {
+                    $invitedProjectId = getAnyProjectIdForCurrentUser($this);
+                }
+
+                inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
+                setFlashMessage('Invitation successfully sent');
             }
             else
             {
@@ -328,11 +340,14 @@ class UserController extends CI_Controller
         }                  
     }
 
-    private function inviteUserInternal($currentUserId, $invitedUserId)
+    private function inviteUserInternal($currentUserId, $invitedUserId, $invitedProject)
     {
         if (is_test($this))
         {
-            $this->output->set_output('Current User '.$currentUser.' InvitedUser '.$invitedUser);
+            $this->output->set_output(
+                'Current User '.$currentUser.
+                ' InvitedUser '.$invitedUser.
+                ' Invited to project '.$invitedProject);
             return true;
         }
         else
@@ -611,6 +626,7 @@ class UserController extends CI_Controller
         $userDetailsViewModel->role = $role;
         $userDetailsViewModel->lTerms = $lTerms;
         $userDetailsViewModel->lRoles = $lRoles;
+        $userDetailsViewModel->invite = true;
 
         return $userDetailsViewModel;
     }

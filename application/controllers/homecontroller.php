@@ -3,7 +3,7 @@ session_start();
 
 class HomeController extends CI_Controller 
 {
-    private $is_test = true;
+    //private $is_test = true;
 
     public function __construct()
     {

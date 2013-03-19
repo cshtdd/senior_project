@@ -247,6 +247,35 @@ class ProjectController extends CI_Controller
         $this->load->view('project_details2_edit', $data);
     }
 
+    public function display_list_of_projects_to_invite_user($user_id)
+    {
+        //print_r(uri_string());
+
+        $current_project_ids = $this->getBelongProjectIds();
+        $userSummaryToInvite = $this->getUserSummaryWithIdInternal($user_id);
+        //print_r($current_project_ids);
+
+        //if only one single project to display this URL shouldn't have been visited
+        if (!isset($userSummaryToInvite) ||
+            !isset($current_project_ids) ||
+            count($current_project_ids) <= 1)  
+        {
+            redirect('/');            
+        }
+        else //multiple projects to display
+        {
+            //get the project summary data for the selected projects
+            $lProjects = $this->getCurrentProjectsSummariesWithIdsInternal($current_project_ids);
+
+            $data['list_title'] = 'Select a project to invite '.$userSummaryToInvite->getFullName();
+            $data['no_results'] = false;
+            $data['lProjects'] = $lProjects;
+            $data['inviteUserSummary'] = $userSummaryToInvite;
+            $data['hideCreateProject'] = true;
+            $this->load->view('project_current_project', $data);
+        }
+    }
+
     private function getBelongProjectIds()
     {
         if (is_test($this))
@@ -859,5 +888,43 @@ class ProjectController extends CI_Controller
             $user_id = getCurrentUserId($this);
             return $this->SPW_User_Model->canUserLeaveProject($user_id, $project_id);
         }
+    }
+
+    private function getUserSummaryWithIdInternal($userId)
+    {
+        if (is_test($this))
+        {
+            return $this->getUserSummaryWithIdInternalTest($userId);
+        }
+        else
+        {
+            if (isset($user_id))
+            {
+                $current_user_id = getCurrentUserId($this);
+                $lUsers  = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($current_user_id, array($userId));
+                if (isset($lUsers) && count($lUsers) > 0)
+                {
+                    return $lUsers[0];
+                }
+                else
+                {
+                    throw new Expcetion('User Id not found');
+                }
+            }
+        }
+    }
+    private function getUserSummaryWithIdInternalTest($userId)
+    {
+        $user1 = new SPW_User_Model();
+        $user1->id = $userId;
+        $user1->first_name = 'Phillippe';
+        $user1->last_name = 'Me';
+        $user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
+
+        $user_summ_vm1 = new SPW_User_Summary_View_Model();
+        $user_summ_vm1->user = $user1;
+        $user_summ_vm1->invite = true; 
+
+        return $user_summ_vm1;
     }
 }

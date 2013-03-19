@@ -207,7 +207,12 @@
         <?php if (isFlashMessageAvailable($this)){ ?>
             <div class="alert">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <?php echo getFlashMessage($this) ?>
+              <div id="alert-text"><?php echo getFlashMessage($this) ?></div>
+            </div>
+        <?php } else { ?>
+            <div id="alert-js" class="alert">
+              <a id="alert-js-close" href="#" class="close">&times;</a>
+              <div id="alert-js-text"></div>
             </div>
         <?php } ?>
 
