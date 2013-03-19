@@ -33,6 +33,7 @@
                             data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
                         }).always(function(){
                             $('#loading_img').remove();
+                            //location.reload();
                         });
                 <?php
                     }                    

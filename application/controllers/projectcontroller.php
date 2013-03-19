@@ -249,6 +249,8 @@ class ProjectController extends CI_Controller
 
     public function display_list_of_projects_to_invite_user($user_id)
     {
+        //print_r(uri_string());
+
         $current_project_ids = $this->getBelongProjectIds();
         $userSummaryToInvite = $this->getUserSummaryWithIdInternal($user_id);
         //print_r($current_project_ids);

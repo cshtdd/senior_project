@@ -9,6 +9,7 @@ class UserController extends CI_Controller
 
         $this->load->helper('request');
         $this->load->helper('invitation');
+        $this->load->helper('flash_message');
 
         $this->load->helper('project_summary_view_model');
         load_project_summary_models($this);
@@ -124,7 +125,8 @@ class UserController extends CI_Controller
                     $invitedProjectId = getAnyProjectIdForCurrentUser($this);
                 }
 
-               inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
+                inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
+                setFlashMessage('Invitation successfully sent');
             }
             else
             {
