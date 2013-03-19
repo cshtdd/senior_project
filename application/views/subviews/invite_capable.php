@@ -54,6 +54,8 @@
                         url: '/usercontroller/invite',
                         data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
                     }).always(function(){
+                        $('#alert-js-text').text('Your invitation was sent');
+                        $('#alert-js').show();
                         $('#loading_img').remove();
                         //location.reload();
                     });           
