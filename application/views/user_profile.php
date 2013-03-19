@@ -1,4 +1,5 @@
 <?php $this->load->view("template_header"); ?>
+<!-- <?php $this->load->helper("loading"); ?> -->
 
 <?php 
     if ($no_results) 
@@ -10,9 +11,7 @@
     else 
     {
 ?>
-
-        <button type="button" class="btn btn-primary btn-large pull-right myUserInviter"
-            data-idtoinvite="<?php echo $userDetails->user->id ?>">Invite</button>
+        <?php $this->load->view('subviews/user_invite', array('user_summary' => $userDetails)) ?>
 
         <h2>User Details</h2>
 
@@ -94,5 +93,7 @@
 <?php 
     }
 ?>
+
+<?php $this->load->view("subviews/invite_capable") ?>
 
 <?php $this->load->view("template_footer"); ?>

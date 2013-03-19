@@ -1,6 +1,6 @@
 <?php $this->load->view("template_header"); ?>
 <?php $this->load->helper("skills"); ?>
-<?php $this->load->helper("loading"); ?>
+<!-- <?php $this->load->helper("loading"); ?> -->
 <!-- edit the current project -->
 
 <!-- START displaying server-side validation errors -->
@@ -281,6 +281,7 @@
             });
         });
 
+        /*
         $('.myUserInviter').each(function(index){
             $(this).click(function(e){
                 var userIdToInvite = $(this).attr('data-idtoinvite');
@@ -296,6 +297,7 @@
                 });
             });
         });
+        */
 
         /*
         $('#btn-leave').click(function(e){
@@ -310,5 +312,7 @@
         */
     //});
 </script>
+
+<?php $this->load->view("subviews/invite_capable") ?>
 
 <?php $this->load->view("template_footer"); ?>
