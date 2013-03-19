@@ -5,39 +5,59 @@
     $(document).ready(function(){
         $('.myUserInviter').each(function(index){
             $(this).click(function(e){
-                var userIdToInvite = $(this).attr('data-idtoinvite');
-
                 $(this).parent().append('<?php echo loading_img() ?>');
 
-                <?php
-                    if (!isset($projectDetails) && 
-                        !isset($projectDetails->project) &&
-                        currentUserHasMultipleProjects($this)) //we need to redirect to the invite page
-                    {
-                ?>
-                        window.location = '<?php echo base_url()?>'+'invite/'+userIdToInvite;
-                <?php 
-                    }
-                    else 
-                    {
-                ?>
-                        <?php if (isset($projectDetails) && isset($projectDetails->project)) { ?>
-                            var projectIdToInvite = '<?php echo $projectDetails->project->id ?>';
-                        <?php } else { ?>
-                            var projectIdToInvite = '<?php echo getAnyProjectIdForCurrentUser($this) ?>';
-                        <?php } ?>
 
-                        $.ajax({
-                            type: 'POST',
-                            url: '/usercontroller/invite',
-                            data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
-                        }).always(function(){
-                            $('#loading_img').remove();
-                            //location.reload();
-                        });
-                <?php
-                    }                    
-                ?>
+                var userIdToInvite = $(this).attr('data-idtoinvite');
+                var dataProjectIdToInvite = $(this).attr('data-projectidtoinvite');
+                var currentUserHasMultipleProjects = false;
+
+                <?php if (currentUserHasMultipleProjects($this)) { ?>
+                    currentUserHasMultipleProjects = true;
+                <?php } ?>
+
+                var useExistingPageId = false;
+                <?php if (isset($projectDetails) && isset($projectDetails->project)) { ?>
+                    var projectIdToInviteTemp = '<?php echo $projectDetails->project->id ?>';
+                    useExistingPageId = true;
+                <?php } else { ?>
+                    var projectIdToInviteTemp = '<?php echo getAnyProjectIdForCurrentUser($this) ?>';
+                <?php } ?>
+
+                var showListOfProjects = true;
+                var projectIdToInvite = 0;
+
+                if (dataProjectIdToInvite && dataProjectIdToInvite.length > 0) //we have a projectId in the button data
+                {
+                    projectIdToInvite = dataProjectIdToInvite;
+                    showListOfProjects = false;
+                }
+
+                //we have a project Id field explicitly specified to the page
+                //or we only have one project
+                if ((showListOfProjects && useExistingPageId) ||
+                    (showListOfProjects && !currentUserHasMultipleProjects)) 
+                {
+                    projectIdToInvite = projectIdToInviteTemp;
+                    showListOfProjects = false;
+                }
+
+
+                if (showListOfProjects) //we need to redirect to the invite page
+                {   
+                    window.location = '<?php echo base_url()?>'+'invite/'+userIdToInvite;
+                }
+                else 
+                {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/usercontroller/invite',
+                        data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
+                    }).always(function(){
+                        $('#loading_img').remove();
+                        //location.reload();
+                    });           
+                }               
 
             });
         });

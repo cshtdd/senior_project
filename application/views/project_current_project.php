@@ -44,7 +44,8 @@
                     <div class="pull-right">
                         <?php $this->load->view('subviews/user_invite', array(
                             'user_summary' => $inviteUserSummary,
-                            'btnClass' => 'btn-primary btn-large'
+                            'btnClass' => 'btn-primary btn-large',
+                            'projectId' => $iProject->project->id
                         )) ?>
                     </div>
                 <?php } ?>
