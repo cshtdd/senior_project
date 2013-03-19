@@ -249,8 +249,28 @@ class ProjectController extends CI_Controller
 
     public function display_list_of_projects_to_invite_user($user_id)
     {
-        //TODO finish this
-        return $this->current_project();
+        $current_project_ids = $this->getBelongProjectIds();
+
+        //print_r($current_project_ids);
+
+        //if only one single project to display this URL shouldn't have been visited
+        if (!isset($current_project_ids) ||
+            count($current_project_ids) <= 1)  
+        {
+            redirect('/');            
+        }
+        else //multiple projects to display
+        {
+            //get the project summary data for the selected projects
+            $lProjects = $this->getCurrentProjectsSummariesWithIdsInternal($current_project_ids);
+
+            $data['list_title'] = 'My Projects';
+            $data['no_results'] = false;
+            $data['lProjects'] = $lProjects;
+            $data['inviteUser'] = true;
+            $data['userIdToInvite'] = $user_id;
+            $this->load->view('project_current_project', $data);
+        }
     }
 
     private function getBelongProjectIds()
