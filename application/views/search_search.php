@@ -35,4 +35,6 @@
     <?php } ?>
 <?php }?>
 
+<?php $this->load->view("subviews/invite_capable"); ?>
+
 <?php $this->load->view("template_footer"); ?>
