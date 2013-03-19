@@ -1,7 +1,5 @@
 <?php $this->load->view("template_header"); ?>
 
-    <h2>User Details</h2>
-
 <?php 
     if ($no_results) 
     {
@@ -12,6 +10,11 @@
     else 
     {
 ?>
+
+        <button type="button" class="btn btn-primary btn-large pull-right myUserInviter"
+            data-idtoinvite="<?php echo $userDetails->user->id ?>">Invite</button>
+
+        <h2>User Details</h2>
 
         <div class="row-fluid">
             <div class="span4 center-text">
