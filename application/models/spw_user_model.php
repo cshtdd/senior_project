@@ -186,6 +186,7 @@ class SPW_User_Model extends CI_Model
 			$this->spw_skill_user_model->insert($spw_id,$skill_id);
 		}
 		
+		
 		$this->load->model('spw_language_model');
 		$this->load->model('spw_language_user_model');
 		foreach ($user_profile->languages as $key => $value) {
@@ -214,7 +215,7 @@ class SPW_User_Model extends CI_Model
     
 	public function update_linkedin_profile($spw_id, $user_profile)
 	{
-		
+
 		$this->load->model('spw_skill_user_model');
 		$this->spw_skill_user_model->delete_skills_for_user($spw_id);
 
