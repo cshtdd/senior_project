@@ -1,6 +1,5 @@
 <?php $this->load->view("template_header"); ?>
-
-    <h2>User Details</h2>
+<!-- <?php $this->load->helper("loading"); ?> -->
 
 <?php 
     if ($no_results) 
@@ -12,6 +11,14 @@
     else 
     {
 ?>
+        <div class="pull-right">
+            <?php $this->load->view('subviews/user_invite', array(
+                'user_summary' => $userDetails,
+                'btnClass' => 'btn-primary btn-large'
+            )) ?>
+        </div>
+
+        <h2>User Details</h2>
 
         <div class="row-fluid">
             <div class="span4 center-text">
@@ -91,5 +98,7 @@
 <?php 
     }
 ?>
+
+<?php $this->load->view("subviews/invite_capable") ?>
 
 <?php $this->load->view("template_footer"); ?>

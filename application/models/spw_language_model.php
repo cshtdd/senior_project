@@ -35,7 +35,14 @@ class SPW_Language_Model extends CI_Model
 					   ->select('name')
 					   ->get('spw_language');
 
-		return $query->result()[0]->name;
+		if ($query->num_rows() > 0)
+		{
+			return $query->row()->name;
+		}
+		else
+		{
+			throw new Exception('Language Id not found');
+		}
 	}
 }
 	

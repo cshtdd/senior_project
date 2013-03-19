@@ -235,7 +235,14 @@ class SPW_User_Model extends CI_Model
 					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn')
 					   ->get('spw_user');
 
-		return $query->result()[0];
+		if ($query->num_rows() > 0)
+		{
+			return $query->row();
+		}
+		else
+		{
+			throw new Exception('Profile Id not found');
+		}
 	}
 
 	public function get_first_name($user_id)
@@ -245,7 +252,14 @@ class SPW_User_Model extends CI_Model
 					   ->select('first_name')
 					   ->get('spw_user');
 
-		return $query->result()[0]->first_name;
+		if ($query->num_rows() > 0)
+		{
+			return $query->row()->first_name;
+		}
+		else
+		{
+			throw new Exception('User Id not found');
+		}
 	}
 
 	public function get_fullname($user_id)
@@ -255,8 +269,15 @@ class SPW_User_Model extends CI_Model
 					   ->select('first_name, last_name')
 					   ->get('spw_user');
 
-		$result_obj = $query->result()[0];
-		return $result_obj->first_name." ".$result_obj->last_name;
+		if ($query->num_rows() > 0)
+		{
+			$result_obj = $query->row();
+			return $result_obj->first_name." ".$result_obj->last_name;
+		}
+		else
+		{
+			throw new Exception('User Id not found');
+		}
 	}
 
 	public function get_picture($user_id)
@@ -266,7 +287,14 @@ class SPW_User_Model extends CI_Model
 					   ->select('picture')
 					   ->get('spw_user');
 
-		return $query->result()[0]->picture;
+		if ($query->num_rows() > 0)
+		{
+			return $query->row()->picture;
+		}
+		else
+		{
+			throw new Exception('User Id not found');
+		}
 	}
 
 

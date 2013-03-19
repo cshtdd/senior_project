@@ -1,8 +1,12 @@
 <?php $this->load->view("template_header"); ?>
 
-<?php echo anchor('project/create', 'Create New Project', array(
-        'class' => 'btn btn-primary btn-large pull-right'
-)) ?>
+<?php 
+    if (!isset($hideCreateProject) || !$hideCreateProject)
+    {
+        echo anchor('project/create', 'Create New Project', array(
+            'class' => 'btn btn-primary btn-large pull-right'));
+    }
+?>
 
 <?php if ($no_results) { ?>
 
@@ -36,6 +40,16 @@
         <?php foreach ($lProjects as $iProject) { ?>
             <li class="well">
 
+                <?php if (isset($inviteUserSummary)) { ?>
+                    <div class="pull-right">
+                        <?php $this->load->view('subviews/user_invite', array(
+                            'user_summary' => $inviteUserSummary,
+                            'btnClass' => 'btn-primary btn-large',
+                            'projectId' => $iProject->project->id
+                        )) ?>
+                    </div>
+                <?php } ?>
+
                 <h4>
                     <?php echo anchor('project/'.$iProject->project->id, $iProject->project->title) ?>
                 </h4>
@@ -49,5 +63,9 @@
     </ul>
 
 <?php }?>
+
+<?php if (isset($inviteUserSummary)) { ?>
+    <?php $this->load->view('subviews/invite_capable') ?>
+<?php } ?>
 
 <?php $this->load->view("template_footer"); ?>
