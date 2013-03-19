@@ -264,11 +264,12 @@ class ProjectController extends CI_Controller
             //get the project summary data for the selected projects
             $lProjects = $this->getCurrentProjectsSummariesWithIdsInternal($current_project_ids);
 
-            $data['list_title'] = 'My Projects';
+            $data['list_title'] = 'Select a project to invite';
             $data['no_results'] = false;
             $data['lProjects'] = $lProjects;
             $data['inviteUser'] = true;
-            $data['userIdToInvite'] = $user_id;
+            $data['hideCreateProject'] = true;
+            $data['userIdToInvite'] = $user_id;            
             $this->load->view('project_current_project', $data);
         }
     }
