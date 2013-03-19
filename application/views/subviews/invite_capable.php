@@ -9,12 +9,23 @@
 
                 $(this).parent().append('<?php echo loading_img() ?>');
 
-                <?php 
-                    if (isset($projectDetails) && isset($projectDetails->project)) 
-                    { 
+                <?php
+                    if (!isset($projectDetails) && 
+                        !isset($projectDetails->project) &&
+                        currentUserHasMultipleProjects($this)) //we need to redirect to the invite page
+                    {
                 ?>
-
-                        var projectIdToInvite = '<?php echo $projectDetails->project->id ?>';
+                        window.location = '<?php echo base_url()?>'+'invite/'+userIdToInvite;
+                <?php 
+                    }
+                    else 
+                    {
+                ?>
+                        <?php if (isset($projectDetails) && isset($projectDetails->project)) { ?>
+                            var projectIdToInvite = '<?php echo $projectDetails->project->id ?>';
+                        <?php } else { ?>
+                            var projectIdToInvite = '<?php echo getAnyProjectIdForCurrentUser($this) ?>';
+                        <?php } ?>
 
                         $.ajax({
                             type: 'POST',
@@ -23,32 +34,8 @@
                         }).always(function(){
                             $('#loading_img').remove();
                         });
-
-                <?php 
-                    } 
-                    else 
-                    { 
-                        if (currentUserHasMultipleProjects($this)) //we need to redirect to the invite page
-                        {
-                ?>
-                            window.location = '<?php echo base_url()?>'+'invite/'+userIdToInvite;
-                <?php 
-                        }
-                        else 
-                        {
-                ?>
-                            var projectIdToInvite = '<?php echo getAnyProjectIdForCurrentUser($this) ?>';
-
-                            $.ajax({
-                                type: 'POST',
-                                url: '/usercontroller/invite',
-                                data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
-                            }).always(function(){
-                                $('#loading_img').remove();
-                            });
                 <?php
-                        }
-                    } 
+                    }                    
                 ?>
 
             });
