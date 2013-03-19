@@ -896,7 +896,19 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            if (isset($user_id))
+            {
+                $current_user_id = getCurrentUserId($this);
+                $lUsers  = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($current_user_id, array($userId));
+                if (isset($lUsers) && count($lUsers) > 0)
+                {
+                    return $lUsers[0];
+                }
+                else
+                {
+                    throw new Expcetion('User Id not found');
+                }
+            }
         }
     }
     private function getUserSummaryWithIdInternalTest($userId)
