@@ -624,6 +624,7 @@ class UserController extends CI_Controller
         $userDetailsViewModel->role = $role;
         $userDetailsViewModel->lTerms = $lTerms;
         $userDetailsViewModel->lRoles = $lRoles;
+        $userDetailsViewModel->invite = true;
 
         return $userDetailsViewModel;
     }
