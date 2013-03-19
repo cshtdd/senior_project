@@ -11,7 +11,12 @@
     else 
     {
 ?>
-        <?php $this->load->view('subviews/user_invite', array('user_summary' => $userDetails)) ?>
+        <div class="pull-right">
+            <?php $this->load->view('subviews/user_invite', array(
+                'user_summary' => $userDetails,
+                'btnClass' => 'btn-primary btn-large'
+            )) ?>
+        </div>
 
         <h2>User Details</h2>
 
