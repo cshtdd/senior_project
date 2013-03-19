@@ -247,6 +247,12 @@ class ProjectController extends CI_Controller
         $this->load->view('project_details2_edit', $data);
     }
 
+    public function display_list_of_projects_to_invite_user($user_id)
+    {
+        //TODO finish this
+        return $this->current_project();
+    }
+
     private function getBelongProjectIds()
     {
         if (is_test($this))
