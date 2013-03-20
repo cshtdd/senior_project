@@ -49,7 +49,7 @@ class SPW_User_Model extends CI_Model
 
 
 
-	public function is_owned_registered($email_address)
+	public function is_spw_registered($email_address)
 	{
 		$query = $this->db
 					   ->where('google_id',NULL)
@@ -65,6 +65,17 @@ class SPW_User_Model extends CI_Model
 		{
 			return false;
 		}
+	}
+
+	public function create_new_spw_user($email_address, $password)
+	{
+		$data = array(
+		   'email' =>  $email_address ,
+		   'hash_pwd' =>  sha1($password),
+		);
+
+		$this->db->insert('spw_user', $data);
+		return $this->db->insert_id();
 	}
 
 	public function is_google_registered($id)
@@ -86,16 +97,6 @@ class SPW_User_Model extends CI_Model
 		}
 	}
 
-	public function create_new_user($email_address, $password)
-	{
-		$data = array(
-		   'email' =>  $email_address ,
-		   'hash_pwd' =>  sha1($password),
-		);
-
-		$this->db->insert('spw_user', $data);
-		return $this->db->insert_id();
-	}
 
 	public function create_new_google_user($email_address, $given_name, $family_name,$google_id)
  	{

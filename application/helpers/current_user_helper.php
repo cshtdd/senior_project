@@ -18,7 +18,7 @@ if ( !function_exists('getCurrentUserId'))
             }
             else
             {
-                throw new Exception('Non-logged in user...');
+               return 0;
             }
         }
     }

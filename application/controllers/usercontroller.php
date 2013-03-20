@@ -252,7 +252,7 @@ class UserController extends CI_Controller
 
     public  function linkedIn_cancel() {
     
-        echo 'Linkedin user cancelled login';            
+        redirect('/');            
     }
 
     public  function linkedIn_callback() {
