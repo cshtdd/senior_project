@@ -463,11 +463,11 @@ class UserController extends CI_Controller
             array_push($lRoles,$role);
         }
 
-        $role = $this->spw_role_user_model->get_role($user_id);
+        $userrole = $this->spw_role_user_model->get_role($user_id);
         
         $role = new SPW_Role_Model();
-        $role->id = $role->id;
-        $role->name = $role->name;
+        $role->id = $userrole->role;
+        //$role->name = $role->name;
 
         $current_user_id = getCurrentUserId($this);
         $invite = $this->SPW_User_Model->canInviteUser($current_user_id, $user_id);
@@ -481,7 +481,6 @@ class UserController extends CI_Controller
         $userDetailsViewModel->lTerms = $lTerms;
         $userDetailsViewModel->lRoles = $lRoles;
 
-       
         return $userDetailsViewModel;
 
     }
