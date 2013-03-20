@@ -47,9 +47,9 @@ class SPW_Term_Model extends CI_Model
 
 		if ($termNum > 0)
         {
-        	for ($j = 0; $j < $termNum; $i++)
+        	for ($i = 0; $i < $termNum; $i++)
         	{
-        		$row = $query->row($j, 'SPW_Term_Model');
+        		$row = $query->row($i, 'SPW_Term_Model');
 				$lTerms[] = $row;
         	}
         }

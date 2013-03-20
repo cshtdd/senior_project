@@ -261,6 +261,7 @@
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
             prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
+            //prefilled: [ <?php echo all_skill_names($this) ?>  ],
             CapitalizeFirstLetter: true,
             preventSubmitOnEnter: true,
             typeahead: true,
