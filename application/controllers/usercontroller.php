@@ -13,18 +13,18 @@ class UserController extends CI_Controller
 
         $this->load->helper('project_summary_view_model');
         load_project_summary_models($this);
+        
+        $this->load->model('spw_skill_user_model');
+        $this->load->model('spw_experience_model');
+        $this->load->model('spw_language_model');
+        $this->load->model('spw_language_user_model');
+        $this->load->model('spw_term_model');
+        $this->load->model('spw_user_model');
+        $this->load->model('spw_experience_model');
+        $this->load->model('spw_role_model');
+        $this->load->model('spw_role_user_model');
 
-        //these models are loaded in the load_project_summary_models method
-        //$this->load->model('SPW_Term_Model');
-        //$this->load->model('SPW_Skill_Model');
-        $this->load->model('SPW_Experience_Model');
-        $this->load->model('SPW_Language_Model');
-        $this->load->model('SPW_Role_Model');
-        //$this->load->model('SPW_User_Model');
-        //$this->load->model('SPW_User_Summary_View_Model');
         $this->load->model('SPW_User_Details_View_Model');
-
-        //$this->output->cache(60);
     }
 
 
@@ -72,9 +72,12 @@ class UserController extends CI_Controller
         }
         else
         {
-            //TODO redirect to login page if not logged in
+            $spw_id = getCurrentUserId($this);
 
-            $currentUserId = getCurrentUserId($this); 
+            if($spw_id < 0)
+            {
+                redirect('/home');
+            }
 
             $updatedFirstName = $this->input->post('text-first-name');
             $updatedLastName = $this->input->post('text-last-name');
@@ -82,23 +85,21 @@ class UserController extends CI_Controller
             $updatedRoleId = $this->input->post('radio-role');
             $updatedUserPictureUrl = $this->input->post('hidden-img-src');            
 
-            //only consider this if the role is a student
-            $updatedTermId = $this->input->post('dropdown-term');
+            $new_profile = (object)array(
+                            'first_name' =>     $updatedFirstName,
+                            'last_name' =>      $updatedLastName,
+                            'spw_summary' =>    $updatedSPWSummary,
+                            'picture' => $updatedUserPictureUrl,
+                            'updatedRoleId' =>  $updatedRoleId,
+                            );
+
+            if($updatedRoleId == 5) //TODO: Not hardcode this
+            {
+                $new_profile->dropdown_term = $this->input->post('dropdown-term');
+            }
 
             //TODO validate the data against XSS and CSRF and SQL Injection
-
-            /*
-            $this->output->set_output(
-                $updatedFirstName.' '.
-                $updatedLastName.' '.
-                $updatedSPWSummary.' '.
-                $updatedRoleId.' '.
-                $updatedTermId.' '.
-                $updatedUserPictureUrl
-            );
-            */
-
-            //TODO update the user data to the DB
+            $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
 
             redirect('/me');
         }
@@ -299,7 +300,6 @@ class UserController extends CI_Controller
                     'languages'             => $this->parse_languages($user->languages),
                 );
 
-            $this->load->model('spw_user_model');
             $spw_id = getCurrentUserId($this);
 
             if($this->session->flashdata('linkedIn_sync') == 'false')
@@ -372,8 +372,7 @@ class UserController extends CI_Controller
     private function get_all_available_terms()
     {
         $this->load->helper('date');
-        $this->load->model('spw_term_model');
-
+        
         $result_terms = array();
         $terms = $this->spw_term_model->getFutureTerms();
 
@@ -392,10 +391,8 @@ class UserController extends CI_Controller
     }
 
     private function get_profile($user_id, $lTerms)
-    {
-        $this->load->model('spw_user_model');
+    {       
         $result = $this->spw_user_model->get_profile_by_id($user_id);
-
 
         $user = new SPW_User_Model();
         $user->id = $user_id;
@@ -416,11 +413,8 @@ class UserController extends CI_Controller
         $lTerms = $this->get_all_available_terms();
 
         $user = $this->get_profile($user_id, $lTerms);
-
-        $this->load->model('spw_skill_user_model');
-        $this->load->model('spw_skill_model');
+        
         $skills_ids = $this->spw_skill_user_model->get_skills_for_user($user_id);
-
 
         $lSkills = array(); 
         for($i = 0; $i < count($skills_ids); $i++)
@@ -431,8 +425,6 @@ class UserController extends CI_Controller
             array_push($lSkills,$skill);
         }        
 
-        $this->load->model('spw_language_user_model');
-        $this->load->model('spw_language_model');
         $languages_ids = $this->spw_language_user_model->get_languages_for_user($user_id);
         $lLanguages = array(); 
 
@@ -444,7 +436,6 @@ class UserController extends CI_Controller
             array_push($lLanguages,$language);
         }        
 
-        $this->load->model('spw_experience_model');
         $positions = $this->spw_experience_model->get_positions_by_user($user_id);
 
         $lExperiences = array();
@@ -459,8 +450,7 @@ class UserController extends CI_Controller
             $position->end_date = $positions[$i]->end_date;
             array_push($lExperiences, $position);
         }
-        
-        $this->load->model('spw_role_model');
+
         $roles = $this->spw_role_model->get_roles();
 
         $lRoles = array();
@@ -472,7 +462,6 @@ class UserController extends CI_Controller
             array_push($lRoles,$role);
         }
 
-        $this->load->model('spw_role_user_model');
         $role = $this->spw_role_user_model->get_role($user_id);
         
         $role = new SPW_Role_Model();

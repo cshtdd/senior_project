@@ -300,6 +300,30 @@ class SPW_User_Model extends CI_Model
 	}
 
 
+   
+ 
+    //TODO validate the data against XSS and CSRF and SQL Injection
+    public function update_summary_profile($spw_id,$new_profile)
+    {
+
+    	$data = array(
+    		'first_name' =>  $new_profile->first_name,
+    		'last_name' =>  $new_profile->last_name,
+			'picture' => $user_profile->picture,
+			'spw_summary'=> $user_profile->spw_summary
+		);
+
+    	if($new_profile->updatedRoleId == 5){
+    		$data->graduation_term = $new_profile->updatedRoleId;	
+    	}
+
+		$this->db->where('id',$spw_id);
+		$this->db->update('spw_user', $data);
+
+		$this->load->model('spw_role_user_model');
+		$this->spw_role_user_model->update_roles_for_user($spw_id, $new_profile->updatedRoleId);
+    }
+
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)
 	{

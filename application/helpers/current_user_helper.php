@@ -18,7 +18,7 @@ if ( !function_exists('getCurrentUserId'))
             }
             else
             {
-               return 0;
+               return -1;
             }
         }
     }
