@@ -68,6 +68,29 @@ class SPW_Skill_Model extends CI_Model
 		}
 	}
 
+	public function getAllSkillsNamesString()
+	{
+		$sql = 'select name
+				from spw_skill';
+		$query = $this->db->query($sql);
+
+		$allSkillNames = array();	
+
+		if ($query->num_rows() >0 )
+		{
+        	foreach ($query->result() as $row) 
+        	{
+        		$name = $row->name;
+				$allSkillNames[] = '"'.$name.'"';
+			}
+
+        	$allSkillNamesStr = join(', ', $allSkillNames);
+
+        	return $allSkillNamesStr;
+    	}
+    	else
+    		return '';      
+	}
 }
 	
 ?>
