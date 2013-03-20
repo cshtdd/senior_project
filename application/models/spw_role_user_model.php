@@ -25,7 +25,7 @@ class SPW_Role_User_Model extends CI_Model
 
 	public function update_roles_for_user($spw_id, $newRoleId)
 	{
-		$this->db->where('id',$spw_id);
+		$this->db->where('user',$spw_id);
 		$this->db->delete('spw_role_user');
 
 		$data = array(
