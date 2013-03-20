@@ -14,6 +14,7 @@ class UserController extends CI_Controller
         $this->load->helper('project_summary_view_model');
         load_project_summary_models($this);
         
+        $this->load->model('spw_skill_model');
         $this->load->model('spw_skill_user_model');
         $this->load->model('spw_experience_model');
         $this->load->model('spw_language_model');

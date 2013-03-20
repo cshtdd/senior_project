@@ -236,7 +236,7 @@ class SPW_User_Model extends CI_Model
 					   ->where('id',$user_id)
 					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn')
 					   ->get('spw_user');
-
+				   
 		if ($query->num_rows() > 0)
 		{
 			return $query->row();
@@ -309,8 +309,8 @@ class SPW_User_Model extends CI_Model
     	$data = array(
     		'first_name' =>  $new_profile->first_name,
     		'last_name' =>  $new_profile->last_name,
-			'picture' => $user_profile->picture,
-			'spw_summary'=> $user_profile->spw_summary
+			'picture' => $new_profile->picture,
+			'summary_spw'=> $new_profile->spw_summary
 		);
 
     	if($new_profile->updatedRoleId == 5){
