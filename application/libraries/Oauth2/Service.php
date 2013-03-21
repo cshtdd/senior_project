@@ -50,6 +50,11 @@ class Service
      */
     private $_scope;
 
+        /**
+     * @var string
+     */
+    private $_subdomain;
+
     /**
      * @param \OAuth2\Client $client
      * @param \OAuth2\Service\Configuration $configuration
@@ -59,17 +64,21 @@ class Service
     public function  __construct(Client $client,
             Service\Configuration $configuration,
             DataStore $dataStore,
-            $scope = null) {
+            $scope = null, $subdomain = null) {
         $this->_client = $client;
         $this->_configuration = $configuration;
         $this->_dataStore = $dataStore;
         $this->_scope = $scope;
+        $this->_subdomain = $subdomain;
     }
 
     /**
      * redirect to authorize endpoint of service
      */
     public function authorize(array $userParameters = array()) {
+       if(isset($this->_subdomain)){
+            $userParameters['hd'] = $this->_subdomain;
+       }
        $parameters = array_merge($userParameters, array(
             'type' => 'web_server',
             'client_id' => $this->_client->getClientKey(),
@@ -83,7 +92,7 @@ class Service
 
         $url = $this->_configuration->getAuthorizeEndpoint();
         $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($parameters);
-
+        
         header('Location: ' . $url);
         die();
     }

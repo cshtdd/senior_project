@@ -234,7 +234,7 @@ class SPW_User_Model extends CI_Model
 	{
 		$query = $this->db
 					   ->where('id',$user_id)
-					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn')
+					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn, graduation_term')
 					   ->get('spw_user');
 				   
 		if ($query->num_rows() > 0)
@@ -314,9 +314,9 @@ class SPW_User_Model extends CI_Model
 		);
 
     	if($new_profile->updatedRoleId == 5){
-    		$data->graduation_term = $new_profile->updatedRoleId;	
+    		$data['graduation_term'] = $new_profile->dropdown_term;	
     	}
-
+    	
 		$this->db->where('id',$spw_id);
 		$this->db->update('spw_user', $data);
 

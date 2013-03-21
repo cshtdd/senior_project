@@ -36,7 +36,7 @@
 
 
             <div class="login-service">
-                <a href="<?php echo base_url('/login/google_oauth2')?>">
+                <a href="<?php echo base_url('/login/fiu_oauth2')?>">
                     <?php echo img(array('src' => '/img/fiu_login.png', 'alt' => 'Panther Mail Login'))?>
                 </a>
             </div>
