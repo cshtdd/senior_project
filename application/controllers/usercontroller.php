@@ -404,17 +404,17 @@ class UserController extends CI_Controller
         $user->summary_spw = $result->summary_spw;
         $user->headline_linkedIn = $result->headline_linkedIn;
         $user->summary_linkedIn = $result->summary_linkedIn;
-        $user->graduation_term = $lTerms[0];
+        $user->graduation_term = $result->graduation_term;
 
         return $user;
     }
 
     private function getUserDetails($user_id)
     {
-        $lTerms = $this->get_all_available_terms();
+        $lTerms = $this->get_all_available_terms();        
 
         $user = $this->get_profile($user_id, $lTerms);
-        
+    
         $skills_ids = $this->spw_skill_user_model->get_skills_for_user($user_id);
 
         $lSkills = array(); 
