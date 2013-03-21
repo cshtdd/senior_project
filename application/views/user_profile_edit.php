@@ -129,7 +129,7 @@
                                                         $arrTermsOptions[$iTerm->id] = $iTerm->name;
                                                     }
 
-                                                    echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term->id);
+                                                    echo form_dropdown('dropdown-term', $arrTermsOptions, $userDetails->user->graduation_term);
                                                 } 
                                             ?>
                                         </div>

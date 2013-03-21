@@ -15,6 +15,7 @@ class SPW_Term_Model extends CI_Model
 	{
 		parent::__construct();
 	}
+	
 
 	/* get the current term information */
 	public function getCurrentTermInfo()
