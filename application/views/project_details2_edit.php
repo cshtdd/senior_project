@@ -113,6 +113,35 @@
             ));
         ?>
 
+        <?php if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) { ?>
+            Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
+        <?php } else { ?>
+            
+            <div class="span4">
+                Delivery Term :
+                <?php 
+                    $arrTermsOptions = array();
+
+                    if (isset($projectDetails->term))
+                    {
+                        $selected = $projectDetails->term->id;
+                    }
+                    else
+                    {
+                        $selected = '';
+                        $arrTermsOptions[$selected] = 'Please Select a Term...';
+                    }
+
+                    foreach ($projectDetails->lTerms as $iTerm) 
+                    {
+                        $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                    }
+
+                    echo form_dropdown('dropdown-term', $arrTermsOptions, $selected);
+                ?>
+            </div>
+        <?php } ?>
+
         <?php 
             echo form_submit(array(
                 'id' => 'btn-submit',
@@ -122,8 +151,6 @@
                 'value' => 'Save Changes'
             ));
         ?>
-
-        Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
 
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 
@@ -164,6 +191,8 @@
         <?php
             echo form_hidden(array(
                 'pid' => $projectDetails->project->id,
+                'pStatus' => $projectDetails->project->status,
+                'propBy' => $projectDetails->project->proposed_by,
                 'pbUrl' => current_url()
                 )
             );
@@ -260,7 +289,7 @@
 
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
-            prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
+            prefilled: [ <?php echo $projectDetails->getCurrentSkillNames(); ?> ],
             //prefilled: [ <?php echo all_skill_names($this) ?>  ],
             CapitalizeFirstLetter: true,
             preventSubmitOnEnter: true,

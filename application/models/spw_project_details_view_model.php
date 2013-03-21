@@ -2,8 +2,6 @@
 
 class SPW_Project_Details_View_Model extends SPW_Project_Summary_View_Model
 {
-	public $lTerms;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -21,6 +19,7 @@ class SPW_Project_Details_View_Model extends SPW_Project_Summary_View_Model
 			}
 
 			$resultStr = join(', ', $resultArray);
+
 			return $resultStr;
 		}
 		else
@@ -28,8 +27,6 @@ class SPW_Project_Details_View_Model extends SPW_Project_Summary_View_Model
 			return '';
 		}
 	}
-
-
 }
 
 ?>

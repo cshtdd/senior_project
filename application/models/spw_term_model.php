@@ -40,7 +40,8 @@ class SPW_Term_Model extends CI_Model
 	{
 		$sql = 'select *
 				from spw_term
-				where (end_date > NOW())';
+				where (end_date > NOW())
+				order by end_date ASC';
 		$query = $this->db->query($sql);
 
 		$termNum = $query->num_rows();
