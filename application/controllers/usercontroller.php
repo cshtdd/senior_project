@@ -99,8 +99,11 @@ class UserController extends CI_Controller
                 $new_profile->dropdown_term = $this->input->post('dropdown-term');
             }
 
-            //TODO validate the data against XSS and CSRF and SQL Injection
-            $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
+            if (!is_test($this))
+            {
+                //TODO validate the data against XSS and CSRF and SQL Injection
+                $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
+            }
 
             redirect('/me');
         }
