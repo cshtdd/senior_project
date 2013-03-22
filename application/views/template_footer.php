@@ -21,5 +21,12 @@
 			});
 		});
     </script>
+    <!--[if lt IE 9]>
+        <script type="text/javascript">
+			$(document).ready(function(){
+				$('form').html5form();
+			});
+        </script>
+    <![endif]-->
 </body>
 </html>

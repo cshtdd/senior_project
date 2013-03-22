@@ -35,6 +35,7 @@
     <script src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
 	<!--[if lt IE 9]>
 		<script src="<?php echo base_url() ?>js/html5shiv.js"></script>
+		<script src="<?php echo base_url() ?>js/jquery.html5form-min.js"></script> 
 	<![endif]-->
 </head>
 <body>
