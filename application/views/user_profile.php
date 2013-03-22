@@ -1,5 +1,6 @@
 <?php $this->load->view("template_header"); ?>
 <!-- <?php $this->load->helper("loading"); ?> -->
+<?php $this->load->helper("user_image"); ?>
 
 <?php 
     if ($no_results) 
@@ -24,7 +25,7 @@
             <div class="span4 center-text">
                 <?php 
                     echo img(array(
-                        'src' => $userDetails->user->picture,
+                        'src' => getUserImage($this, $userDetails->user->picture),
                         'class' => 'user-img-large'
                     ))
                 ?>

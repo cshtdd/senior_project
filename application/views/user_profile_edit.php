@@ -1,5 +1,5 @@
 <?php $this->load->view("template_header"); ?>
-
+<?php $this->load->helper("user_image"); ?>
 
 <?php 
     if ($no_results) 
@@ -27,7 +27,7 @@
                         <?php 
                             echo img(array(
                                 'id' => 'img-user-profile',
-                                'src' => $userDetails->user->picture,
+                                'src' => getUserImage($this, $userDetails->user->picture),
                                 'class' => 'user-img-large',
                                 'alt' => $userDetails->getFullName()
                             ));

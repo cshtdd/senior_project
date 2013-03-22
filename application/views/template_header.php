@@ -1,5 +1,6 @@
 <?php $this->load->helper('nav_top') ?>
 <?php $this->load->helper('notifications') ?>
+<?php $this->load->helper("user_image"); ?>
 
 <!DOCTYPE html>
 <html>
@@ -111,7 +112,7 @@
                                                 <small class="block-text">View Profile</small>                                                
                                             </div>
                                             <?php 
-                                                $imgSrc = getCurrentUserHeaderImg($this);
+                                                $imgSrc = getUserImage($this, getCurrentUserHeaderImg($this));
                                                 if (isset($imgSrc))
                                                 {
                                                     echo img(array(
