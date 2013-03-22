@@ -91,6 +91,18 @@
                             ));
                         ?>
 
+                        <?php
+                            if (isset($userDetails->user->email) && 
+                                strlen($userDetails->user->email) > 0)
+                            {
+                        ?> 
+                                <p>
+                                    <?php echo mailto($userDetails->user->email, $userDetails->user->email) ?>
+                                </p>
+                        <?php
+                            }
+                        ?>
+
 
                             <div>
                                 <h4>Your Role</h4>
