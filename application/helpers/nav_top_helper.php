@@ -25,9 +25,12 @@ if ( !function_exists('getCurrentUserHeaderImg'))
 {
     function getCurrentUserHeaderImg($sender_controller)
     {
+        $result = '';
+
         if (is_test($sender_controller))
         {
-            return 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
+            $result = 'https://si0.twimg.com/profile_images/635660229/camilin87_bigger.jpg';
+            //$result = '';
         }
         else
         {
@@ -37,8 +40,15 @@ if ( !function_exists('getCurrentUserHeaderImg'))
 
             $session_data = $sender_controller->session->userdata('logged_in');
             $user_id = $session_data['id'];
-            return $CI->spw_user_model->get_picture($user_id);
+            $result = $CI->spw_user_model->get_picture($user_id);
         }
+
+        if (!isset($result) || strlen($result) == 0)
+        {
+            $result = '/img/no-photo.jpeg';
+        }
+
+        return $result;
     }
 }
 
