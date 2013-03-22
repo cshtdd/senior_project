@@ -13,11 +13,13 @@
 -->
 	
     <script type="text/javascript">
-        $('#alert-js').hide();
-        $('#alert-js-close').click(function(e){
-            e.preventDefault();
-            $('#alert-js').hide();
-        });
+		$(document).ready(function(){
+			$('#alert-js').hide();
+			$('#alert-js-close').click(function(e){
+				e.preventDefault();
+				$('#alert-js').hide();
+			});
+		});
     </script>
 </body>
 </html>
