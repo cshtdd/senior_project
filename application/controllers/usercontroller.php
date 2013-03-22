@@ -99,8 +99,11 @@ class UserController extends CI_Controller
                 $new_profile->dropdown_term = $this->input->post('dropdown-term');
             }
 
-            //TODO validate the data against XSS and CSRF and SQL Injection
-            $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
+            if (!is_test($this))
+            {
+                //TODO validate the data against XSS and CSRF and SQL Injection
+                $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
+            }
 
             redirect('/me');
         }
@@ -525,6 +528,7 @@ class UserController extends CI_Controller
         $user1->id = $user_id;
         $user1->first_name = 'Flash';
         $user1->last_name = 'Gordon';
+        $user1->email = 'lolo@gmail.com';
         $user1->picture = 'http://i0.kym-cdn.com/photos/images/newsfeed/000/162/317/2vA1a.png?1313349760';
         $user1->summary_spw = 'Mobile oriented developer. Has worked for the biggest players in the field.';
         $user1->summary_linkedIn = 'Worked as a security expert at LinkedIn right after they lost all of their passwords';
@@ -568,17 +572,27 @@ class UserController extends CI_Controller
 
         $experience1 = new SPW_Experience_Model();
         $experience1->id = 1;
-        $experience1->title = 'Senior iOS developer at Apple';
+        $experience1->company_name = 'Apple';
+        $experience1->start_date = '2007-12';
+        $experience1->company_industry = 'IT';
+        $experience1->title = 'Senior iOS developer';
         $experience1->description = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
 
         $experience2 = new SPW_Experience_Model();
         $experience2->id = 2;
-        $experience2->title = 'Senior Android developer at Google';
+        $experience2->company_name = 'Google';
+        $experience2->start_date = '2010-9';
+        $experience2->end_date = '2010-12';
+        $experience2->title = 'Senior Android developer';
         $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
 
         $experience3 = new SPW_Experience_Model();
         $experience3->id = 3;
-        $experience3->title = 'Senior Mobile developer at Microsoft';
+        $experience3->company_name = 'Microsoft';
+        $experience2->start_date = '2013-1';
+        $experience2->end_date = '2013-3';
+        $experience3->company_industry = 'FastFood';
+        $experience3->title = 'Senior Mobile developer';
         $experience3->description = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
 
 

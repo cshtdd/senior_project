@@ -16,13 +16,7 @@
                 </p>
 
                 <p>
-                    <?php if ($projectDetails->displayJoin) { ?>
-                        <button class="btn btn-primary" type="button">Join</button>
-                    <?php } ?>
-                    
-                    <?php if ($projectDetails->displayLeave) { ?>
-                        <button class="btn btn-warning" type="button">Leave</button>
-                    <?php } ?>
+                    <?php $this->load->view('subviews/join_leave_buttons', array('projectDetails' => $projectDetails)) ?>
                 </p>
             </div>
 

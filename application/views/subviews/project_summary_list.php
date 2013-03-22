@@ -14,13 +14,7 @@
                 </p>
 
                 <p>
-                    <?php if ($iProject->displayJoin) { ?>
-                        <button class="btn btn-primary" type="button">Join</button>
-                    <?php } ?>
-                    
-                    <?php if ($iProject->displayLeave) { ?>
-                        <button class="btn btn-warning" type="button">Leave</button>
-                    <?php } ?>
+                    <?php $this->load->view('subviews/join_leave_buttons', array('projectDetails' => $iProject)) ?>
                 </p>
             </div>
 

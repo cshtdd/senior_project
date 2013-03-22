@@ -1,5 +1,6 @@
 <?php $this->load->helper('nav_top') ?>
 <?php $this->load->helper('notifications') ?>
+<?php $this->load->helper("user_image"); ?>
 
 <!DOCTYPE html>
 <html>
@@ -42,7 +43,7 @@
           <div class="navbar-inner">
             <?php echo anchor('/', 'FIU Senior Project', array('class' => 'brand')) ?>
 
-            <?php if ( !stristr(uri_string(), 'login') ) { ?>
+            <?php if ( !in_array(strtolower(uri_string()), array('login', 'register')) ) { ?>            
 
                 <?php
                     function isActiveNavItem($targetUrl)
@@ -111,7 +112,7 @@
                                                 <small class="block-text">View Profile</small>                                                
                                             </div>
                                             <?php 
-                                                $imgSrc = getCurrentUserHeaderImg($this);
+                                                $imgSrc = getUserImage($this, getCurrentUserHeaderImg($this));
                                                 if (isset($imgSrc))
                                                 {
                                                     echo img(array(

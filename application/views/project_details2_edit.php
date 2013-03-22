@@ -46,11 +46,16 @@
                 'value' => 'Leave Project'
             ));
 
+        echo form_close();
+    }
+?>
+
+<?php 
+    if (!isset($creating_new) || !$creating_new)
+    {
         echo anchor('project/create', 'Create New Project', array(
             'class' => 'btn btn-primary btn-large pull-right hor-margin'
-            ));
-
-        echo form_close();
+        ));
     }
 ?>
 

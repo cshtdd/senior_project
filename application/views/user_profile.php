@@ -1,5 +1,6 @@
 <?php $this->load->view("template_header"); ?>
 <!-- <?php $this->load->helper("loading"); ?> -->
+<?php $this->load->helper("user_image"); ?>
 
 <?php 
     if ($no_results) 
@@ -24,7 +25,7 @@
             <div class="span4 center-text">
                 <?php 
                     echo img(array(
-                        'src' => $userDetails->user->picture,
+                        'src' => getUserImage($this, $userDetails->user->picture),
                         'class' => 'user-img-large'
                     ))
                 ?>
@@ -35,16 +36,33 @@
                     <?php echo $userDetails->getFullName() ?>
                 </h3>
 
-                <?php echo $userDetails->role->name ?>
-
                 <?php 
-                    if (isset($userDetails->user->graduation_term) &&
-                        isset($userDetails->user->graduation_term->name) && 
-                        strlen($userDetails->user->graduation_term->name) > 0) {
+                    if (isUserLoggedIn($this))
+                    {
+                        if (isset($userDetails->user->email) && 
+                            strlen($userDetails->user->email) > 0)
+                        {
+                ?> 
+                            <p>
+                                <?php echo mailto($userDetails->user->email, $userDetails->user->email) ?>
+                            </p>
+                <?php
+                        }
+                    }
                 ?>
-                    Graduating In
-                    <?php echo $userDetails->user->graduation_term->name ?>
-                <?php } ?>
+
+                <p>
+                    <?php echo $userDetails->role->name ?>
+
+                    <?php 
+                        if (isset($userDetails->user->graduation_term) &&
+                            isset($userDetails->user->graduation_term->name) && 
+                            strlen($userDetails->user->graduation_term->name) > 0) {
+                    ?>
+                        Graduating In
+                        <?php echo $userDetails->user->graduation_term->name ?>
+                    <?php } ?>
+                </p>
             </div>
         </div>
 
@@ -78,22 +96,7 @@
         </div>
 
         <div class="spaced-top">
-            <?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) { ?>
-                <h4>Experience</h4>
-                <ul>
-                    <?php foreach($userDetails->lExperiences as $iExperience) { ?>
-                        <li class="well">
-                            <h5>
-                                <?php echo $iExperience->title ?>
-                            </h5>
-
-                            <p>
-                                <?php echo $iExperience->description ?>
-                            </p>
-                        </li>
-                    <?php } ?>
-                </ul>
-            <?php } ?>
+            <?php $this->load->view('subviews/experience_list', array('lExperiences' => $userDetails->lExperiences)) ?> 
         </div>
 <?php 
     }
