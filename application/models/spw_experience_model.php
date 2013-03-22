@@ -42,7 +42,7 @@ class SPW_Experience_Model extends CI_Model
                         'start_date'        => $position_obj->start_date,
                         'end_date'          => $position_obj->end_date,
                         'title'             => $position_obj->title,
-                        'summary'           => $position_obj->summary,
+                        'summary'           => $position_obj->summary
                          );
 
         $this->db->insert('spw_experience', $data); 
