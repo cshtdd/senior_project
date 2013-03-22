@@ -576,7 +576,6 @@ class UserController extends CI_Controller
         $experience2 = new SPW_Experience_Model();
         $experience2->id = 2;
         $experience2->company_name = 'Google';
-        $experience2->company_industry = 'CIA';
         $experience2->title = 'Senior Android developer';
         $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
 
