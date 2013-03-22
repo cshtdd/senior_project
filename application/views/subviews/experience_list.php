@@ -35,6 +35,26 @@
                     ?>
                 </h5>
 
+
+                    <?php 
+                        if (isset($iExperience->start_date) && 
+                            strlen($iExperience->start_date) > 0)
+                        {
+                            $endDateStr = 'Present';
+                            if (isset($iExperience->end_date) && 
+                                strlen($iExperience->end_date) > 0)
+                            {
+                                $endDateStr = $iExperience->end_date;
+                            }
+                    ?>
+                            <p class="muted">
+                                <?php echo $iExperience->start_date.' to '.$endDateStr ?>
+                            </p>
+                    <?php
+                        }
+                    ?>
+                
+
                 <p>
                     <?php echo $iExperience->description ?>
                 </p>
