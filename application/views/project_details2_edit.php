@@ -118,11 +118,37 @@
             ));
         ?>
 
+        <div class="span8">
+                Number of members :
+                <?php 
+                    echo form_input(array(
+                        'id' => 'text-project-max-students',
+                        'name' => 'text-project-max-stydents',
+                        'type' => 'number',
+                        'class' => 'input-small',
+                        'placeholder' => '0',
+                        'value' => $projectDetails->project->max_students,
+                        'required' => '',
+                        'title' => 'Max Number of Students'
+                    ));
+                ?>
+        </div>
+
+        <?php 
+            echo form_submit(array(
+                'id' => 'btn-submit',
+                'name' => 'btn-submit',
+                'type' => 'Submit',
+                'class' => 'btn btn-large btn-primary pull-right',
+                'value' => 'Save Changes'
+            ));
+        ?>
+
         <?php if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) { ?>
             Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
         <?php } else { ?>
             
-            <div class="span4">
+            <div class="span8">
                 Delivery Term :
                 <?php 
                     $arrTermsOptions = array();
@@ -147,19 +173,9 @@
             </div>
         <?php } ?>
 
-        <?php 
-            echo form_submit(array(
-                'id' => 'btn-submit',
-                'name' => 'btn-submit',
-                'type' => 'Submit',
-                'class' => 'btn btn-large btn-primary pull-right',
-                'value' => 'Save Changes'
-            ));
-        ?>
-
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 
-                <div class="span2">
+                <div class="span5">
                     <?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
                         'listTitle' => 'Proposed By:',
                         'lUserSummaries' => array($projectDetails->proposedBySummary),
@@ -169,7 +185,7 @@
                     )) ?>
                 </div>
 
-                <div class="span8">
+                <div class="span3">
                     <?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
                         'listTitle' => 'Mentors:',
                         'lUserSummaries' => $projectDetails->lMentorSummaries,
@@ -294,7 +310,7 @@
 
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
-            prefilled: [ <?php echo $projectDetails->getCurrentSkillNames(); ?> ],
+            prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
             //prefilled: [ <?php echo all_skill_names($this) ?>  ],
             CapitalizeFirstLetter: true,
             preventSubmitOnEnter: true,

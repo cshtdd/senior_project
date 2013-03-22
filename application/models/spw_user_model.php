@@ -702,6 +702,44 @@ class SPW_User_Model extends CI_Model
         }
     }
 
+    /* return the id of the projects the user belong or false if does not have a project 
+       regardless of the project statuses */
+    public function userHaveProjectsRegardlessStatus($user_id)
+    {
+        $param[0] = $user_id;
+
+        if ($this->isUserAStudent($user_id))
+        {
+            $sql = 'select project
+                    from spw_user, spw_project
+                    where (spw_user.id = ?) and (project = spw_project.id)';
+        }
+        else
+        {
+            $sql = 'select project
+                    from spw_mentor_project, spw_project
+                    where (mentor = ?) and (spw_project.id = spw_mentor_project.project)';
+        }
+
+        $query = $this->db->query($sql, $param);
+
+        if ($query->num_rows() > 0)
+        {
+            //$res = array();
+
+            foreach ($query->result() as $row)
+            {
+                $res[] = $row->project;
+            }
+
+            return $res;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+
     /* given the full list of Ids with at least one match, determines which can
        actually be suggested to */
     private function chooseRelevantIds($allSuggestedIds, $totalValidIds)
@@ -985,7 +1023,7 @@ class SPW_User_Model extends CI_Model
                 $param[0] = $user_id;
                 $param[1] = $project_id;
         
-                if ($this->SPW_User_Model->isUserAStudent($user_id))
+                if ($this->isUserAStudent($user_id))
                 { 
                     $sql = 'update spw_user
                             set project = NULL
@@ -1004,6 +1042,48 @@ class SPW_User_Model extends CI_Model
         }
 
         return false;    
+    }
+
+    /* Assigns a project to a user and returns whether was successful or not */
+    public function assignProjectToUser($project_id, $user_id)
+    {
+        $tempProject = new SPW_Project_Model();     
+        $project = $tempProject->getProjectInfo($project_id);
+
+        if (isset($project))
+        {
+            $user = $this->getUserInfo($user_id);
+            if (isset($user))
+            {
+                if ($this->isUserAStudent($user_id))
+                {
+                    $user->project = $project_id;
+                    $this->db->where('id', $user_id);
+                    $this->db->update('spw_user', $user);
+                }
+                else
+                {
+                    $query = $this->db->get_where('spw_mentor_project', array('mentor' => $user_id,'project' => $project_id));
+                    if ($query->num_rows() == 0)
+                    {
+                         $data = array(
+                        'mentor'  => $user_id, 
+                        'project' => $project_id
+                         );
+
+                        $this->db->insert('spw_mentor_project', $data); 
+                    }
+                }
+
+                return true;
+            }
+            else
+                throw new Exception('The user does not exists');
+        }
+        else
+            throw new Exception('The project does not exists');
+
+        return false;
     }
 
     /* takes any array of ids and dump it in an array of ids */
