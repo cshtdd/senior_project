@@ -26,6 +26,28 @@ class LoginController extends CI_Controller
         $this->load->view('login_index');
     }
 
+    public function fiu_oauth2()
+    {
+         $client = new OAuth2\Client(
+            '10019035853.apps.googleusercontent.com',
+            'MWTrFtPTn3TxUOf8q9jqPpd5',
+            'http://srprog-spr13-01.aul.fiu.edu/senior-projects/login/google_oauth2_callback'
+        );
+
+        $configuration = new OAuth2\Service\Configuration(
+            'https://accounts.google.com/o/oauth2/auth',
+            'https://accounts.google.com/o/oauth2/auth/token'
+        );
+
+        $dataStore = new OAuth2\DataStore\Session();
+
+        $scope = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
+
+        $service = new OAuth2\Service($client, $configuration, $dataStore, $scope, 'fiu.edu');
+
+        $service->authorize();
+    }
+
     public function google_oauth2()
     {
         $client = new OAuth2\Client(

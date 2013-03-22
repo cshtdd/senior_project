@@ -49,7 +49,7 @@ class SPW_User_Model extends CI_Model
 
 
 
-	public function is_owned_registered($email_address)
+	public function is_spw_registered($email_address)
 	{
 		$query = $this->db
 					   ->where('google_id',NULL)
@@ -65,6 +65,17 @@ class SPW_User_Model extends CI_Model
 		{
 			return false;
 		}
+	}
+
+	public function create_new_spw_user($email_address, $password)
+	{
+		$data = array(
+		   'email' =>  $email_address ,
+		   'hash_pwd' =>  sha1($password),
+		);
+
+		$this->db->insert('spw_user', $data);
+		return $this->db->insert_id();
 	}
 
 	public function is_google_registered($id)
@@ -86,16 +97,6 @@ class SPW_User_Model extends CI_Model
 		}
 	}
 
-	public function create_new_user($email_address, $password)
-	{
-		$data = array(
-		   'email' =>  $email_address ,
-		   'hash_pwd' =>  sha1($password),
-		);
-
-		$this->db->insert('spw_user', $data);
-		return $this->db->insert_id();
-	}
 
 	public function create_new_google_user($email_address, $given_name, $family_name,$google_id)
  	{
@@ -186,6 +187,7 @@ class SPW_User_Model extends CI_Model
 			$this->spw_skill_user_model->insert($spw_id,$skill_id);
 		}
 		
+		
 		$this->load->model('spw_language_model');
 		$this->load->model('spw_language_user_model');
 		foreach ($user_profile->languages as $key => $value) {
@@ -214,7 +216,7 @@ class SPW_User_Model extends CI_Model
     
 	public function update_linkedin_profile($spw_id, $user_profile)
 	{
-		
+
 		$this->load->model('spw_skill_user_model');
 		$this->spw_skill_user_model->delete_skills_for_user($spw_id);
 
@@ -232,9 +234,9 @@ class SPW_User_Model extends CI_Model
 	{
 		$query = $this->db
 					   ->where('id',$user_id)
-					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn')
+					   ->select('email, first_name, last_name, picture, summary_spw, headline_linkedIn,summary_linkedIn, graduation_term')
 					   ->get('spw_user');
-
+				   
 		if ($query->num_rows() > 0)
 		{
 			return $query->row();
@@ -297,6 +299,30 @@ class SPW_User_Model extends CI_Model
 		}
 	}
 
+
+   
+ 
+    //TODO validate the data against XSS and CSRF and SQL Injection
+    public function update_summary_profile($spw_id,$new_profile)
+    {
+
+    	$data = array(
+    		'first_name' =>  $new_profile->first_name,
+    		'last_name' =>  $new_profile->last_name,
+			'picture' => $new_profile->picture,
+			'summary_spw'=> $new_profile->spw_summary
+		);
+
+    	if($new_profile->updatedRoleId == 5){
+    		$data['graduation_term'] = $new_profile->dropdown_term;	
+    	}
+    	
+		$this->db->where('id',$spw_id);
+		$this->db->update('spw_user', $data);
+
+		$this->load->model('spw_role_user_model');
+		$this->spw_role_user_model->update_roles_for_user($spw_id, $new_profile->updatedRoleId);
+    }
 
  	/* return a SPW_Term_Model info corresponding to the user id */
 	public function getUserGraduationTerm($user_id)

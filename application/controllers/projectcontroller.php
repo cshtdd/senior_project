@@ -225,51 +225,104 @@ class ProjectController extends CI_Controller
 
     public function create_new_project()
     {
-        //TODO redirect to home if not logged in
-        $currentUserId = getCurrentUserId($this);
+        if (is_test($this))
+        {
+            //TODO redirect to home if not logged in
+            $currentUserId = getCurrentUserId($this);
 
-        //TODO read this from the DB eventually
-        $projStatus = new SPW_Project_Status_Model();
-        $projStatus->id = 1;
-        $projStatus->name = 'created';
+            //TODO read this from the DB eventually
+            $projStatus = new SPW_Project_Status_Model();
+            $projStatus->id = 1;
+            $projStatus->name = 'created';
 
-        $project1 = new SPW_Project_Model();
-        $project1->id = -1;
-        $project1->title = '';
-        $project1->description = '';
-        $project1->status = $projStatus;
+            $project1 = new SPW_Project_Model();
+            $project1->id = -1;
+            $project1->title = '';
+            $project1->description = '';
+            $project1->status = 1;
 
-        //TODO get the current user term from the DB
-        $term1 = new SPW_Term_Model();
-        $term1->id = 1;
-        $term1->name = 'Spring 2013';
-        $term1->description = 'Spring 2013';
-        $term1->start_date = '1-8-2013';
-        $term1->end_date = '4-26-2013';
+            //TODO get the current user term from the DB
+            $term1 = new SPW_Term_Model();
+            $term1->id = 1;
+            $term1->name = 'Spring 2013';
+            $term1->description = 'Spring 2013';
+            $term1->start_date = '1-8-2013';
+            $term1->end_date = '4-26-2013';
 
-        //TODO get the current user data from the db
-        $user1 = new SPW_User_Model();
-        $user1->id = getCurrentUserId($this);
-        $user1->first_name = 'Phillippe';
-        $user1->last_name = 'Me';
-        $user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
+            //TODO get the current user data from the db
+            $user1 = new SPW_User_Model();
+            $user1->id = getCurrentUserId($this);
+            $user1->first_name = 'Phillippe';
+            $user1->last_name = 'Me';
+            $user1->picture = 'https://si0.twimg.com/profile_images/3033419400/07e622e1fb86372b76a2aa605e496aaf_bigger.jpeg';
 
-        $current_user_vm = new SPW_User_Summary_View_Model();
-        $current_user_vm->user = $user1;
+            $current_user_vm = new SPW_User_Summary_View_Model();
+            $current_user_vm->user = $user1;
 
 
-        $project_details = new SPW_Project_Details_View_Model();
-        $project_details->project = $project1;
-        $project_details->term = $term1;
-        $project_details->proposedBySummary = $current_user_vm;
-        $project_details->displayJoin = false;
-        $project_details->displayLeave = false;
+            $project_details = new SPW_Project_Details_View_Model();
+            $project_details->project = $project1;
+            $project_details->term = $term1;
+            $project_details->proposedBySummary = $current_user_vm;
+            $project_details->displayJoin = false;
+            $project_details->displayLeave = false;
+            $project_details->onlyShowUserTerm = true;
 
-        $data['projectDetails'] = $project_details;
-        $data['title'] = 'Create Project';
-        $data['creating_new'] = true;
+            $data['projectDetails'] = $project_details;
+            $data['title'] = 'Create Project';
+            $data['creating_new'] = true;
 
-        $this->load->view('project_details2_edit', $data);
+            $this->load->view('project_details2_edit', $data);
+        }
+        else
+        {
+            if(isUserLoggedIn($this))
+            {
+                $project_details = new SPW_Project_Details_View_Model();
+
+                $currentUserId = getCurrentUserId($this);
+
+                $project_details->onlyShowUserTerm = $this->SPW_User_Model->isUserAStudent($currentUserId);
+
+                $project1 = new SPW_Project_Model();
+                $project1->id = -1;
+                $project1->title = '';
+                $project1->proposed_by = $currentUserId;
+                $project1->description = '';
+                $project1->status = 1;
+
+                if (isset($project_details->onlyShowUserTerm) && ($project_details->onlyShowUserTerm))
+                {
+                    $term1 = $this->SPW_User_Model->getUserGraduationTerm($currentUserId);
+                }
+                else
+                {
+                    $lTerms = $this->SPW_Term_Model->getAllValidTerms();
+                }
+
+                $lUsers = $this->SPW_User_Summary_View_Model->prepareUsersDataToShow($currentUserId, array($currentUserId));
+                $current_user_vm = $lUsers[0];
+
+                $project_details->project = $project1;
+                if (isset($term1))
+                    $project_details->term = $term1;
+                if (isset($lTerms) && count($lTerms)>0)
+                    $project_details->lTerms = $lTerms;
+                $project_details->proposedBySummary = $current_user_vm;
+                $project_details->displayJoin = false;
+                $project_details->displayLeave = false;
+
+                $data['projectDetails'] = $project_details;
+                $data['title'] = 'Create Project';
+                $data['creating_new'] = true;
+
+                $this->load->view('project_details2_edit', $data);
+            }
+            else
+            {
+                redirect('login','refresh');
+            }
+        }
     }
 
     public function display_list_of_projects_to_invite_user($user_id)
@@ -770,6 +823,7 @@ class ProjectController extends CI_Controller
         $project1->status = $projStatus;
 
         $project_summ_vm1 = new SPW_Project_Details_View_Model();
+        $project_summ_vm1->onlyShowUserTerm = true;
         $project_summ_vm1->project = $project1;
         $project_summ_vm1->term = $term1;
         $project_summ_vm1->lSkills = $lSkills1;

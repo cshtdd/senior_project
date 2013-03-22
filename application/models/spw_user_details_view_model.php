@@ -14,9 +14,6 @@ class SPW_User_Details_View_Model extends SPW_User_Summary_View_Model
 	//a list of SPW_Role objects with all the available roles
 	public $lRoles;
 
-	//a SPW_Term_Model
-	public $term;
-
 	//a list of all the available terms students can choose
 	public $lTerms;
 
