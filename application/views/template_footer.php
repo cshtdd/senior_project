@@ -11,6 +11,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
 -->
+	<!--[if lt IE 9]>
+		<script type="text/javascript">
+			   $('form').html5form();
+		</script>
+	<![endif]-->
+	
     <script type="text/javascript">
         $('#alert-js').hide();
         $('#alert-js-close').click(function(e){
