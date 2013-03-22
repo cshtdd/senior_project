@@ -35,16 +35,33 @@
                     <?php echo $userDetails->getFullName() ?>
                 </h3>
 
-                <?php echo $userDetails->role->name ?>
-
                 <?php 
-                    if (isset($userDetails->user->graduation_term) &&
-                        isset($userDetails->user->graduation_term->name) && 
-                        strlen($userDetails->user->graduation_term->name) > 0) {
+                    if (isUserLoggedIn($this))
+                    {
+                        if (isset($userDetails->user->email) && 
+                            strlen($userDetails->user->email) > 0)
+                        {
+                ?> 
+                            <p>
+                                <?php echo mailto($userDetails->user->email, $userDetails->user->email) ?>
+                            </p>
+                <?php
+                        }
+                    }
                 ?>
-                    Graduating In
-                    <?php echo $userDetails->user->graduation_term->name ?>
-                <?php } ?>
+
+                <p>
+                    <?php echo $userDetails->role->name ?>
+
+                    <?php 
+                        if (isset($userDetails->user->graduation_term) &&
+                            isset($userDetails->user->graduation_term->name) && 
+                            strlen($userDetails->user->graduation_term->name) > 0) {
+                    ?>
+                        Graduating In
+                        <?php echo $userDetails->user->graduation_term->name ?>
+                    <?php } ?>
+                </p>
             </div>
         </div>
 
