@@ -78,22 +78,7 @@
         </div>
 
         <div class="spaced-top">
-            <?php if (isset($userDetails->lExperiences) && count($userDetails->lExperiences) > 0) { ?>
-                <h4>Experience</h4>
-                <ul>
-                    <?php foreach($userDetails->lExperiences as $iExperience) { ?>
-                        <li class="well">
-                            <h5>
-                                <?php echo $iExperience->title ?>
-                            </h5>
-
-                            <p>
-                                <?php echo $iExperience->description ?>
-                            </p>
-                        </li>
-                    <?php } ?>
-                </ul>
-            <?php } ?>
+            <?php $this->load->view('subviews/experience_list', array('lExperiences' => $userDetails->lExperiences)) ?> 
         </div>
 <?php 
     }
