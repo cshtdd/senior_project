@@ -36,6 +36,10 @@
 	<!--[if lt IE 9]>
 		<script src="<?php echo base_url() ?>js/html5shiv.js"></script>
 		<script src="<?php echo base_url() ?>js/jquery.html5form-min.js"></script>
+		
+		<script type="text/javascript">
+		   $('form').html5form();
+		</script>
 	<![endif]-->
 </head>
 <body>
