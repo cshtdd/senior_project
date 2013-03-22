@@ -43,7 +43,7 @@
           <div class="navbar-inner">
             <?php echo anchor('/', 'FIU Senior Project', array('class' => 'brand')) ?>
 
-            <?php if ( !stristr(uri_string(), 'login') ) { ?>
+            <?php if ( !in_array(strtolower(uri_string()), array('login', 'register')) ) { ?>            
 
                 <?php
                     function isActiveNavItem($targetUrl)
