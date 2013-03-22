@@ -568,17 +568,23 @@ class UserController extends CI_Controller
 
         $experience1 = new SPW_Experience_Model();
         $experience1->id = 1;
-        $experience1->title = 'Senior iOS developer at Apple';
+        $experience1->company_name = 'Apple';
+        $experience1->company_industry = 'IT';
+        $experience1->title = 'Senior iOS developer';
         $experience1->description = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
 
         $experience2 = new SPW_Experience_Model();
         $experience2->id = 2;
-        $experience2->title = 'Senior Android developer at Google';
+        $experience2->company_name = 'Google';
+        $experience2->company_industry = 'CIA';
+        $experience2->title = 'Senior Android developer';
         $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
 
         $experience3 = new SPW_Experience_Model();
         $experience3->id = 3;
-        $experience3->title = 'Senior Mobile developer at Microsoft';
+        $experience3->company_name = 'Microsoft';
+        $experience3->company_industry = 'FastFood';
+        $experience3->title = 'Senior Mobile developer';
         $experience3->description = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
 
 
