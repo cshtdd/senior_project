@@ -136,44 +136,52 @@ class ProjectController extends CI_Controller
         }
         else
         {
+            //$this->output->set_output('received a valid POST request');
+
+            //reading parameters
+            $updated_project_id = $this->input->post('pid');
+
+            $postBackUrl = $this->input->post('pbUrl');
+            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+
+            $updated_project_title = $this->input->post('text-project-title');
+            $updated_project_description = $this->input->post('text-description');
+
+            $updated_skill_names_str = $this->input->post('hidden-skill-list');
+            $update_mentor_ids_str = $this->input->post('mnthidden-ids');
+            $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+
+            $updated_project_max_students = $this->input->post('text-project-max-students');
+
+            $updated_proposedBy = $this->input->post('propBy');
+            $updated_pStatus = $this->input->post('pStatus');
+            $updated_term_id = $this->input->post('dropdown-term');
+
+            /*
+            //uncomment this block to display the input parameters
+            $this->output->set_output(
+                $updated_project_id.' '.
+                $postBackUrl.' '.
+                $updated_project_title.' '.
+                $updated_project_description.' '.
+                $updated_skill_names_str.' '.
+                $update_mentor_ids_str.' '.
+                $update_team_members_ids_str.' '.
+                $updated_project_max_students.' '.
+                $updated_proposedBy.' '.
+                $updated_pStatus.' '.
+                $updated_term_id
+            );
+            return;
+            */
+
+            //TODO validate the parameters and make sure everything is ok
+            //if something fails make sure to add the error message somewhere
+
+            //TODO splitting the ids str array into something usable
+
             if (is_test($this))
             {
-                //$this->output->set_output('received a valid POST request');
-
-                //reading parameters
-                $updated_project_id = $this->input->post('pid');
-
-                $postBackUrl = $this->input->post('pbUrl');
-                if (strlen($postBackUrl) == 0) $postBackUrl = '/';
-
-                $updated_project_title = $this->input->post('text-project-title');
-                $updated_project_description = $this->input->post('text-description');
-
-                $updated_skill_names_str = $this->input->post('hidden-skill-list');
-                $update_mentor_ids_str = $this->input->post('mnthidden-ids');
-                $update_team_members_ids_str = $this->input->post('usrhidden-ids');
-
-                /*
-                $this->output->set_output(
-                    $updated_project_id.' '.
-                    $postBackUrl.' '.
-                    $updated_project_title.' '.
-                    $updated_project_description.' '.
-                    $updated_skill_names_str.' '.
-                    $update_mentor_ids_str.' '.
-                    $update_team_members_ids_str
-                );
-                */
-
-                //TODO validate the parameters and make sure everything is ok
-                //if something fails make sure to add the error message somewhere
-
-
-                //TODO splitting the ids str array into something usable
-
-
-                //TODO implement this, and then redirect to the request url
-
                 setFlashMessage($this, 'Your project was updated');
                 redirect($postBackUrl);
             }
@@ -181,18 +189,16 @@ class ProjectController extends CI_Controller
             {
                 $current_user_id = getCurrentUserId($this);
 
-                $postBackUrl = $this->input->post('pbUrl');
-
                 $updated_project = new SPW_Project_Model();
-                $updated_project->id = $this->input->post('pid');
+                $updated_project->id = $updated_project_id;
 
                 $new_project = $updated_project->id == -1;
 
-                $updated_project->title = $this->input->post('text-project-title');
-                $updated_project->description = $this->input->post('text-description');
-                $updated_project->proposed_by = $this->input->post('propBy');
-                $updated_project->status = $this->input->post('pStatus');
-                $updated_project->max_students = $this->input->post('text-project-max-students');
+                $updated_project->title = $updated_project_title;
+                $updated_project->description = $updated_project_description;
+                $updated_project->proposed_by = $updated_proposedBy;
+                $updated_project->status = $updated_pStatus;
+                $updated_project->max_students = $updated_project_max_students;
 
                 if ($this->SPW_User_Model->isUserAStudent($current_user_id))
                 {
@@ -201,7 +207,7 @@ class ProjectController extends CI_Controller
                 }
                 else
                 {
-                    $updated_project->delivery_term = $this->input->post('dropdown-term');
+                    $updated_project->delivery_term = $updated_term_id;
                 }
                 
                 if (isset($new_project) && $new_project)
@@ -210,6 +216,7 @@ class ProjectController extends CI_Controller
                     if (isset($new_project_id))
                     {
                         $this->SPW_User_Model->assignProjectToUser($new_project_id, $updated_project->proposed_by);
+
                         setFlashMessage($this, 'Your project was created');
                         $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
                         redirect($newPostBackUrl); 
@@ -220,20 +227,11 @@ class ProjectController extends CI_Controller
                         redirect($postBackUrl);
                     }  
                 }
-                else
-                {
-                    $updated_skill_names_str = $this->input->post('hidden-skill-list');
-                    $update_mentor_ids_str = $this->input->post('mnthidden-ids');
-                    $update_team_members_ids_str = $this->input->post('usrhidden-ids');
-                }
-                //end of not yet implemented by camilo
-                
-                
-                
 
-                $updated_skill_names_str = $this->input->post('hidden-skill-list');
-                $update_mentor_ids_str = $this->input->post('mnthidden-ids');
-                $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+                /*
+                //end of not yet implemented by camilo
+
+                //to log the input look at the commentd call to $this->output->set_output above
 
                 echo 'Skill Names: '.$updated_skill_names_str.'<br>';
                 echo 'mentors: '.$update_mentor_ids_str.'<br>';
@@ -246,8 +244,7 @@ class ProjectController extends CI_Controller
                 echo 'status: '.$updated_project->status.'<br>';
                 echo 'propBy: '.$updated_project->proposed_by.'<br>';
                 echo 'term: '.$updated_project->delivery_term.'<br>';
-
-
+                */
             }
         }
     }
