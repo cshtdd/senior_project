@@ -129,25 +129,41 @@
         ?>
 
         <div>
-            Delivery Term: 
-            <?php 
-                if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) 
-                { 
-                    echo strtoupper($projectDetails->term->name);
-                } 
-                else 
-                { 
+            <span>
+                Delivery Term: 
+                <?php 
+                    if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) 
+                    { 
+                        echo strtoupper($projectDetails->term->name);
+                    } 
+                    else 
+                    { 
+                        $arrTermsOptions = array();
+
+                        foreach ($projectDetails->lTerms as $iTerm) 
+                        {
+                            //echo $iTerm->id.' '.$iTerm->name;
+                            $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                        }
+
+                        echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);
+                    } 
+                ?>
+            </span>
+
+            <span>
+                Maximum project capacity: 
+                <?php 
                     $arrTermsOptions = array();
 
-                    foreach ($projectDetails->lTerms as $iTerm) 
+                    for ($i = 2; $i <= 6; $i++) 
                     {
-                        //echo $iTerm->id.' '.$iTerm->name;
-                        $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                        $arrTermsOptions[$i] = $i.' students';
                     }
 
-                    echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);
-                } 
-            ?>
+                    echo form_dropdown('text-project-max-students', $arrTermsOptions, $projectDetails->project->max_students);
+                ?>
+            </span>
         </div>
 
         <?php if (!isset($creating_new)) { ?>
