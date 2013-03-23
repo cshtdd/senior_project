@@ -2,174 +2,174 @@
 
 class SPW_Project_Summary_View_Model extends CI_Model
 {
-	//a SPW_Project_Model object
-	public $project;
+    //a SPW_Project_Model object
+    public $project;
 
-	//a SPW_Term_Model object
-	public $term;
+    //a SPW_Term_Model object
+    public $term;
 
-	//an array of SPW_Skill_Model objects
-	public $lSkills;
+    //an array of SPW_Skill_Model objects
+    public $lSkills;
 
-	//an array of SPW_User_Summary_View_Model
-	public $lMentorSummaries;
+    //an array of SPW_User_Summary_View_Model
+    public $lMentorSummaries;
 
-	//a SPW_User_Summary object
-	public $proposedBySummary;
+    //a SPW_User_Summary object
+    public $proposedBySummary;
 
-	//an array of SPW_User_Summary_View_Model
-	public $lTeamMemberSummaries;
+    //an array of SPW_User_Summary_View_Model
+    public $lTeamMemberSummaries;
 
-	public $justList;
+    public $justList;
 
-	public $displayJoin;
-	public $displayLeave;
+    public $displayJoin;
+    public $displayLeave;
 
-	//a list of all the available valid terms to choose
-	public $lTerms;
+    //a list of all the available valid terms to choose
+    public $lTerms;
 
-	public $onlyShowUserTerm;
+    public $onlyShowUserTerm;
 
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	public function getShortDescription()
-	{
-		return substr($this->project->description, 0, min(200, strlen($this->project->description)));
-	}
+    public function getShortDescription()
+    {
+        return substr($this->project->description, 0, min(200, strlen($this->project->description)));
+    }
 
-	public function getlSkillNames()
-	{
-		$resultArray = array();
+    public function getlSkillNames()
+    {
+        $resultArray = array();
 
-		foreach ($this->lSkills as $iSkill)
-		{
-			$resultArray[] = $iSkill->name;
-		}
+        foreach ($this->lSkills as $iSkill)
+        {
+            $resultArray[] = $iSkill->name;
+        }
 
-		$resultStr = join(', ', $resultArray);
-		return $resultStr;
-	}
+        $resultStr = join(', ', $resultArray);
+        return $resultStr;
+    }
 
-	/* this function fills a list of projects with their data */
-	public function prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, $pastProjects)
-	{
-		$tempUser = new SPW_User_Model();
-		$tempProject = new SPW_Project_Model();
+    /* this function fills a list of projects with their data */
+    public function prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, $pastProjects)
+    {
+        $tempUser = new SPW_User_Model();
+        $tempProject = new SPW_Project_Model();
 
-		$length = count($lProjectIds);
+        $length = count($lProjectIds);
 
-		$lProjects = array();
+        $lProjects = array();
 
-		for ($i = 0; $i < $length; $i++)
-		{
-			$project_summ_vm = new SPW_Project_Summary_View_Model();
+        for ($i = 0; $i < $length; $i++)
+        {
+            $project_summ_vm = new SPW_Project_Summary_View_Model();
 
-			$project_id = $lProjectIds[$i];
+            $project_id = $lProjectIds[$i];
 
-			$project = $tempProject->getProjectInfo($project_id);
+            $project = $tempProject->getProjectInfo($project_id);
 
-			if (isset($project))
-			{
-				$project_summ_vm->project = $project;
+            if (isset($project))
+            {
+                $project_summ_vm->project = $project;
 
-				$project_summ_vm->justList = true;
+                $project_summ_vm->justList = true;
 
-				$term = $tempProject->getProjectTermInfo($project_id);
+                $term = $tempProject->getProjectTermInfo($project_id);
 
-				if (isset($term))
-				{
-					if (!($tempProject->isProjectClosed($term)))
-					{
-						if ($tempUser->isUserAStudent($user_id))
-						{
-							$currentUserTerm = $tempUser->getUserGraduationTerm($user_id);
+                if (isset($term))
+                {
+                    if (!($tempProject->isProjectClosed($term)))
+                    {
+                        if ($tempUser->isUserAStudent($user_id))
+                        {
+                            $currentUserTerm = $tempUser->getUserGraduationTerm($user_id);
 
-							if ($currentUserTerm->id == $term->id)
-								$project_summ_vm->justList = false;
-						}
-						else
-							$project_summ_vm->justList = false; 
-					}
+                            if ($currentUserTerm->id == $term->id)
+                                $project_summ_vm->justList = false;
+                        }
+                        else
+                            $project_summ_vm->justList = false; 
+                    }
 
-					$project_summ_vm->term = $term;
-				}
+                    $project_summ_vm->term = $term;
+                }
 
-				$lSkills = $tempProject->getProjectListOfSkills($project_id);
-				if (isset($lSkills) && count($lSkills)>0)
-				{
-					$project_summ_vm->lSkills = $lSkills;
-				}
+                $lSkills = $tempProject->getProjectListOfSkills($project_id);
+                if (isset($lSkills) && count($lSkills)>0)
+                {
+                    $project_summ_vm->lSkills = $lSkills;
+                }
 
-				$lMentorsSumm = $tempProject->getMentorsListForProject($project_id);
-				if (isset($lMentorsSumm) && count($lMentorsSumm)>0)
-				{
-					$project_summ_vm->lMentorSummaries = $lMentorsSumm;
-				}
+                $lMentorsSumm = $tempProject->getMentorsListForProject($project_id);
+                if (isset($lMentorsSumm) && count($lMentorsSumm)>0)
+                {
+                    $project_summ_vm->lMentorSummaries = $lMentorsSumm;
+                }
 
-				$proposedBySumm = $tempProject->getProposedByOfProject($project_id);
-				if (isset($proposedBySumm))
-				{
-					$project_summ_vm->proposedBySummary = $proposedBySumm;
-				}
-				
-				$lStudentsSumm = $tempProject->getStudentsListForProject($project_id);
-				if (isset($lStudentsSumm) && count($lStudentsSumm)>0)
-				{
-					$project_summ_vm->lTeamMemberSummaries = $lStudentsSumm;
-				}
+                $proposedBySumm = $tempProject->getProposedByOfProject($project_id);
+                if (isset($proposedBySumm))
+                {
+                    $project_summ_vm->proposedBySummary = $proposedBySumm;
+                }
+                
+                $lStudentsSumm = $tempProject->getStudentsListForProject($project_id);
+                if (isset($lStudentsSumm) && count($lStudentsSumm)>0)
+                {
+                    $project_summ_vm->lTeamMemberSummaries = $lStudentsSumm;
+                }
 
-				$project_summ_vm->onlyShowUserTerm = $tempUser->isUserAStudent($user_id);
+                $project_summ_vm->onlyShowUserTerm = $tempUser->isUserAStudent($user_id);
 
-				if (!$project_summ_vm->onlyShowUserTerm)
-				{
-					$tempTerm = new SPW_Term_Model();
-					$project_summ_vm->lTerms = $tempTerm->getAllValidTerms();
-				}
+                if (!$project_summ_vm->onlyShowUserTerm)
+                {
+                    $tempTerm = new SPW_Term_Model();
+                    $project_summ_vm->lTerms = $tempTerm->getAllValidTerms();
+                }
 
-				if (!($project_summ_vm->justList))
-				{
-					if (!$pastProjects)
-					{	
-						//if (in_array($lProjectIds[$i], $belongProjectIdsList))
-						if ($this->isProjectInList($belongProjectIdsList, $project_id))
-						{
-							$project_summ_vm->displayLeave = TRUE;
-							$project_summ_vm->displayJoin = FALSE;
-						}
-						else
-						{
-							$project_summ_vm->displayLeave = FALSE;
-							$project_summ_vm->displayJoin = TRUE;
-						}	
-					}
-				} 
-			}
-			else
-			{
-				throw new Exception('spw_project table error in db...');
-			}
+                if (!($project_summ_vm->justList))
+                {
+                    if (!$pastProjects)
+                    {   
+                        //if (in_array($lProjectIds[$i], $belongProjectIdsList))
+                        if ($this->isProjectInList($belongProjectIdsList, $project_id))
+                        {
+                            $project_summ_vm->displayLeave = TRUE;
+                            $project_summ_vm->displayJoin = FALSE;
+                        }
+                        else
+                        {
+                            $project_summ_vm->displayLeave = FALSE;
+                            $project_summ_vm->displayJoin = TRUE;
+                        }   
+                    }
+                } 
+            }
+            else
+            {
+                throw new Exception('spw_project table error in db...');
+            }
 
-			$lProjects[] = $project_summ_vm;
-		}
-		return $lProjects;
-	}
+            $lProjects[] = $project_summ_vm;
+        }
+        return $lProjects;
+    }
 
-	public function isProjectInList($belongProjIdsList, $project_Id)
-	{
-		$length = count($belongProjIdsList);
+    public function isProjectInList($belongProjIdsList, $project_Id)
+    {
+        $length = count($belongProjIdsList);
 
-		for ($i = 0; $i < $length; $i++)
-		{
-			if ($belongProjIdsList[$i] == $project_Id)
-				return true;
-		}
+        for ($i = 0; $i < $length; $i++)
+        {
+            if ($belongProjIdsList[$i] == $project_Id)
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }
-	
+    
 ?>
