@@ -303,6 +303,33 @@ class ProjectController extends CI_Controller
     {
         if (is_test($this))
         {
+            $term1 = new SPW_Term_Model();
+            $term1->id = 1;
+            $term1->name = 'Spring 2013';
+            $term1->description = 'Spring 2013';
+            $term1->start_date = '1-8-2013';
+            $term1->end_date = '4-26-2013';
+
+            $term2 = new SPW_Term_Model();
+            $term2->id = 2;
+            $term2->name = 'Summer 2013';
+            $term2->description = 'Summer 2013';
+            $term2->start_date = '4-26-2013';
+            $term2->end_date = '1-8-2013';
+
+            $term3 = new SPW_Term_Model();
+            $term3->id = 3;
+            $term3->name = 'Fall 2013';
+            $term3->description = 'Fall 2013';
+            $term3->start_date = '1-8-2013';
+            $term3->end_date = '12-28-2013';
+
+            $lTerms = array(
+                    $term1,
+                    $term2,
+                    $term3
+                );
+
             //TODO redirect to home if not logged in
             $currentUserId = getCurrentUserId($this);
 
@@ -318,12 +345,14 @@ class ProjectController extends CI_Controller
             $project1->status = 1;
 
             //TODO get the current user term from the DB
+            /*
             $term1 = new SPW_Term_Model();
             $term1->id = 1;
             $term1->name = 'Spring 2013';
             $term1->description = 'Spring 2013';
             $term1->start_date = '1-8-2013';
             $term1->end_date = '4-26-2013';
+            */
 
             //TODO get the current user data from the db
             $user1 = new SPW_User_Model();
@@ -343,6 +372,7 @@ class ProjectController extends CI_Controller
             $project_details->displayJoin = false;
             $project_details->displayLeave = false;
             //$project_details->onlyShowUserTerm = true;
+            $project_details->lTerms = $lTerms;
 
             $data['projectDetails'] = $project_details;
             $data['title'] = 'Create Project';
@@ -819,10 +849,6 @@ class ProjectController extends CI_Controller
     }
     private function getProjectDetailsInternalTest($project_id)
     {
-        $projStatus = new SPW_Project_Status_Model();
-        $projStatus->id = 1;
-        $projStatus->name = 'Open';
-
         $term1 = new SPW_Term_Model();
         $term1->id = 1;
         $term1->name = 'Spring 2013';
@@ -830,6 +856,39 @@ class ProjectController extends CI_Controller
         $term1->start_date = '1-8-2013';
         $term1->end_date = '4-26-2013';
 
+        $term2 = new SPW_Term_Model();
+        $term2->id = 2;
+        $term2->name = 'Summer 2013';
+        $term2->description = 'Summer 2013';
+        $term2->start_date = '4-26-2013';
+        $term2->end_date = '1-8-2013';
+
+        $term3 = new SPW_Term_Model();
+        $term3->id = 3;
+        $term3->name = 'Fall 2013';
+        $term3->description = 'Fall 2013';
+        $term3->start_date = '1-8-2013';
+        $term3->end_date = '12-28-2013';
+
+        $lTerms = array(
+                $term1,
+                $term2,
+                $term3
+            );
+
+
+        $projStatus = new SPW_Project_Status_Model();
+        $projStatus->id = 1;
+        $projStatus->name = 'Open';
+
+        /*
+        $term1 = new SPW_Term_Model();
+        $term1->id = 1;
+        $term1->name = 'Spring 2013';
+        $term1->description = 'Spring 2013';
+        $term1->start_date = '1-8-2013';
+        $term1->end_date = '4-26-2013';
+        */
 
         $skill1 = new SPW_Skill_Model();
         $skill1->id = 0;
@@ -908,6 +967,7 @@ class ProjectController extends CI_Controller
         $project_summ_vm1->proposedBySummary = $user_summ_vm3;
         $project_summ_vm1->displayJoin = false;
         $project_summ_vm1->displayLeave = true;
+        $project_summ_vm1->lTerms = $lTerms;
 
         return $project_summ_vm1;
     }
