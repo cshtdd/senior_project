@@ -103,6 +103,12 @@
                             }
                         ?>
 
+                        <?php if (isset($canChangePassword) && $canChangePassword) { ?>
+                            <p>
+                                <?php echo anchor('change-password', 'Click to change password') ?>
+                            </p>
+                        <?php } ?>
+
 
                             <div>
                                 <h4>Your Role</h4>

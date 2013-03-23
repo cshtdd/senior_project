@@ -49,6 +49,11 @@ class SearchController extends CI_Controller
         $this->load->view('search_search', $data);
     }
 
+    public function display_mobile_search()
+    {
+        $this->load->view('search_mobile_search');
+    }
+
     private function getResultsWithSearchParam($search_query)
     {
         $user_id = getCurrentUserId($this);
