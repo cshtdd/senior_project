@@ -342,7 +342,7 @@ class ProjectController extends CI_Controller
             $project_details->proposedBySummary = $current_user_vm;
             $project_details->displayJoin = false;
             $project_details->displayLeave = false;
-            $project_details->onlyShowUserTerm = true;
+            //$project_details->onlyShowUserTerm = true;
 
             $data['projectDetails'] = $project_details;
             $data['title'] = 'Create Project';
@@ -899,7 +899,7 @@ class ProjectController extends CI_Controller
         $project1->status = $projStatus;
 
         $project_summ_vm1 = new SPW_Project_Details_View_Model();
-        $project_summ_vm1->onlyShowUserTerm = true;
+        //$project_summ_vm1->onlyShowUserTerm = true;
         $project_summ_vm1->project = $project1;
         $project_summ_vm1->term = $term1;
         $project_summ_vm1->lSkills = $lSkills1;
