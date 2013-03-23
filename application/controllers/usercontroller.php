@@ -416,7 +416,7 @@ class UserController extends CI_Controller
             }
             else
             {
-                $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match oour records');
+                $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match our records');
                 return false;
             }
         }
