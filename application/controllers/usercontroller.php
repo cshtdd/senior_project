@@ -344,6 +344,85 @@ class UserController extends CI_Controller
         }                  
     }
 
+    public function display_change_password()
+    {
+        if (isUserLoggedIn($this))
+        {
+            $this->load->view('user_change_password');
+        }
+        else
+        {
+            redirect('/');
+        }
+    }
+
+    public function change_password()
+    {
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
+        else
+        {
+            if (isUserLoggedIn($this))
+            {
+                $currentUserId = getCurrentUserId($this);
+                $currentPassword = $this->input->post('current-password');
+                $newPassword = $this->input->post('password_1');
+
+
+                $this->load->library('form_validation');
+                $this->form_validation->set_rules('current-password', 'Current Password','required'); 
+                $this->form_validation->set_rules('password_1', 'New Password','required|min_length[6]'); 
+                $this->form_validation->set_rules('current-password', 'Current Password', 'callback_validateCurrentUserPassword');
+
+                if ($this->form_validation->run() == FALSE)
+                {
+                    $this->load->view('user_change_password');
+                }
+                else //if everything was OK
+                {
+                    if (!is_test($this))
+                    {
+                        $this->changeUserPasswordInternal($currentUserId, $newPassword);
+                    }
+
+                    setFlashMessage($this, 'Your password has been changed');
+                    redirect('/me');
+                }                
+            }
+            else
+            {
+                redirect('/');
+            }
+        }
+    }
+
+    public function validateCurrentUserPassword($str)
+    {
+        if (is_test($this))
+        {
+            if ($str == '123')
+            {
+                return true;
+            }
+            else
+            {
+                $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match oour records');
+                return false;
+            }
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
+    }
+
+    private function changeUserPasswordInternal($currentUserId, $newPassword)
+    {
+        throw new Exception('not implemented');
+    }
+
     private function inviteUserInternal($currentUserId, $invitedUserId, $invitedProject)
     {
         if (is_test($this))
