@@ -192,7 +192,7 @@ class ProjectController extends CI_Controller
                 $updated_project->description = $this->input->post('text-description');
                 $updated_project->proposed_by = $this->input->post('propBy');
                 $updated_project->status = $this->input->post('pStatus');
-                $updated_project->max_students = $this->input->post('text-project-max-stydents');
+                $updated_project->max_students = $this->input->post('text-project-max-students');
 
                 if ($this->SPW_User_Model->isUserAStudent($current_user_id))
                 {
