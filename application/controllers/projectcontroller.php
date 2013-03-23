@@ -226,6 +226,8 @@ class ProjectController extends CI_Controller
                     $updated_skill_names_str = $this->input->post('hidden-skill-list');
                     $update_mentor_ids_str = $this->input->post('mnthidden-ids');
                     $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+
+                    $listMemberIds = $this->SPW_User_Model->getListOfUserIdsToUpdate($update_team_members_ids_str);
                 }
                 //end of not yet implemented by camilo
                 
@@ -235,6 +237,12 @@ class ProjectController extends CI_Controller
                 $updated_skill_names_str = $this->input->post('hidden-skill-list');
                 $update_mentor_ids_str = $this->input->post('mnthidden-ids');
                 $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+                
+                echo 'Members <br>';
+                for ($i = 0; $i < count($listMemberIds); $i++)
+                {
+                    echo $i.'-->'.$listMemberIds[$i].'<br>';
+                }
 
                 echo 'Skill Names: '.$updated_skill_names_str.'<br>';
                 echo 'mentors: '.$update_mentor_ids_str.'<br>';

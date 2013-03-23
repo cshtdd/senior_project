@@ -1057,9 +1057,12 @@ class SPW_User_Model extends CI_Model
             {
                 if ($this->isUserAStudent($user_id))
                 {
-                    $user->project = $project_id;
-                    $this->db->where('id', $user_id);
-                    $this->db->update('spw_user', $user);
+                    if ($user->project != $project_id)
+                    {
+                        $user->project = $project_id;
+                        $this->db->where('id', $user_id);
+                        $this->db->update('spw_user', $user);
+                    }
                 }
                 else
                 {
@@ -1084,6 +1087,16 @@ class SPW_User_Model extends CI_Model
             throw new Exception('The project does not exists');
 
         return false;
+    }
+
+    /* get a string with the ids separated by commas and returns a array of ids */
+    public function getListOfUserIdsToUpdate($listIdStr)
+    {
+        $listIdStr = str_replace(' ', '', $listIdStr);
+
+        $listIdArray = explode(',', $listIdStr);
+
+        return $listIdArray;
     }
 
     /* takes any array of ids and dump it in an array of ids */
