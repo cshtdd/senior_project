@@ -25,11 +25,6 @@ class SPW_Project_Summary_View_Model extends CI_Model
     public $displayJoin;
     public $displayLeave;
 
-    //a list of all the available valid terms to choose
-    public $lTerms;
-
-    public $onlyShowUserTerm;
-
     public function __construct()
     {
         parent::__construct();
@@ -119,14 +114,6 @@ class SPW_Project_Summary_View_Model extends CI_Model
                 if (isset($lStudentsSumm) && count($lStudentsSumm)>0)
                 {
                     $project_summ_vm->lTeamMemberSummaries = $lStudentsSumm;
-                }
-
-                $project_summ_vm->onlyShowUserTerm = $tempUser->isUserAStudent($user_id);
-
-                if (!$project_summ_vm->onlyShowUserTerm)
-                {
-                    $tempTerm = new SPW_Term_Model();
-                    $project_summ_vm->lTerms = $tempTerm->getAllValidTerms();
                 }
 
                 if (!($project_summ_vm->justList))
