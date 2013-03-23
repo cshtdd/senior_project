@@ -26,7 +26,7 @@ class SPW_Project_Model extends CI_Model
 	{
 		$sql = 'select spw_project.id
 	         	from spw_project, spw_term
-	         	where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+	         	where ((spw_project.status = 3) or ((spw_project.status = 5))) and (spw_term.id = spw_project.delivery_term) 
 	                   	and (spw_term.end_date < NOW())
              	order by id ASC';
 
@@ -46,6 +46,22 @@ class SPW_Project_Model extends CI_Model
 
 		return NULL;
 	}
+
+	public function insert($project_obj)
+    {
+        $data = array(
+                        'title'         => $project_obj->title,
+                        'description'   => $project_obj->description,
+                        'max_students'  => $project_obj->max_students,
+                        'proposed_by'   => $project_obj->proposed_by,
+                        'delivery_term' => $project_obj->delivery_term,
+                        'status'        => $project_obj->status
+                         );
+
+        $this->db->insert('spw_project', $data); 
+
+        return $this->db->insert_id();
+    }
 
 	public function getProjectDeliveryTerm($project_id)
 	{
