@@ -200,8 +200,6 @@ class ProjectController extends CI_Controller
 
                 $updated_project->title = $updated_project_title;
                 $updated_project->description = $updated_project_description;
-                $updated_project->proposed_by = $updated_proposedBy;
-                $updated_project->status = $updated_pStatus;
                 $updated_project->max_students = $updated_project_max_students;
 
                 if ($this->SPW_User_Model->isUserAStudent($current_user_id))
@@ -216,6 +214,8 @@ class ProjectController extends CI_Controller
                 
                 if (isset($new_project) && $new_project)
                 {
+                    $updated_project->proposed_by = $current_user_id;
+                    $updated_project->status = 1;
                     $new_project_id = $this->SPW_Project_Model->insert($updated_project);
                     if (isset($new_project_id))
                     {
@@ -231,11 +231,29 @@ class ProjectController extends CI_Controller
                         redirect($postBackUrl);
                     }  
                 }
+                else
+                {
+                    //update the project and everything
+                    $updated_skill_names_str = $this->input->post('hidden-skill-list');
+                    $update_mentor_ids_str = $this->input->post('mnthidden-ids');
+                    $update_team_members_ids_str = $this->input->post('usrhidden-ids');
 
-                /*
+                    $listMemberIds = $this->SPW_User_Model->getListOfUserIdsToUpdate($update_team_members_ids_str);
+                }
+
+                
+
                 //end of not yet implemented by camilo
 
-                //to log the input look at the commentd call to $this->output->set_output above
+                $updated_skill_names_str = $this->input->post('hidden-skill-list');
+                $update_mentor_ids_str = $this->input->post('mnthidden-ids');
+                $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+                
+                echo 'Members <br>';
+                for ($i = 0; $i < count($listMemberIds); $i++)
+                {
+                    echo $i.'-->'.$listMemberIds[$i].'<br>';
+                }
 
                 echo 'Skill Names: '.$updated_skill_names_str.'<br>';
                 echo 'mentors: '.$update_mentor_ids_str.'<br>';
@@ -248,7 +266,8 @@ class ProjectController extends CI_Controller
                 echo 'status: '.$updated_project->status.'<br>';
                 echo 'propBy: '.$updated_project->proposed_by.'<br>';
                 echo 'term: '.$updated_project->delivery_term.'<br>';
-                */
+                echo 'max students:'.$updated_project->max_students.'<br>';
+                
             }
         }
     }
@@ -384,6 +403,8 @@ class ProjectController extends CI_Controller
         {
             if(isUserLoggedIn($this))
             {
+                $tempTerm = new SPW_Term_Model();
+
                 $project_details = new SPW_Project_Details_View_Model();
 
                 $currentUserId = getCurrentUserId($this);
@@ -396,6 +417,9 @@ class ProjectController extends CI_Controller
                 $project1->proposed_by = $currentUserId;
                 $project1->description = '';
                 $project1->status = 1;
+                $project1->max_students = 5;
+
+                $currentTerm = $tempTerm->getCurrentTermInfo();
 
                 if (isset($project_details->onlyShowUserTerm) && ($project_details->onlyShowUserTerm))
                 {
@@ -412,6 +436,8 @@ class ProjectController extends CI_Controller
                 $project_details->project = $project1;
                 if (isset($term1))
                     $project_details->term = $term1;
+                else
+                    $project_details->term = $currentTerm;
                 if (isset($lTerms) && count($lTerms)>0)
                     $project_details->lTerms = $lTerms;
                 $project_details->proposedBySummary = $current_user_vm;
@@ -835,14 +861,12 @@ class ProjectController extends CI_Controller
             return $this->getProjectDetailsInternalTest($project_id);
         }
         else
-        {
-            $lProjectIds = array();
+        {        
             $user_id = getCurrentUserId($this);
-            $lProjectIds[] = $project_id;
-            $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, FALSE);
-            if (isset($lProjects) && (count($lProjects) == 1))
-                return $lProjects[0];
+            $tempDetails = new SPW_Project_Details_View_Model();
+            $projectDetails = $tempDetails->prepareProjectDetailsDataToShow($user_id, $project_id);
+            if (isset($projectDetails))
+                return $projectDetails;
             else
                 return NULL;
         }
