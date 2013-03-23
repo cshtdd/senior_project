@@ -89,6 +89,12 @@
                                 <?php echo get_nav_item('past-projects', 'Past Projects') ?>
                                 <?php echo get_nav_item('project', 'My Projects') ?>
                                 <?php echo get_nav_item('about', 'About') ?>
+
+                                <li class="visible-phone visible-tablet <?php echo isActiveNavItem('mobile-search') ? 'dropdown active' : 'dropdown' ?>">
+                                    <a href="<?php echo base_url().'mobile-search' ?>">
+                                        Search
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul class="nav pull-right">
