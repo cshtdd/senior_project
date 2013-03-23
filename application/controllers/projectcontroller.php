@@ -222,6 +222,7 @@ class ProjectController extends CI_Controller
                 }
                 else
                 {
+                    //update the project and everything
                     $updated_skill_names_str = $this->input->post('hidden-skill-list');
                     $update_mentor_ids_str = $this->input->post('mnthidden-ids');
                     $update_team_members_ids_str = $this->input->post('usrhidden-ids');
