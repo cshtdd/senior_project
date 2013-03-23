@@ -115,8 +115,19 @@
 
                                 <?php if (isUserLoggedIn($this)) { ?>                      
 
+                                    <li class="visible-phone visible-tablet <?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
+                                        <a href="<?php echo base_url().'me' ?>">
+                                            <?php echo getCurrentUserHeaderFullName($this)?> Profile
+                                        </a>
+                                    </li>
+                                    <li class="visible-phone visible-tablet">
+                                        <a href="<?php echo base_url().'logout' ?>">
+                                            Logout
+                                        </a>
+                                    </li>
 
-                                    <li class="<?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
+
+                                    <li class="visible-desktop <?php echo isActiveNavItem('me') ? 'dropdown active' : 'dropdown' ?>">
                                         <a id="link-profile" href="<?php echo base_url().'me' ?>" role="button" class="dropdown-toggle" data-toggle="dropdown">
                                             <i class="icon-user"></i> <b class="caret"></b>
                                         
@@ -181,7 +192,7 @@
 
 
                             <?php echo form_open('searchcontroller/search_string', array( 
-                                'class' => 'navbar-search pull-right', 
+                                'class' => 'navbar-search pull-right visible-desktop', 
                                 'id' => 'search-form-top',
                                 'method' => 'GET')) ?>
                                 <div class="input-append">
