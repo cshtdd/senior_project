@@ -99,9 +99,14 @@
                                     {
                                 ?>
                                         <li id="notifications-badge" <?php echo get_nav_item_class('notifications') ?> >
-                                            <a href="<?php echo base_url().'notifications' ?>">
+                                            <a href="<?php echo base_url().'notifications' ?>" class="visible-desktop">
                                                 <i class="icon-envelope"></i>
                                                 <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                            </a>
+
+                                            <a href="<?php echo base_url().'notifications' ?>" class="visible-phone visible-tablet">                                                
+                                                <span class="badge badge-important"><?php echo $notificationsCount ?></span>
+                                                <span>Notifications Pending</span>
                                             </a>
                                         </li>
                                 <?php
