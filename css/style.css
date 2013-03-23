@@ -304,3 +304,8 @@ form.inline
 {
     display: inline;
 }
+
+#alert-js
+{
+    display: none;
+}
