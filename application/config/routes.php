@@ -40,6 +40,7 @@
 
 $route['(?i)(about)'] = 'staticpagescontroller/about';
 $route['(?i)(change-password)'] = 'usercontroller/display_change_password';
+$route['(?i)(mobile-search)'] = 'searchcontroller/display_mobile_search';
 
 $route['(?i)(notifications)'] = 'notificationscontroller/display_notifications';
 
