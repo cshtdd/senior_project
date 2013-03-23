@@ -37,6 +37,7 @@ class UserController extends CI_Controller
 
         if ($user_id == $currentUserId) //we are viewing the current user profile
         {
+            $data['canChangePassword'] = $this->getUserCanChangePassword($currentUserId);
             $resulting_view_name = 'user_profile_edit';
         }
         else //we are viewing somebody else's profile
@@ -348,7 +349,14 @@ class UserController extends CI_Controller
     {
         if (isUserLoggedIn($this))
         {
-            $this->load->view('user_change_password');
+            if ($this->getUserCanChangePassword(getCurrentUserId($this)))
+            {
+                $this->load->view('user_change_password');
+            }
+            else
+            {
+                redirect('/');
+            }
         }
         else
         {
@@ -713,5 +721,17 @@ class UserController extends CI_Controller
         $userDetailsViewModel->invite = true;
 
         return $userDetailsViewModel;
+    }
+
+    private function getUserCanChangePassword($userId)
+    {
+        if (is_test($this))
+        {
+            return true;
+        }
+        else
+        {
+            throw new Exception('not implemented');
+        }
     }
 }
