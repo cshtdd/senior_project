@@ -129,7 +129,7 @@
         ?>
 
         <div>
-            <span>
+            <span class="inline-block">
                 Delivery Term: 
                 <?php 
                     if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) 
@@ -151,7 +151,7 @@
                 ?>
             </span>
 
-            <span>
+            <span class="inline-block hor-margin">
                 Maximum project capacity: 
                 <?php 
                     $arrTermsOptions = array();
