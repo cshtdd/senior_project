@@ -103,6 +103,10 @@
                             }
                         ?>
 
+                            <p>
+                                <?php echo anchor('change-password', 'Click to change password') ?>
+                            </p>
+
 
                             <div>
                                 <h4>Your Role</h4>
