@@ -5,7 +5,7 @@ class SPW_Project_Model extends CI_Model
     public $id;
     public $title;
     public $description;
-    public $max_students;
+    public $max_students = 5;
 
     //the id of the SPW_User
     public $proposed_by;
