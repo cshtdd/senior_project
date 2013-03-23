@@ -12,7 +12,7 @@ if ( !function_exists('all_skill_names'))
         { 
             //return ' "C#", "C# 2.0/3.5" ';
             $sender_controller->load->model('SPW_Skill_Model');
-            $allSkillNames = $SPW_Skill_Model->getAllSkillsNamesString();
+            $allSkillNames = $sender_controller->SPW_Skill_Model->getAllSkillsNamesString();
             if (isset($allSkillNames))
             {
                 return $allSkillNames;

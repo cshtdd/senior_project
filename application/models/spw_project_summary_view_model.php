@@ -78,15 +78,18 @@ class SPW_Project_Summary_View_Model extends CI_Model
                 {
                     if (!($tempProject->isProjectClosed($term)))
                     {
-                        if ($tempUser->isUserAStudent($user_id))
+                        if ($tempUser->canUserLeaveProject($user_id, $project_id))
                         {
-                            $currentUserTerm = $tempUser->getUserGraduationTerm($user_id);
+                            if ($tempUser->isUserAStudent($user_id))
+                            {
+                                $currentUserTerm = $tempUser->getUserGraduationTerm($user_id);
 
-                            if ($currentUserTerm->id == $term->id)
-                                $project_summ_vm->justList = false;
+                                if ($currentUserTerm->id == $term->id)
+                                    $project_summ_vm->justList = false;
+                            }
+                            else
+                                $project_summ_vm->justList = false; 
                         }
-                        else
-                            $project_summ_vm->justList = false; 
                     }
 
                     $project_summ_vm->term = $term;
