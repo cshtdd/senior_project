@@ -39,6 +39,7 @@
 */
 
 $route['(?i)(about)'] = 'staticpagescontroller/about';
+$route['(?i)(change-password)'] = 'usercontroller/display_change_password';
 
 $route['(?i)(notifications)'] = 'notificationscontroller/display_notifications';
 
@@ -47,8 +48,6 @@ $route['(?i)(search)/(:any)'] = 'searchcontroller/search/$2';
 
 $route['(?i)(me)'] = 'usercontroller/current_user';
 $route['(?i)(user)'] = 'usercontroller/current_user';
-//I NEED THIS this is where the user profile links point to
-//whatever the reason to previously remove this escapes my knowledge
 $route['(?i)(user)/linkedIn_initiate'] = 'usercontroller/linkedIn_initiate';
 $route['(?i)(user)/linkedIn_callback'] = 'usercontroller/linkedIn_callback';
 $route['(?i)(user)/linkedIn_sync'] = 'usercontroller/linkedIn_sync';
