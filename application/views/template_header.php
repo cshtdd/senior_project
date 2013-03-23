@@ -30,10 +30,12 @@
 
     <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
+	<!--[if lt IE 9]>
+		<script src="<?php echo base_url() ?>js/html5shiv.js"></script>
+	<![endif]-->
 </head>
 <body>
     <div class="container-narrow">

@@ -118,22 +118,6 @@
             ));
         ?>
 
-        <div class="span8">
-                Number of members :
-                <?php 
-                    echo form_input(array(
-                        'id' => 'text-project-max-students',
-                        'name' => 'text-project-max-stydents',
-                        'type' => 'number',
-                        'class' => 'input-small',
-                        'placeholder' => '0',
-                        'value' => $projectDetails->project->max_students,
-                        'required' => '',
-                        'title' => 'Max Number of Students'
-                    ));
-                ?>
-        </div>
-
         <?php 
             echo form_submit(array(
                 'id' => 'btn-submit',
@@ -144,38 +128,47 @@
             ));
         ?>
 
-        <?php if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) { ?>
-            Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
-        <?php } else { ?>
-            
-            <div class="span8">
-                Delivery Term :
+        <div>
+            <span class="inline-block">
+                Delivery Term: 
+                <?php 
+                    if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) 
+                    { 
+                        echo strtoupper($projectDetails->term->name);
+                    } 
+                    else 
+                    { 
+                        $arrTermsOptions = array();
+
+                        foreach ($projectDetails->lTerms as $iTerm) 
+                        {
+                            //echo $iTerm->id.' '.$iTerm->name;
+                            $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                        }
+
+                        echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);
+                    } 
+                ?>
+            </span>
+
+            <span class="inline-block hor-margin">
+                Maximum project capacity: 
                 <?php 
                     $arrTermsOptions = array();
 
-                    if (isset($projectDetails->term))
+                    for ($i = 2; $i <= 6; $i++) 
                     {
-                        $selected = $projectDetails->term->id;
-                    }
-                    else
-                    {
-                        $selected = '';
-                        $arrTermsOptions[$selected] = 'Please Select a Term...';
+                        $arrTermsOptions[$i] = $i.' students';
                     }
 
-                    foreach ($projectDetails->lTerms as $iTerm) 
-                    {
-                        $arrTermsOptions[$iTerm->id] = $iTerm->name;
-                    }
-
-                    echo form_dropdown('dropdown-term', $arrTermsOptions, $selected);
+                    echo form_dropdown('text-project-max-students', $arrTermsOptions, $projectDetails->project->max_students);
                 ?>
-            </div>
-        <?php } ?>
+            </span>
+        </div>
 
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 
-                <div class="span5">
+                <div class="span2">
                     <?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
                         'listTitle' => 'Proposed By:',
                         'lUserSummaries' => array($projectDetails->proposedBySummary),
@@ -185,7 +178,7 @@
                     )) ?>
                 </div>
 
-                <div class="span3">
+                <div class="span8">
                     <?php $this->load->view('subviews/user_summaries_full_list_edit_project', array(
                         'listTitle' => 'Mentors:',
                         'lUserSummaries' => $projectDetails->lMentorSummaries,
@@ -212,8 +205,6 @@
         <?php
             echo form_hidden(array(
                 'pid' => $projectDetails->project->id,
-                'pStatus' => $projectDetails->project->status,
-                'propBy' => $projectDetails->project->proposed_by,
                 'pbUrl' => current_url()
                 )
             );
@@ -311,7 +302,6 @@
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
             prefilled: [ <?php echo $projectDetails->getCurrentSkillNames() ?> ],
-            //prefilled: [ <?php echo all_skill_names($this) ?>  ],
             CapitalizeFirstLetter: true,
             preventSubmitOnEnter: true,
             typeahead: true,

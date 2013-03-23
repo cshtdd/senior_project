@@ -24,6 +24,13 @@
                 <?php echo $projectDetails->project->description ?>
             </p>
 
+            <p>
+                Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
+            </p>
+            <p>
+                Maximum project capacity: <?php echo $projectDetails->project->max_students.' students' ?>
+            </p>
+
             <?php $this->load->view('subviews/user_summaries_full_list', array(
                 'listTitle' => 'Proposed By:',
                 'lUserSummaries' => array($projectDetails->proposedBySummary)
@@ -42,10 +49,6 @@
                 'lUserSummaries' => $projectDetails->lTeamMemberSummaries,
                 'errorMessage' => 'Join this team for a free beer! Not really...'
             )) ?>
-
-            Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
-            <!--Project Status: <?php echo $projectDetails->project->status->name ?> -->
-        
 
 <?php }?>
 

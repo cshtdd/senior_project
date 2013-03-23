@@ -11,12 +11,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
 -->
+	
     <script type="text/javascript">
-        $('#alert-js').hide();
-        $('#alert-js-close').click(function(e){
-            e.preventDefault();
-            $('#alert-js').hide();
-        });
+		$(document).ready(function(){
+			$('#alert-js').hide();
+			$('#alert-js-close').click(function(e){
+				e.preventDefault();
+				$('#alert-js').hide();
+			});
+		});
     </script>
+
+	<script src="http://browser-update.org/update.js"></script>	
 </body>
 </html>
