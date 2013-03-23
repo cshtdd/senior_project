@@ -87,9 +87,13 @@ class ProjectController extends CI_Controller
         $project_details = $this->getProjectDetailsInternal($project_id);
 
         if (isset($current_project_ids) && (count($current_project_ids)>0))
+        {
             $isMyProject = in_array($project_id, $current_project_ids);
+        }
         else
+        {
             $isMyProject = false;
+        }
 
         //don't allow details edit after close date
         $isProjectClosed = $this->isProjectClosedInternal($project_id);
