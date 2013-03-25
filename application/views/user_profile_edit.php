@@ -130,7 +130,7 @@
                                             <?php
                                                 $roleNameStr = $iRole->name;
                                                 if (strtolower($iRole->name) == 'student') $roleNameStr = $roleNameStr.' graduating in ';
-                                                echo $roleNameStr;
+                                                echo ucwords($roleNameStr);
                                             ?>
                                             </label>
                                         </div>
