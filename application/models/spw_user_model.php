@@ -67,6 +67,24 @@ class SPW_User_Model extends CI_Model
         }
     }
 
+     public function is_spw_registered_by_id($spw_id)
+    {
+        $query = $this->db
+                       ->where('google_id',NULL)
+                       ->where('linkedin_id',NULL)
+                       ->where('id',$spw_id)
+                       ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function create_new_spw_user($email_address, $password)
     {
         $data = array(

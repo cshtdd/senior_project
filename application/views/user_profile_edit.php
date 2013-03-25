@@ -184,7 +184,7 @@
                                 'name' => 'text-description',
                                 //'class' => 'input-large',
                                 'rows' => '12',
-                                'placeholder' => 'Enter a description for the project...',
+                                'placeholder' => 'Tell us a little bit about yourself...',
                                 'value' => $userDetails->user->summary_spw,
                                 'required' => '',
                                 'Title' => 'Project Description'
