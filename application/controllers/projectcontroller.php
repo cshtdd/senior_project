@@ -159,29 +159,6 @@ class ProjectController extends CI_Controller
 
             $updated_term_id = $this->input->post('dropdown-term');
 
-            /*
-            //uncomment this block to display the input parameters
-            $this->output->set_output(
-                $updated_project_id.' '.
-                $postBackUrl.' '.
-                $updated_project_title.' '.
-                $updated_project_description.' '.
-                $updated_skill_names_str.' '.
-                $update_mentor_ids_str.' '.
-                $update_team_members_ids_str.' '.
-                $updated_project_max_students.' '.
-                $updated_proposedBy.' '.
-                $updated_pStatus.' '.
-                $updated_term_id
-            );
-            return;
-            */
-
-            //TODO validate the parameters and make sure everything is ok
-            //if something fails make sure to add the error message somewhere
-
-            //TODO splitting the ids str array into something usable
-
             if (is_test($this))
             {
                 setFlashMessage($this, 'Your project was updated');
@@ -234,13 +211,32 @@ class ProjectController extends CI_Controller
                 }
                 else
                 {
-                    //update the project and everything
-                    $updated_skill_names_str = $this->input->post('hidden-skill-list');
-                    $update_mentor_ids_str = $this->input->post('mnthidden-ids');
-                    $update_team_members_ids_str = $this->input->post('usrhidden-ids');
+                    /*$project = $this->SPW_Project_Model->getProjectInfo($updated_project->id);
 
-                    $listMemberIds = $this->SPW_User_Model->getListOfUserIdsToUpdate($update_team_members_ids_str);
-                }             
+                    if (isset($project))
+                    {
+                        $project->title = $updated_project->title;
+                        $project->description = $updated_project->description;
+                        $project->max_students = $updated_project->max_students;
+                        $project->delivery_term = $updated_project->delivery_term;
+
+                        $this->SPW_Project_Model->update($project); 
+
+                        if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
+                            $this->SPW_Project_Model->updateProjectSkills($updated_skill_names_str);
+
+                        $update_mentor_ids_str
+                        $update_team_members_ids_str
+                    }
+                    else
+                    {
+                        setFlashMessage($this, 'An error ocurred. Try again later');
+                    }
+                
+                    redirect($postBackUrl);*/
+
+                    echo 'Coming Soon...';
+                }
             }
         }
     }
