@@ -26,7 +26,7 @@ class SPW_Project_Model extends CI_Model
     {
         $sql = 'select spw_project.id
                 from spw_project, spw_term
-                where ((spw_project.status = 3) or ((spw_project.status = 5))) and (spw_term.id = spw_project.delivery_term) 
+                where (spw_project.status <> 4) and (spw_term.id = spw_project.delivery_term) 
                         and (spw_term.end_date < NOW())
                 order by id ASC';
 
@@ -47,6 +47,7 @@ class SPW_Project_Model extends CI_Model
         return NULL;
     }
 
+    /* Inserts a new project in spw_project */
     public function insert($project_obj)
     {
         $data = array(
@@ -439,7 +440,7 @@ class SPW_Project_Model extends CI_Model
                 from spw_project, spw_skill, spw_skill_project
                 where (spw_skill_project.project = spw_project.id) and 
                       (spw_skill_project.skill = spw_skill.id) and
-                      (spw_project.status = 3) and (spw_skill.name like ?)";
+                      (spw_project.status <> 4) and (spw_skill.name like ?)";
 
         $query = $this->db->query($sql, $param);
 
@@ -462,7 +463,7 @@ class SPW_Project_Model extends CI_Model
 
         $sql = "select id
                 from spw_project
-                where (status = 3) and
+                where (status <> 4) and
                       ((title like ?) or (description like ?))";
 
         $query = $this->db->query($sql, $param);
@@ -474,6 +475,48 @@ class SPW_Project_Model extends CI_Model
         }
         else
             return NULL;
+    }
+
+    public function assignSkillsToProject($updated_skill_names_str, $project_id)
+    {
+        $lSkillNames = $this->explodeCommaSeparatedSkillNamesStr($updated_skill_names_str);
+
+        $length = count($lSkillNames);
+
+        $tempSkill = new SPW_Skill_Model();
+
+        for ($i = 0; $i < $length; $i++)
+        {
+            $skill_id = $tempSkill->existsSkillOnTable($lSkillNames[$i]);
+
+            if (!isset($skill_id))
+            {
+                $tempSkill->name = $lSkillNames[$i];
+                $tempSkill->website_active = 0;
+
+                $skill_id = $tempSkill->insert($tempSkill);
+            }
+
+            if (isset($skill_id))
+            {
+                $data = array('skill'  => $skill_id, 
+                              'project' => $project_id
+                             );
+
+                $this->db->insert('spw_skill_project', $data);
+
+                $skill_id = NULL;
+            }
+            else
+                throw new Exception('An error occurred on database');  
+        }
+    }
+
+    public function explodeCommaSeparatedSkillNamesStr($skillNamesStr)
+    {
+        $listNamesArray = explode(',', $skillNamesStr);
+
+        return $listNamesArray;
     }
 }
     
