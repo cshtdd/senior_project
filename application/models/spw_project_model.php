@@ -64,6 +64,39 @@ class SPW_Project_Model extends CI_Model
         return $this->db->insert_id();
     }
 
+    /* Updates an existing project */
+    public function update($project_obj)
+    {
+        $this->db->where('id', $project_obj->id);
+        $this->db->update('spw_project', $project_obj);
+    }
+
+    public function deleteSkillProjectEntry($skill_id, $project_id)
+    {
+        if (isset($skill_id) && isset($project_id))
+        {
+            $param[0] = $skill_id;
+            $param[1] = $project_id;
+
+            $sql = 'delete
+                    from spw_skill_project
+                    where (skill = ?) and (project = ?)';
+
+            $query = $this->db->query($sql, $param);
+        }
+    }
+
+    public function insertSkillProjectEntry($skill_id, $project_id)
+    {
+        if (isset($skill_id) && isset($project_id))
+        {
+            $data = array('skill'  => $skill_id, 
+                          'project' => $project_id);
+
+            $this->db->insert('spw_skill_project', $data);
+        }
+    }
+
     public function getProjectDeliveryTerm($project_id)
     {
         $param[0] = $project_id;
@@ -510,6 +543,11 @@ class SPW_Project_Model extends CI_Model
             else
                 throw new Exception('An error occurred on database');  
         }
+    }
+
+    public function updateProjectSkills($updated_skill_names_str, $project_id)
+    {
+
     }
 
     public function explodeCommaSeparatedSkillNamesStr($skillNamesStr)
