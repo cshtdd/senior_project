@@ -56,7 +56,7 @@
                 
 
                 <p>
-                    <?php echo $iExperience->description ?>
+                    <?php echo $iExperience->summary ?>
                 </p>
             </li>
         <?php } ?>
