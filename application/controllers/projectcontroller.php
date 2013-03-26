@@ -157,8 +157,6 @@ class ProjectController extends CI_Controller
 
             $updated_project_max_students = $this->input->post('text-project-max-students');
 
-            $updated_proposedBy = $this->input->post('propBy');
-            $updated_pStatus = $this->input->post('pStatus');
             $updated_term_id = $this->input->post('dropdown-term');
 
             /*
@@ -215,11 +213,14 @@ class ProjectController extends CI_Controller
                 if (isset($new_project) && $new_project)
                 {
                     $updated_project->proposed_by = $current_user_id;
-                    $updated_project->status = 1;
+                    $updated_project->status = 2;
                     $new_project_id = $this->SPW_Project_Model->insert($updated_project);
                     if (isset($new_project_id))
                     {
                         $this->SPW_User_Model->assignProjectToUser($new_project_id, $updated_project->proposed_by);
+
+                        if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
+                            $this->SPW_Project_Model->assignSkillsToProject($updated_skill_names_str, $new_project_id);
 
                         setFlashMessage($this, 'Your project was created');
                         $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
@@ -239,35 +240,7 @@ class ProjectController extends CI_Controller
                     $update_team_members_ids_str = $this->input->post('usrhidden-ids');
 
                     $listMemberIds = $this->SPW_User_Model->getListOfUserIdsToUpdate($update_team_members_ids_str);
-                }
-
-                
-
-                //end of not yet implemented by camilo
-
-                $updated_skill_names_str = $this->input->post('hidden-skill-list');
-                $update_mentor_ids_str = $this->input->post('mnthidden-ids');
-                $update_team_members_ids_str = $this->input->post('usrhidden-ids');
-                
-                echo 'Members <br>';
-                for ($i = 0; $i < count($listMemberIds); $i++)
-                {
-                    echo $i.'-->'.$listMemberIds[$i].'<br>';
-                }
-
-                echo 'Skill Names: '.$updated_skill_names_str.'<br>';
-                echo 'mentors: '.$update_mentor_ids_str.'<br>';
-                echo 'members: '.$update_team_members_ids_str.'<br>';
-
-                echo 'title: '.$updated_project->title.'<br>';
-                echo 'description: '.$updated_project->description.'<br>';
-                echo 'project id: '.$updated_project->id.'<br>';
-                echo 'url: '.$postBackUrl.'<br>';
-                echo 'status: '.$updated_project->status.'<br>';
-                echo 'propBy: '.$updated_project->proposed_by.'<br>';
-                echo 'term: '.$updated_project->delivery_term.'<br>';
-                echo 'max students:'.$updated_project->max_students.'<br>';
-                
+                }             
             }
         }
     }
