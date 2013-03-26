@@ -68,7 +68,7 @@ class SPW_Term_Model extends CI_Model
 
 		$sql = "select spw_project.id
 				from spw_project, spw_term
-				where (spw_project.delivery_term = spw_term.id) and (spw_project.status = 3)
+				where (spw_project.delivery_term = spw_term.id) and (spw_project.status <> 4)
 					   and ((spw_term.name like ?) or (spw_term.description like ?))";
 		$query = $this->db->query($sql, $param);
 

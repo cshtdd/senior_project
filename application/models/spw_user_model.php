@@ -485,7 +485,7 @@ class SPW_User_Model extends CI_Model
                                            from spw_skill_user
                                            where user = ?) as skills, (select spw_project.id, skill
                                                                        from spw_project, spw_skill_project, spw_term
-                                                                       where (spw_project.id = project) and (spw_project.status = 3) and
+                                                                       where (spw_project.id = project) and (spw_project.status <> 4) and
                                                                          (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
                                                                          and (spw_term.id = ?)) as project_skills
                         where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
@@ -498,7 +498,7 @@ class SPW_User_Model extends CI_Model
 
                 $sql1 = 'select id
                          from spw_project
-                         where (delivery_term = ?) and (status = 3)';
+                         where (delivery_term = ?) and (status <> 4)';
 
                 $query1 = $this->db->query($sql1, $param1);
             }
@@ -512,7 +512,7 @@ class SPW_User_Model extends CI_Model
                                        from spw_skill_user
                                        where user = ?) as skills, (select spw_project.id, skill
                                                                    from spw_project, spw_skill_project, spw_term
-                                                                   where (spw_project.id = project) and (spw_project.status = 3) and
+                                                                   where (spw_project.id = project) and (spw_project.status <> 4) and
                                                                          (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())) 
                                                                          as project_skills
                     where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
@@ -523,7 +523,7 @@ class SPW_User_Model extends CI_Model
 
             $sql1 = 'select spw_project.id
                      from spw_project, spw_term
-                     where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+                     where (spw_project.status <> 4) and (spw_term.id = spw_project.delivery_term) 
                             and (spw_term.end_date > NOW())';
 
             $query1 = $this->db->query($sql1);
@@ -554,7 +554,7 @@ class SPW_User_Model extends CI_Model
 
                 $sql = 'select spw_project.id
                         from spw_project, spw_term
-                        where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+                        where (spw_project.status <> 4) and (spw_term.id = spw_project.delivery_term) 
                             and (spw_term.end_date > NOW()) and (spw_term.id = ?)
                         order by id ASC';
 
@@ -565,7 +565,7 @@ class SPW_User_Model extends CI_Model
         {
             $sql = 'select spw_project.id
                     from spw_project, spw_term
-                    where (spw_project.status = 3) and (spw_term.id = spw_project.delivery_term) 
+                    where (spw_project.status <> 4) and (spw_term.id = spw_project.delivery_term) 
                           and (spw_term.end_date > NOW())
                     order by id ASC';
 
@@ -691,14 +691,14 @@ class SPW_User_Model extends CI_Model
             $sql = 'select project
                     from spw_user, spw_project
                     where (spw_user.id = ?) and (project = spw_project.id) 
-                           and (spw_project.status = 3)';
+                           and (spw_project.status <> 4)';
         }
         else
         {
             $sql = 'select project
                     from spw_mentor_project, spw_project
                     where (mentor = ?) and (spw_project.id = spw_mentor_project.project) 
-                           and (spw_project.status = 3)';
+                           and (spw_project.status <> 4)';
         }
 
         $query = $this->db->query($sql, $param);
@@ -1087,10 +1087,9 @@ class SPW_User_Model extends CI_Model
                     $query = $this->db->get_where('spw_mentor_project', array('mentor' => $user_id,'project' => $project_id));
                     if ($query->num_rows() == 0)
                     {
-                         $data = array(
-                        'mentor'  => $user_id, 
-                        'project' => $project_id
-                         );
+                         $data = array('mentor'  => $user_id, 
+                                       'project' => $project_id
+                                      );
 
                         $this->db->insert('spw_mentor_project', $data); 
                     }
