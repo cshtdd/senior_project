@@ -211,7 +211,7 @@ class ProjectController extends CI_Controller
                 }
                 else
                 {
-                    /*$project = $this->SPW_Project_Model->getProjectInfo($updated_project->id);
+                    $project = $this->SPW_Project_Model->getProjectInfo($updated_project->id);
 
                     if (isset($project))
                     {
@@ -223,19 +223,16 @@ class ProjectController extends CI_Controller
                         $this->SPW_Project_Model->update($project); 
 
                         if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
-                            $this->SPW_Project_Model->updateProjectSkills($updated_skill_names_str);
+                            $this->SPW_Project_Model->updateProjectSkills($updated_skill_names_str, $project->id);
 
-                        $update_mentor_ids_str
-                        $update_team_members_ids_str
+                        $this->SPW_Project_Model->updateProjectUsers($update_mentor_ids_str, $update_team_members_ids_str, $project->id);
                     }
                     else
                     {
                         setFlashMessage($this, 'An error ocurred. Try again later');
                     }
                 
-                    redirect($postBackUrl);*/
-
-                    echo 'Coming Soon...';
+                    redirect($postBackUrl);
                 }
             }
         }
