@@ -121,6 +121,27 @@ class SPW_Skill_Model extends CI_Model
 		else
 			return NULL;
 	}
+
+	public function getListSkillNamesOfProject($project_id)
+	{
+		$param[0] = $project_id;
+		$sql = 'select spw_skill.name
+				from spw_skill, spw_skill_project
+				where (spw_skill_project.project = ?) and (spw_skill_project.skill = spw_skill.id)';
+		$query = $this->db->query($sql, $param);
+
+		if ($query->num_rows()>0)
+		{
+			$res = array();
+			foreach ($query->result() as $row) 
+			{
+				$res[] = ucfirst(strtolower($row->name));
+			}
+			return $res;
+		}
+		else
+			return NULL;
+	}
 }
 	
 ?>
