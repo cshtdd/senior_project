@@ -840,7 +840,12 @@ class SPW_User_Model extends CI_Model
                         }
                         else
                         {
-                            return true;
+                            $invitedUserBelongProjects = $this->userHaveProjects($invited_user_id);
+                            if (isset($invitedUserBelongProjects) && count($invitedUserBelongProjects)>0)
+                            {
+                                if (!in_array($currentUserBelongProjects[0], $invitedUserBelongProjects))
+                                    return true;
+                            }
                         }   
                     }
                 }
@@ -883,6 +888,8 @@ class SPW_User_Model extends CI_Model
                     if ($lStudentProjectId[0] != $lMentorProjectIds[$i])
                         return true;
                 }
+                else
+                    return true;
             }
         }
 
@@ -907,6 +914,8 @@ class SPW_User_Model extends CI_Model
                     if (!in_array($lMentorProjectIds[$i], $lInvitedMentorProjectIds))
                         return true;
                 }
+                else
+                    return true;
             }       
         }
 
