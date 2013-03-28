@@ -7,6 +7,7 @@ class SearchController extends CI_Controller
         parent::__construct();
 
         $this->load->helper('project_summary_view_model');
+        $this->load->helper('request');
         load_project_summary_models($this);
 
         //$this->output->cache(60);
@@ -15,38 +16,53 @@ class SearchController extends CI_Controller
     public function search_string()
     {
         $search_param = $this->input->get('q', TRUE);
-        $redirectUrl = base_url().'search/'.$search_param;
+        $redirectUrl = base_url().'search/'.'keyword';
         redirect($redirectUrl);
     }  
 
     public function search($search_param='')
     {
-        $data['title'] = 'Search';
-        $data['no_results'] = true;
-
-        if (isset($search_param) && strlen($search_param) > 0)
+        if (!is_POST_request($this))
         {
-            $search_query = urldecode($search_param);
-
-            $search_query = strtolower($search_query);
-
-            $search_query = trim($search_query);
-
-            $results_search = $this->getResultsWithSearchParam($search_query);
-
-            //$lProjects = $this->getProjectsWithSearchParam($search_query);
-            //$lUsers = $this->getUsersWithSearchParam($search_query);
-
-            if (isset($results_search) && count($results_search) > 0)
-            {
-                $data['lProjects'] = $results_search[0];
-                $data['lMentors'] = $results_search[1];
-                $data['lStudents'] = $results_search[2];
-                $data['no_results'] = false;
-            }
+            redirect('/');
         }
+        else
+        {
+            $search_param = $this->input->post('q');
 
-        $this->load->view('search_search', $data);
+            $data['title'] = 'Search';
+            $data['no_results'] = true;
+
+            if (isset($search_param) && strlen($search_param) > 0)
+            {
+                $search_query = $this->removeUndesiredCharacters($search_param);
+
+                $search_query = strtolower($search_query);
+
+                $search_query = trim($search_query);
+
+                $results_search = $this->getResultsWithSearchParam($search_query);
+
+                //$lProjects = $this->getProjectsWithSearchParam($search_query);
+                //$lUsers = $this->getUsersWithSearchParam($search_query);
+
+                if (isset($results_search) && count($results_search) > 0)
+                {
+                    $data['lProjects'] = $results_search[0];
+                    $foundProjects = (count($results_search[0])==0);
+
+                    $data['lMentors'] = $results_search[1];
+                    $foundMentors = (count($results_search[1])==0);
+
+                    $data['lStudents'] = $results_search[2];
+                    $foundStudents = (count($results_search[2])==0);
+
+                    $data['no_results'] = $foundProjects && $foundMentors && $foundStudents;
+                }
+            }
+
+            $this->load->view('search_search', $data);
+        }
     }
 
     public function display_mobile_search()
@@ -189,7 +205,6 @@ class SearchController extends CI_Controller
         return $res;
     }
 
-   
     private function refineSearchQuery($searchQuery)
     {
         $res = array();
@@ -415,6 +430,19 @@ class SearchController extends CI_Controller
                 $user_summ_vm4
             );
         return $result;
+    }
+
+    private function removeUndesiredCharacters($search_param)
+    {
+        $undesiredCharacters = array('&','$','@','?','~','%','^','[',']','{','}','|',',',';',':',
+                                     '=','<','>');
+
+        if (isset($search_param))
+        {
+            $search_param = str_replace($undesiredCharacters,' ', $search_param); 
+        }
+
+        return $search_param;
     }
 
     private function isStopWord($word)
