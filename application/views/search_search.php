@@ -2,7 +2,7 @@
 
 <?php if ($no_results) { ?>
 
-    <p>no data to display</p>
+    <p>No matches found</p>
 
 <?php } else { ?>
     <?php if (isset($lProjects) && count($lProjects) > 0) { ?>

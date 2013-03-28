@@ -197,10 +197,9 @@
 
 
 
-                            <?php echo form_open('searchcontroller/search_string', array( 
+                            <?php echo form_open('searchcontroller/search', array( 
                                 'class' => 'navbar-search pull-right visible-desktop', 
-                                'id' => 'search-form-top',
-                                'method' => 'GET')) ?>
+                                'id' => 'search-form-top')) ?>
                                 <div class="input-append">
                                     <?php
 
@@ -209,7 +208,9 @@
                                         $pos = stripos($uri, 'search/');
                                         if (isset($pos) && $pos === 0)
                                         {
-                                            $searchParam = urldecode(substr($uri, strlen('search/')));
+                                            $searchParam = substr($uri, strlen('search/'));
+
+
                                         }
 
                                         echo form_input(array(
