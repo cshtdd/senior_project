@@ -5,6 +5,7 @@ class SPW_Notification_Model extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('spw_user_model');
     }
 
     public function get_total_notifications($user_id)
@@ -42,6 +43,30 @@ class SPW_Notification_Model extends CI_Model
 
         $this->db->where('id',$notificationId);
         $this->db->update('spw_user', $data);
+    }
+
+    public function create_leave_notification_for_user($from_user_id, $to_user_id)
+    {
+        $fullname = $this->spw_user_model->get_fullname($from_user_id);
+        $data = array(
+                    'from' => $from_user_id,
+                    'to_user'  => $to_user_id,
+                    'body'      => fullname." left your team",
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
+     public function create_join_notification_for_user($from_user_id, $to_user_id)
+    {
+        $fullname = $this->spw_user_model->get_fullname($from_user_id);
+        $data = array(
+                    'from' => $from_user_id,
+                    'to_user'  => $to_user_id,
+                    'body'      => $fullname." wants to join your team",
+                    );
+
+        $this->db->insert('spw_notification',$data);
     }
 }
     

@@ -674,6 +674,39 @@ class SPW_Project_Model extends CI_Model
         else
             return NULL;
     }
+
+    public function get_team_members($project_id)
+    {
+        $team_members = array();
+
+        $query = $this->db
+                       ->where('project',$project_id)
+                       ->select('id')
+                       ->get('spw_user');
+
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result() as $row)
+            {
+                array_push($team_members, $query->row()->id);
+            }
+        }
+
+        $query = $this->db
+                      ->where('project',$project_id)
+                      ->select('mentor')
+                      ->get('spw_mentor_project');  
+
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result() as $row)
+            {
+                array_push($team_members, $query->row()->mentor);
+            }
+        }
+
+        return $team_members;    
+    }
 }
 
 ?>
