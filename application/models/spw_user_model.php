@@ -317,8 +317,31 @@ class SPW_User_Model extends CI_Model
         }
     }
 
+    public function get_role($user_id)
+    {
+        $query = $this->db
+                       ->where('user',$user_id)
+                       ->select('role')
+                       ->get('spw_role');
 
-   
+        if ($query->num_rows() > 0)
+        {
+            if($query->num_rows() > 1)
+            {
+                
+            }
+
+            foreach ($query->result() as $row) {
+                
+            }
+            return $query->row()->picture;
+        }
+        else
+        {
+            throw new Exception('User Id not found');
+        }
+    }
+       
  
     //TODO validate the data against XSS and CSRF and SQL Injection
     public function update_summary_profile($spw_id,$new_profile)

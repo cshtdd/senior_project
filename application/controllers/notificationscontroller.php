@@ -9,6 +9,8 @@ class NotificationsController extends CI_Controller
 
         $this->load->model('SPW_Notification_View_Model');
         $this->load->model('spw_notification_model');
+        $this->load->model('spw_user_model');
+        $this->load->model('spw_project_model');
         $this->load->helper('request');
     }
 
@@ -50,12 +52,35 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            if (!is_test($this))
-            {
-                $this->spw_notification_model->set_notification_to_read($notification_id);
-            }
+            $this->spw_notification_model->set_notification_to_read($notification_id);
 
-            $this->output->set_output('notification accepted');
+            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
+            $project_title = $this->spw_project_model->get_project_title($spw_notification_model->to_project);
+            
+            if($spw_notification_model->type == 'join')
+            {
+                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);  
+
+                $this->spw_notification_model->create_join_approved_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
+                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
+
+                $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title;
+                setFlashMessage($this, $reject_details_msg);
+                $reject_details_msg = $from_fullname." will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+
+                
+            }else if($spw_notification_model->type == 'professor_approval'){
+
+                $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
+                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
+
+                $reject_details_msg = $project_title." has been rejected";
+                setFlashMessage($this, $reject_details_msg);
+                $reject_details_msg =  "All team members will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+            } 
+  
 
             $pbUrl = $this->input->post('pbUrl');
             if (isset($pbUrl) && strlen($pbUrl))
@@ -65,7 +90,7 @@ class NotificationsController extends CI_Controller
         }
     }
 
-    public function reject_notification($notificationId)
+    public function reject_notification($notification_id)
     {
         if (!is_POST_request($this))
         {
@@ -73,14 +98,29 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            if (!is_test($this))
+            $this->spw_notification_model->set_notification_to_read($notification_id);
+            
+            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
+
+            if($spw_notification_model->type == 'join')
             {
-                $this->spw_notification_model->set_notification_to_read($notificationId);
-            }
+                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);
+                $project_title = $this->spw_project_model->get_project_title($project_id);
 
-            $this->output->set_output('notification rejected');
+                $reject_details_msg = 'Request to join project '.$project_title." has been denied/n";
+                $reject_details_msg = $reject_details_msg.$from_fullname." will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
 
-            //redirect back to the previous page
+                $this->spw_notification_model->create_join_rejected_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
+            }else if($spw_notification_model->type == 'professor_approval')
+            {
+                $reject_details_msg = $project_title." has been rejected";
+                $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+
+                $this->spw_notification_model->create_professor_approval_rejected_notification($spw_notification_model->to_project);
+            } 
+
             $pbUrl = $this->input->post('pbUrl');
             if (isset($pbUrl) && strlen($pbUrl))
             {
@@ -128,20 +168,31 @@ class NotificationsController extends CI_Controller
   
     private function getPendingNotificationsForUser($user_id)
     {
-        $query = $this->spw_notification_model->get_notifications_by_user($user_id); 
+        $result = $this->spw_notification_model->get_active_notification_for_user($user_id); 
 
-        $notifications = array();
-        foreach ($query as $row)
+        if(isset($result))
         {
-            $notification = new SPW_Notification_View_Model();
-            $notification->id = $row->id;
-            $msg = $row->body;
-            $notification->message = $msg;
-            $notification->displayTwoButtons = !$this->is_a_leave_msg($msg);
-            array_push($notifications, $notification);
-        }
+            $notifications = array();
+            foreach ($result as $row)
+            {
+                if($row->type == "join" || $row->type == "professor_approval"){
+                    $displayTwoButtons  = true;
+                }else{
+                    $displayTwoButtons  = false;
+                }
 
-        return $notifications;
+                $notification = new SPW_Notification_View_Model();
+                $notification->id = $row->id;
+                $msg = $row->body;
+                $notification->message = $msg;
+                $notification->displayTwoButtons = $displayTwoButtons;
+                array_push($notifications, $notification);
+            }
+
+            return $notifications;
+        }else{
+            return null;
+        }
     }
 
     private function is_a_leave_msg($msg)
