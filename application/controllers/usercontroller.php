@@ -389,7 +389,7 @@ class UserController extends CI_Controller
                 {
                     $this->load->view('user_change_password');
                 }
-                else //if everything was OK
+                else 
                 {
                     if (!is_test($this))
                     {
@@ -417,6 +417,7 @@ class UserController extends CI_Controller
             }
             else
             {
+
                 $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match our records');
                 return false;
             }
