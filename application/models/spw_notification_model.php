@@ -109,8 +109,8 @@ class SPW_Notification_Model extends CI_Model
                     'from' => $from_user_id,
                     'to_user'  => $to_user_id,
                     'to_project'  => $project_id,
-                    'body'      => fullname." left your project ".$project_title,
-                     'type'    => 'leave'
+                    'body'      => $fullname." left your project ".$project_title,
+                    'type'    => 'leave'
                     );
 
         $this->db->insert('spw_notification',$data);
