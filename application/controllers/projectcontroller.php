@@ -259,7 +259,7 @@ class ProjectController extends CI_Controller
                 {
                     $member_id = $project_team[$i];
                     if($member_id != $currentUserId){
-                        $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id);
+                        $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
                     }
                 }
                 
@@ -1094,7 +1094,7 @@ class ProjectController extends CI_Controller
         }
     }
 
-    private function leaveProjectInternal($projectId, $user_id)
+    private function leaveProjectInternal($project_id, $user_id)
     {
         if (is_test($this))
         {
