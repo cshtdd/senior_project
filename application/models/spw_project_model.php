@@ -674,6 +674,86 @@ class SPW_Project_Model extends CI_Model
         else
             return NULL;
     }
+
+    public function get_team_members($project_id)
+    {
+        $team_members = array();
+
+        $query = $this->db
+                       ->where('project',$project_id)
+                       ->select('id')
+                       ->get('spw_user');
+
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result() as $row)
+            {
+                array_push($team_members, $query->row()->id);
+            }
+        }
+
+        $query = $this->db
+                      ->where('project',$project_id)
+                      ->select('mentor')
+                      ->get('spw_mentor_project');  
+
+        if ($query->num_rows() > 0)
+        {
+            foreach ($query->result() as $row)
+            {
+                array_push($team_members, $query->row()->mentor);
+            }
+        }
+
+        return $team_members;    
+    }
+
+    public function get_project_title($project_id)
+    {
+        $query = $this->db
+                       ->where('id',$project_id)
+                       ->select('title')
+                       ->get('spw_project');
+
+        if ($query->num_rows() > 0)
+        {
+           return $query->row()->title;
+        }else{
+            return "";
+        }
+    }
+
+    public function add_member_to_project($user_id, $project_id)
+    {
+        if($this->spw_user_model->isUserAStudent($user_id))
+        {
+            $this->add_student_to_project($user_id, $project_id);
+
+        }else if($this->spw_user_model->isUserPossibleMentor($user_id)){
+            $this->add_mentor_to_project($user_id, $project_id);
+        }
+    }
+
+    public function add_student_to_project($student_id, $project_id)
+    {
+        $data = array(
+            'project' => $project_id
+            );
+
+        $this->db->where('id',$student_id);
+        $this->db->update('spw_user', $data);
+    }
+
+    public function add_mentor_to_project($mentor_id, $project_id)
+    {
+      
+        $data = array(
+            'mentor' => $mentor_id,
+            'project' => $project_id,
+        );
+
+        $this->db->insert('spw_mentor_project', $data);
+    }
 }
 
 ?>

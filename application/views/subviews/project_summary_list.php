@@ -72,7 +72,6 @@
             </ul>
 
             Delivery Term: <?php echo strtoupper($iProject->term->name) ?>
-            <!--Project Status: <?php echo $iProject->project->status->name ?> -->
         </li>
     <?php } ?>
 </ul>
