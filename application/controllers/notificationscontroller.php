@@ -65,18 +65,19 @@ class NotificationsController extends CI_Controller
                 $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
 
                 $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title;
-                setFlashMessage($this, $reject_details_msg);
+                //setFlashMessage($this, $reject_details_msg);
                 $reject_details_msg = $from_fullname." will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
 
                 
-            }else if($spw_notification_model->type == 'professor_approval'){
-
+            }
+            else if($spw_notification_model->type == 'professor_approval')
+            {
                 $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
                 $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
 
                 $reject_details_msg = $project_title." has been rejected";
-                setFlashMessage($this, $reject_details_msg);
+                //setFlashMessage($this, $reject_details_msg);
                 $reject_details_msg =  "All team members will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
             } 
@@ -112,7 +113,8 @@ class NotificationsController extends CI_Controller
                 setFlashMessage($this, $reject_details_msg);
 
                 $this->spw_notification_model->create_join_rejected_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
-            }else if($spw_notification_model->type == 'professor_approval')
+            }
+            else if($spw_notification_model->type == 'professor_approval')
             {
                 $reject_details_msg = $project_title." has been rejected";
                 $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
