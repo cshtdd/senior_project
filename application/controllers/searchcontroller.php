@@ -148,17 +148,17 @@ class SearchController extends CI_Controller
         return $results_search;
     }
 
-	private function searchKeywordDatabaseQueries($keyword)
-	{
-		$user_id = getCurrentUserId($this);
-		$listProjectsIds = array();
-		$lProjectsTmp = array();
+    private function searchKeywordDatabaseQueries($keyword)
+    {
+        $user_id = getCurrentUserId($this);
+        $listProjectsIds = array();
+        $lProjectsTmp = array();
         $listUsersIds = array();
         $lUsersTmp = array();
 
-		$listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword);
-		$lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword);
-		$listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
+        $listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword);
+        $lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword);
+        $listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
 
         $lProjectsTmp = $this->SPW_Term_Model->searchQueriesOnTermForUsers($keyword);
         $listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
