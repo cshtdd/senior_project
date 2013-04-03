@@ -290,6 +290,7 @@ class ProjectController extends CI_Controller
             if(!$result)
             {
                 $project_team = $this->spw_project_model->get_team_members($project_id);
+               
                 for($i = 0; $i < count($project_team); $i++)
                 {
                     $member_id = $project_team[$i];
