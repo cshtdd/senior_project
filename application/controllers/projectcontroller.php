@@ -255,16 +255,6 @@ class ProjectController extends CI_Controller
 
             if($this->leaveProjectInternal($projectId, $currentUserId))
             {
-                $project_team = $this->spw_project_model->get_team_members($projectId);
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId)
-                    {
-                        $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
-                    }
-                }
-                
                 setFlashMessage($this, 'You have left the project');    
             }
             else
@@ -284,10 +274,7 @@ class ProjectController extends CI_Controller
         else
         {
             $postBackUrl = $this->input->post('pbUrl');
-            if (strlen($postBackUrl) == 0) 
-            {
-                $postBackUrl = '/';
-            }
+            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
 
             $project_id = $this->input->post('pid');
 
@@ -1091,7 +1078,19 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            return $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
+            $result = $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
+
+            $project_team = $this->spw_project_model->get_team_members($projectId);
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $user_id)
+                {
+                    $this->spw_notification_model->create_leave_notification_for_user($user_id, $member_id, $projectId);
+                }
+            }
+
+            return $result;
         }
     }
 
