@@ -253,18 +253,22 @@ class ProjectController extends CI_Controller
             $projectId = $this->input->post('pid');
             $currentUserId = getCurrentUserId($this);
 
-            if($this->leaveProjectInternal($projectId, $currentUserId)){
+            if($this->leaveProjectInternal($projectId, $currentUserId))
+            {
                 $project_team = $this->spw_project_model->get_team_members($projectId);
                 for($i = 0; $i < count($project_team); $i++)
                 {
                     $member_id = $project_team[$i];
-                    if($member_id != $currentUserId){
+                    if($member_id != $currentUserId)
+                    {
                         $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
                     }
                 }
                 
                 setFlashMessage($this, 'You have left the project');    
-            }else{
+            }
+            else
+            {
                  setFlashMessage($this, "Error: you can't leave this project");  
             }
             redirect($postBackUrl);
@@ -299,7 +303,9 @@ class ProjectController extends CI_Controller
                 }
 
                 setFlashMessage($this, 'Your join request has been sent');
-            }else{
+            }
+            else
+            {
                 $project_title = $this->spw_project_model->get_project_title($project_id);
                 $msg = 'You already sent a notification for the project '.$project_title;
                 setFlashMessage($this, $msg);
