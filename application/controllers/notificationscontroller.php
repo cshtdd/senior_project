@@ -70,29 +70,7 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            $this->spw_notification_model->set_notification_to_read($notification_id);
-            
-            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
-
-            if($spw_notification_model->type == 'join')
-            {
-                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);
-                $project_title = $this->spw_project_model->get_project_title($project_id);
-
-                $reject_details_msg = 'Request to join project '.$project_title." has been denied/n";
-                $reject_details_msg = $reject_details_msg.$from_fullname." will be notified promptly of your decision";
-                setFlashMessage($this, $reject_details_msg);
-
-                $this->spw_notification_model->create_join_rejected_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
-            }
-            else if($spw_notification_model->type == 'professor_approval')
-            {
-                $reject_details_msg = $project_title." has been rejected";
-                $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
-                setFlashMessage($this, $reject_details_msg);
-
-                $this->spw_notification_model->create_professor_approval_rejected_notification($spw_notification_model->to_project);
-            } 
+            $this->rejectNotificationInternal($notification_id);
 
             $pbUrl = $this->input->post('pbUrl');
             if (isset($pbUrl) && strlen($pbUrl))
@@ -253,6 +231,43 @@ class NotificationsController extends CI_Controller
     }
     private function acceptNotificationInternalTest($notification_id)
     {
-        setFlashMessage($this, 'Team members will be promptly notified of your decision');
+        setFlashMessage($this, 'Team members will be notified of your decision');
+    }
+
+    private function rejectNotificationInternal($notification_id)
+    {
+        if (is_test($this))
+        {
+            $this->rejectNotificationInternalTest($notification_id);
+        }
+        else
+        {
+            $this->spw_notification_model->set_notification_to_read($notification_id);
+            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
+
+            if($spw_notification_model->type == 'join')
+            {
+                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);
+                $project_title = $this->spw_project_model->get_project_title($project_id);
+
+                $reject_details_msg = 'Request to join project '.$project_title." has been denied/n";
+                $reject_details_msg = $reject_details_msg.$from_fullname." will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+
+                $this->spw_notification_model->create_join_rejected_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
+            }
+            else if($spw_notification_model->type == 'professor_approval')
+            {
+                $reject_details_msg = $project_title." has been rejected";
+                $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+
+                $this->spw_notification_model->create_professor_approval_rejected_notification($spw_notification_model->to_project);
+            }
+        }
+    }
+    private function rejectNotificationInternalTest($notification_id)
+    {
+        setFlashMessage($this, 'Candidates will be notified of your rejection');
     }
 }
