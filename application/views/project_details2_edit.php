@@ -298,7 +298,7 @@
         }
     }
 
-    //$(document).ready(function(){
+    $(document).ready(function(){
 
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
@@ -315,6 +315,7 @@
         $('.myUserRemover').each(function(index){
             $(this).click(function(e){
                 e.preventDefault();
+                e.stopPropagation();
                 var idToRemove = $(this).attr("data-idtoremove");
                 var parentListId = $('#' + idToRemove).parent().attr('id');
 
@@ -352,7 +353,7 @@
                 });
         });
         */
-    //});
+    });
 </script>
 
 <?php $this->load->view("subviews/invite_capable") ?>

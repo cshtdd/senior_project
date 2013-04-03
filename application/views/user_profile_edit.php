@@ -224,6 +224,7 @@
 
                 $('#link-change-image').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     $('#link-change-image-container').hide();
                     $('#text-img-url-container').show();
@@ -231,6 +232,7 @@
 
                 $('#link-change-image-cancel').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     $('#text-img-url-container').hide();
                     $('#link-change-image-container').show();
@@ -238,6 +240,7 @@
 
                 $('#link-change-image-ok').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     var newImgSrc = $('#text-img-url').val();
 
