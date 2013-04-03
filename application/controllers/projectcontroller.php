@@ -12,6 +12,7 @@ class ProjectController extends CI_Controller
         $this->load->helper('flash_message');
         load_project_summary_models($this);
         $this->load->model('SPW_Project_Details_View_Model');
+        $this->load->model('spw_notification_model');
         //$this->output->cache(60);
     }
 
@@ -157,32 +158,7 @@ class ProjectController extends CI_Controller
 
             $updated_project_max_students = $this->input->post('text-project-max-students');
 
-            $updated_proposedBy = $this->input->post('propBy');
-            $updated_pStatus = $this->input->post('pStatus');
             $updated_term_id = $this->input->post('dropdown-term');
-
-            /*
-            //uncomment this block to display the input parameters
-            $this->output->set_output(
-                $updated_project_id.' '.
-                $postBackUrl.' '.
-                $updated_project_title.' '.
-                $updated_project_description.' '.
-                $updated_skill_names_str.' '.
-                $update_mentor_ids_str.' '.
-                $update_team_members_ids_str.' '.
-                $updated_project_max_students.' '.
-                $updated_proposedBy.' '.
-                $updated_pStatus.' '.
-                $updated_term_id
-            );
-            return;
-            */
-
-            //TODO validate the parameters and make sure everything is ok
-            //if something fails make sure to add the error message somewhere
-
-            //TODO splitting the ids str array into something usable
 
             if (is_test($this))
             {
@@ -200,8 +176,6 @@ class ProjectController extends CI_Controller
 
                 $updated_project->title = $updated_project_title;
                 $updated_project->description = $updated_project_description;
-                $updated_project->proposed_by = $updated_proposedBy;
-                $updated_project->status = $updated_pStatus;
                 $updated_project->max_students = $updated_project_max_students;
 
                 if ($this->SPW_User_Model->isUserAStudent($current_user_id))
@@ -216,10 +190,15 @@ class ProjectController extends CI_Controller
                 
                 if (isset($new_project) && $new_project)
                 {
+                    $updated_project->proposed_by = $current_user_id;
+                    $updated_project->status = 2;
                     $new_project_id = $this->SPW_Project_Model->insert($updated_project);
                     if (isset($new_project_id))
                     {
                         $this->SPW_User_Model->assignProjectToUser($new_project_id, $updated_project->proposed_by);
+
+                        if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
+                            $this->SPW_Project_Model->assignSkillsToProject($updated_skill_names_str, $new_project_id);
 
                         setFlashMessage($this, 'Your project was created');
                         $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
@@ -231,24 +210,31 @@ class ProjectController extends CI_Controller
                         redirect($postBackUrl);
                     }  
                 }
+                else
+                {
+                    $project = $this->SPW_Project_Model->getProjectInfo($updated_project->id);
 
-                /*
-                //end of not yet implemented by camilo
+                    if (isset($project))
+                    {
+                        $project->title = $updated_project->title;
+                        $project->description = $updated_project->description;
+                        $project->max_students = $updated_project->max_students;
+                        $project->delivery_term = $updated_project->delivery_term;
 
-                //to log the input look at the commentd call to $this->output->set_output above
+                        $this->SPW_Project_Model->update($project); 
 
-                echo 'Skill Names: '.$updated_skill_names_str.'<br>';
-                echo 'mentors: '.$update_mentor_ids_str.'<br>';
-                echo 'members: '.$update_team_members_ids_str.'<br>';
+                        if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
+                            $this->SPW_Project_Model->updateProjectSkills($updated_skill_names_str, $project->id);
 
-                echo 'title: '.$updated_project->title.'<br>';
-                echo 'description: '.$updated_project->description.'<br>';
-                echo 'project id: '.$updated_project->id.'<br>';
-                echo 'url: '.$postBackUrl.'<br>';
-                echo 'status: '.$updated_project->status.'<br>';
-                echo 'propBy: '.$updated_project->proposed_by.'<br>';
-                echo 'term: '.$updated_project->delivery_term.'<br>';
-                */
+                        $this->SPW_Project_Model->updateProjectUsers($update_mentor_ids_str, $update_team_members_ids_str, $project->id);
+                    }
+                    else
+                    {
+                        setFlashMessage($this, 'An error ocurred. Try again later');
+                    }
+                
+                    redirect($postBackUrl);
+                }
             }
         }
     }
@@ -261,17 +247,26 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            //$this->output->set_output('received a valid POST request');
-
             $postBackUrl = $this->input->post('pbUrl');
             if (strlen($postBackUrl) == 0) $postBackUrl = '/';
 
             $projectId = $this->input->post('pid');
             $currentUserId = getCurrentUserId($this);
 
-            $this->leaveProjectInternal($projectId, $currentUserId);
-            setFlashMessage($this, 'You have left the project');
-
+            if($this->leaveProjectInternal($projectId, $currentUserId)){
+                $project_team = $this->spw_project_model->get_team_members($projectId);
+                for($i = 0; $i < count($project_team); $i++)
+                {
+                    $member_id = $project_team[$i];
+                    if($member_id != $currentUserId){
+                        $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
+                    }
+                }
+                
+                setFlashMessage($this, 'You have left the project');    
+            }else{
+                 setFlashMessage($this, "Error: you can't leave this project");  
+            }
             redirect($postBackUrl);
         }
     }
@@ -284,17 +279,31 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            //$this->output->set_output('received a valid POST request');
-
             $postBackUrl = $this->input->post('pbUrl');
-            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
+            if (strlen($postBackUrl) == 0) 
+                $postBackUrl = '/';
 
-            $projectId = $this->input->post('pid');
+            $project_id = $this->input->post('pid');
             $currentUserId = getCurrentUserId($this);
 
-            $this->joinProjectInternal($projectId, $currentUserId);
-            setFlashMessage($this, 'Your join request has been sent');
+            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
+            if(!$result)
+            {
+                $project_team = $this->spw_project_model->get_team_members($project_id);
+                for($i = 0; $i < count($project_team); $i++)
+                {
+                    $member_id = $project_team[$i];
+                    if($member_id != $currentUserId){
+                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
+                    }
+                }
 
+                setFlashMessage($this, 'Your join request has been sent');
+            }else{
+                $project_title = $this->spw_project_model->get_project_title($project_id);
+                $msg = 'You already sent a notification for the project '.$project_title;
+                setFlashMessage($this, $msg);
+            }
             redirect($postBackUrl);
         }
     }
@@ -384,6 +393,8 @@ class ProjectController extends CI_Controller
         {
             if(isUserLoggedIn($this))
             {
+                $tempTerm = new SPW_Term_Model();
+
                 $project_details = new SPW_Project_Details_View_Model();
 
                 $currentUserId = getCurrentUserId($this);
@@ -396,6 +407,9 @@ class ProjectController extends CI_Controller
                 $project1->proposed_by = $currentUserId;
                 $project1->description = '';
                 $project1->status = 1;
+                $project1->max_students = 5;
+
+                $currentTerm = $tempTerm->getCurrentTermInfo();
 
                 if (isset($project_details->onlyShowUserTerm) && ($project_details->onlyShowUserTerm))
                 {
@@ -412,6 +426,8 @@ class ProjectController extends CI_Controller
                 $project_details->project = $project1;
                 if (isset($term1))
                     $project_details->term = $term1;
+                else
+                    $project_details->term = $currentTerm;
                 if (isset($lTerms) && count($lTerms)>0)
                     $project_details->lTerms = $lTerms;
                 $project_details->proposedBySummary = $current_user_vm;
@@ -835,14 +851,12 @@ class ProjectController extends CI_Controller
             return $this->getProjectDetailsInternalTest($project_id);
         }
         else
-        {
-            $lProjectIds = array();
+        {        
             $user_id = getCurrentUserId($this);
-            $lProjectIds[] = $project_id;
-            $belongProjectIdsList = $this->SPW_User_Model->userHaveProjects($user_id);
-            $lProjects = $this->SPW_Project_Summary_View_Model->prepareProjectsDataToShow($user_id, $lProjectIds, $belongProjectIdsList, FALSE);
-            if (isset($lProjects) && (count($lProjects) == 1))
-                return $lProjects[0];
+            $tempDetails = new SPW_Project_Details_View_Model();
+            $projectDetails = $tempDetails->prepareProjectDetailsDataToShow($user_id, $project_id);
+            if (isset($projectDetails))
+                return $projectDetails;
             else
                 return NULL;
         }
@@ -1080,7 +1094,7 @@ class ProjectController extends CI_Controller
         }
     }
 
-    private function leaveProjectInternal($projectId, $user_id)
+    private function leaveProjectInternal($project_id, $user_id)
     {
         if (is_test($this))
         {
@@ -1092,18 +1106,6 @@ class ProjectController extends CI_Controller
         }
     }
 
-    private function joinProjectInternal($projectId, $user_id)
-    {
-        if (is_test($this))
-        {
-            return true;
-        }
-        else
-        {
-            //TODO create a notification and send it to the team members
-            throw new Exception('Not implemented');
-        }
-    }
 
     private function getCurrentUserCanLeaveProjectInternal($project_id)
     {

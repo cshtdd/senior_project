@@ -106,6 +106,7 @@ class UserController extends CI_Controller
                 $this->spw_user_model->update_summary_profile($spw_id,$new_profile);
             }
 
+            setFlashMessage($this, 'Your profile has been updated');
             redirect('/me');
         }
     }
@@ -388,7 +389,7 @@ class UserController extends CI_Controller
                 {
                     $this->load->view('user_change_password');
                 }
-                else //if everything was OK
+                else 
                 {
                     if (!is_test($this))
                     {
@@ -416,6 +417,7 @@ class UserController extends CI_Controller
             }
             else
             {
+
                 $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match our records');
                 return false;
             }
@@ -663,7 +665,7 @@ class UserController extends CI_Controller
         $experience1->start_date = '2007-12';
         $experience1->company_industry = 'IT';
         $experience1->title = 'Senior iOS developer';
-        $experience1->description = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
+        $experience1->summary = 'Participated in the initial development of the iOS operating system. Specialized in iOS kernel process scheduling';
 
         $experience2 = new SPW_Experience_Model();
         $experience2->id = 2;
@@ -671,7 +673,7 @@ class UserController extends CI_Controller
         $experience2->start_date = '2010-9';
         $experience2->end_date = '2010-12';
         $experience2->title = 'Senior Android developer';
-        $experience2->description = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
+        $experience2->summary = 'Reingeneered Android core to make it work like iOSs kernel. Enhanced multitasking support';
 
         $experience3 = new SPW_Experience_Model();
         $experience3->id = 3;
@@ -680,7 +682,7 @@ class UserController extends CI_Controller
         $experience2->end_date = '2013-3';
         $experience3->company_industry = 'FastFood';
         $experience3->title = 'Senior Mobile developer';
-        $experience3->description = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
+        $experience3->summary = 'Worked on the migration of Microsoft mobile apps from version 7.8 to 8.0. Ported Office 2012 to ARM';
 
 
         $lExperiences = array(
@@ -731,7 +733,7 @@ class UserController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            return $this->spw_user_model->is_spw_registered_by_id($userId);
         }
     }
 }
