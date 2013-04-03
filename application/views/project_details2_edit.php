@@ -356,5 +356,6 @@
 </script>
 
 <?php $this->load->view("subviews/invite_capable") ?>
+<?php $this->load->view("subviews/create_project_btn_alert") ?>
 
 <?php $this->load->view("template_footer"); ?>
