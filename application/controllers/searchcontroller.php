@@ -43,15 +43,15 @@ class SearchController extends CI_Controller
             if (isset($results_search) && count($results_search) > 0)
             {
                 $data['lProjects'] = $results_search[0];
-                $foundProjects = (count($results_search[0])==0);
+                $notFoundProjects = (count($results_search[0])==0);
 
                 $data['lMentors'] = $results_search[1];
-                $foundMentors = (count($results_search[1])==0);
+                $notFoundMentors = (count($results_search[1])==0);
 
                 $data['lStudents'] = $results_search[2];
-                $foundStudents = (count($results_search[2])==0);
+                $notFoundStudents = (count($results_search[2])==0);
 
-                $data['no_results'] = $foundProjects && $foundMentors && $foundStudents;
+                $data['no_results'] = $notFoundProjects && $notFoundMentors && $notFoundStudents;
             }
         }
 
