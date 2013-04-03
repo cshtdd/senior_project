@@ -52,36 +52,7 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            $this->spw_notification_model->set_notification_to_read($notification_id);
-
-            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
-            $project_title = $this->spw_project_model->get_project_title($spw_notification_model->to_project);
-            
-            if($spw_notification_model->type == 'join')
-            {
-                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);  
-
-                $this->spw_notification_model->create_join_approved_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
-                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
-
-                $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title;
-                //setFlashMessage($this, $reject_details_msg);
-                $reject_details_msg = $from_fullname." will be notified promptly of your decision";
-                setFlashMessage($this, $reject_details_msg);
-
-                
-            }
-            else if($spw_notification_model->type == 'professor_approval')
-            {
-                $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
-                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
-
-                $reject_details_msg = $project_title." has been rejected";
-                //setFlashMessage($this, $reject_details_msg);
-                $reject_details_msg =  "All team members will be notified promptly of your decision";
-                setFlashMessage($this, $reject_details_msg);
-            } 
-  
+            $this->acceptNotificationInternal($notification_id);
 
             $pbUrl = $this->input->post('pbUrl');
             if (isset($pbUrl) && strlen($pbUrl))
@@ -238,5 +209,50 @@ class NotificationsController extends CI_Controller
                 $notification_vm4
             );
         return $lNotifications;
+    }
+
+    private function acceptNotificationInternal($notification_id)
+    {
+        if (is_test($this))
+        {
+            $this->acceptNotificationInternalTest($notification_id);
+        }
+        else
+        {
+            $this->spw_notification_model->set_notification_to_read($notification_id);
+
+            $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
+            $project_title = $this->spw_project_model->get_project_title($spw_notification_model->to_project);
+
+
+            if($spw_notification_model->type == 'join')
+            {
+                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);  
+
+                $this->spw_notification_model->create_join_approved_notification_for_user($spw_notification_model->to_user, $spw_notification_model->from,$spw_notification_model->to_project);
+                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
+
+                $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title;
+                //setFlashMessage($this, $reject_details_msg);
+                $reject_details_msg = $from_fullname." will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+
+                
+            }
+            else if($spw_notification_model->type == 'professor_approval')
+            {
+                $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
+                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
+
+                $reject_details_msg = $project_title." has been rejected";
+                //setFlashMessage($this, $reject_details_msg);
+                $reject_details_msg =  "All team members will be notified promptly of your decision";
+                setFlashMessage($this, $reject_details_msg);
+            }  
+        }
+    }
+    private function acceptNotificationInternalTest($notification_id)
+    {
+        setFlashMessage($this, 'Team members will be promptly notified of your decision');
     }
 }
