@@ -22,7 +22,8 @@ class SearchController extends CI_Controller
 
     public function search($search_param='')
     {
-        $search_param = $this->input->post('q');
+        //ARGHH I spent so much time trying to figure out why search_param was empty
+        //$search_param = $this->input->post('q');
 
         $data['title'] = 'Search';
         $data['no_results'] = true;
