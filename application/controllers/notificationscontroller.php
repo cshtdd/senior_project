@@ -80,7 +80,7 @@ class NotificationsController extends CI_Controller
         }
     }
 
-    public function hide_notification($notificationId)
+    public function hide_notification($notification_id)
     {
         if (!is_POST_request($this))
         {
@@ -88,12 +88,7 @@ class NotificationsController extends CI_Controller
         }
         else
         {
-            if (!is_test($this))
-            {
-                $this->spw_notification_model->set_notification_to_read($notificationId);
-            }
-            
-            $this->output->set_output('notification hidden');
+            $this->hideNotificationInternal($notification_id);
 
             //redirect back to the previous page
             $pbUrl = $this->input->post('pbUrl');
@@ -269,5 +264,21 @@ class NotificationsController extends CI_Controller
     private function rejectNotificationInternalTest($notification_id)
     {
         setFlashMessage($this, 'Candidates will be notified of your rejection');
+    }
+
+    private function hideNotificationInternal($notification_id)
+    {
+        if (is_test($this))
+        {
+            $this->hideNotificationInternalTest($notification_id);
+        }
+        else
+        {
+            $this->spw_notification_model->set_notification_to_read($notificationId);
+        }
+    }
+    private function hideNotificationInternalTest($notification_id)
+    {
+        setFlashMessage($this, 'Nofication hidden');
     }
 }
