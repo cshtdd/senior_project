@@ -198,9 +198,10 @@
 
 
 
-                            <?php echo form_open('searchcontroller/search', array( 
+                            <?php echo form_open('searchcontroller/search_string', array( 
                                 'class' => 'navbar-search pull-right visible-desktop', 
-                                'id' => 'search-form-top')) ?>
+                                'id' => 'search-form-top',
+                                'method' => 'GET')) ?>
                                 <div class="input-append">
                                     <?php
 
