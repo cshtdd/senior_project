@@ -210,9 +210,7 @@
                                         $pos = stripos($uri, 'search/');
                                         if (isset($pos) && $pos === 0)
                                         {
-                                            $searchParam = substr($uri, strlen('search/'));
-
-
+                                            $searchParam = urldecode(substr($uri, strlen('search/')));
                                         }
 
                                         echo form_input(array(
