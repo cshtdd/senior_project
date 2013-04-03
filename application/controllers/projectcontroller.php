@@ -285,31 +285,14 @@ class ProjectController extends CI_Controller
         {
             $postBackUrl = $this->input->post('pbUrl');
             if (strlen($postBackUrl) == 0) 
+            {
                 $postBackUrl = '/';
+            }
 
             $project_id = $this->input->post('pid');
-            $currentUserId = getCurrentUserId($this);
 
-            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
-            if(!$result)
-            {
-                $project_team = $this->spw_project_model->get_team_members($project_id);
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId){
-                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
-                    }
-                }
+            $this->joinProjectInternal($project_id);
 
-                setFlashMessage($this, 'Your join request has been sent');
-            }
-            else
-            {
-                $project_title = $this->spw_project_model->get_project_title($project_id);
-                $msg = 'You already sent a notification for the project '.$project_title;
-                setFlashMessage($this, $msg);
-            }
             redirect($postBackUrl);
         }
     }
@@ -1169,5 +1152,42 @@ class ProjectController extends CI_Controller
         $newPostBackUrl = str_replace('create', $new_project_id, $postBackUrl);
 
         return $newPostBackUrl;
+    }
+
+    private function joinProjectInternal($project_id)
+    {
+        if (is_test($this))
+        {
+            $this->joinProjectInternalTest($project_id);
+        }
+        else
+        {
+            $currentUserId = getCurrentUserId($this);
+
+            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
+            if(!$result)
+            {
+                $project_team = $this->spw_project_model->get_team_members($project_id);
+                for($i = 0; $i < count($project_team); $i++)
+                {
+                    $member_id = $project_team[$i];
+                    if($member_id != $currentUserId){
+                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
+                    }
+                }
+
+                setFlashMessage($this, 'Your join request has been sent');
+            }
+            else
+            {
+                $project_title = $this->spw_project_model->get_project_title($project_id);
+                $msg = 'You already sent a notification for the project '.$project_title;
+                setFlashMessage($this, $msg);
+            }
+        }
+    }
+    private function joinProjectInternalTest($project_id)
+    {
+        setFlashMessage($this, 'Your join request has been sent');
     }
 }
