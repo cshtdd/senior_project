@@ -4,6 +4,7 @@
     if (!isset($hideCreateProject) || !$hideCreateProject)
     {
         echo anchor('project/create', 'Create New Project', array(
+            'id' => 'btn-create-new-project',
             'class' => 'btn btn-primary btn-large pull-right'));
     }
 ?>
