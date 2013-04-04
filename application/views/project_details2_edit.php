@@ -316,11 +316,21 @@
             $(this).click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
+
                 var idToRemove = $(this).attr("data-idtoremove");
                 var parentListId = $('#' + idToRemove).parent().attr('id');
 
-                $('#' + idToRemove).remove();
-                buildlUserIds(parentListId);
+                alertify.set({ labels: {
+                    ok     : "Yes",
+                    cancel : "No" }
+                });
+
+                alertify.confirm("Do you really want to expel this user from your project?", function (e) {
+                    if (e) {
+                        $('#' + idToRemove).remove();
+                        buildlUserIds(parentListId);
+                    }
+                });
             });
         });
 
