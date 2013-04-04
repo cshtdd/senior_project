@@ -71,6 +71,20 @@ class SPW_Project_Model extends CI_Model
         $this->db->update('spw_project', $project_obj);
     }
 
+    public function update_status($project_id, $status)
+    {   
+        $query = $this->db
+                      ->where('name',$status)
+                      ->get('spw_project_status');
+
+        $data = array(
+            'status' => $query->row()->id
+        );
+
+        $this->db->where('id',$project_id);
+        $this->db->update('spw_project', $data);
+    }
+
     public function deleteSkillProjectEntry($skill_id, $project_id)
     {
         if (isset($skill_id) && isset($project_id))
