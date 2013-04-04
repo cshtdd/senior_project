@@ -214,6 +214,8 @@
                     <?php $this->load->view('subviews/experience_list', array('lExperiences' => $userDetails->lExperiences)) ?>
                 </div>
 
+                <div class="clearfix"></div>
+
             </div>
 
         <?php echo form_close() ?>
