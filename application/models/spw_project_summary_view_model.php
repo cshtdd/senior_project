@@ -137,8 +137,13 @@ class SPW_Project_Summary_View_Model extends CI_Model
                         else
                         {
                             $project_summ_vm->displayLeave = FALSE;
-                            $project_summ_vm->displayJoin = TRUE;
-                        }   
+
+                            $lMemberIds = $tempProject->getStudentIdsListForProject($project_id);
+                            if (count($lMemberIds) == $project->max_students)
+                                $project_summ_vm->displayJoin = FALSE;
+                            else
+                                $project_summ_vm->displayJoin = TRUE;
+                        } 
                     }
                 } 
             }
