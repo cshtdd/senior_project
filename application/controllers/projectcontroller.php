@@ -369,13 +369,15 @@ class ProjectController extends CI_Controller
         {
             if(isUserLoggedIn($this))
             {
+                $currentUserId = getCurrentUserId($this);
+                
+                $isUserStudent = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                
                 $tempTerm = new SPW_Term_Model();
 
-                $project_details = new SPW_Project_Details_View_Model();
+                $project_details = new SPW_Project_Details_View_Model();    
 
-                $currentUserId = getCurrentUserId($this);
-
-                $project_details->onlyShowUserTerm = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                $project_details->onlyShowUserTerm = $isUserStudent;
 
                 $project1 = new SPW_Project_Model();
                 $project1->id = -1;
