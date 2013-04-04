@@ -167,7 +167,9 @@
             </span>
         </div>
 
-        <?php echo 'Status: '.ucfirst($projectDetails->statusName) ?>
+        <?php if (!isset($creating_new) || !$creating_new) 
+            echo 'Status: '.ucfirst($projectDetails->statusName)
+         ?>
 
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 

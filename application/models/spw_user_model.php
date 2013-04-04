@@ -514,7 +514,7 @@ class SPW_User_Model extends CI_Model
                                            where user = ?) as skills, (select spw_project.id, skill
                                                                        from spw_project, spw_skill_project, spw_term
                                                                        where (spw_project.id = project) and (spw_project.status <> 4) and
-                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests >= NOW())
                                                                          and (spw_term.id = ?)) as project_skills
                         where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
                         group by spw_project.id
@@ -541,7 +541,7 @@ class SPW_User_Model extends CI_Model
                                        where user = ?) as skills, (select spw_project.id, skill
                                                                    from spw_project, spw_skill_project, spw_term
                                                                    where (spw_project.id = project) and (spw_project.status <> 4) and
-                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests > NOW())) 
+                                                                         (spw_term.id = spw_project.delivery_term) and (spw_term.closed_requests >= NOW())) 
                                                                          as project_skills
                     where (skills.skill=project_skills.skill) and (spw_project.id=project_skills.id)
                     group by spw_project.id
@@ -847,7 +847,7 @@ class SPW_User_Model extends CI_Model
                 {
                     $currentUserGraduationTerm = $this->getUserGraduationTerm($current_user_id);
 
-                    if ($currentUserGraduationTerm->closed_requests > $currentDate)
+                    if ($currentUserGraduationTerm->closed_requests >= $currentDate)
                     {
                         if ($isInvitedUserStudent)
                         {
@@ -909,7 +909,7 @@ class SPW_User_Model extends CI_Model
             $tempProject = new SPW_Project_Model();
             $projectTerm = $tempProject->getProjectDeliveryTerm($lMentorProjectIds[$i]);
 
-            if (($projectTerm->id == $studentTerm->id) && ($projectTerm->closed_requests > $currentDate))
+            if (($projectTerm->id == $studentTerm->id) && ($projectTerm->closed_requests >= $currentDate))
             {
                 if (isset($lStudentProjectId) && (count($lStudentProjectId)>0))
                 {
@@ -935,7 +935,7 @@ class SPW_User_Model extends CI_Model
             $tempProject = new SPW_Project_Model();
             $projectTerm = $tempProject->getProjectDeliveryTerm($lMentorProjectIds[$i]);;
 
-            if ($projectTerm->closed_requests > $currentDate)
+            if ($projectTerm->closed_requests >= $currentDate)
             {
                 if (isset($lInvitedMentorProjectIds) && (count($lInvitedMentorProjectIds)>0))
                 {

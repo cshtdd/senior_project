@@ -4,6 +4,7 @@ if ( !function_exists('shouldPresentWarningOnCreateProject'))
 {
     function shouldPresentWarningOnCreateProject($sender_controller)
     {
+
         if (is_test($sender_controller))
         {
             return true;
