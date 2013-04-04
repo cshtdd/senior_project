@@ -1063,7 +1063,7 @@ class ProjectController extends CI_Controller
             if (isset($term))
             {
                 $currentDate = date('Y-m-d');
-                if ($term->closed_requests > $currentDate)
+                if ($term->closed_requests >= $currentDate)
                 {
                     return false;
                 }

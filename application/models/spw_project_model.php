@@ -145,8 +145,8 @@ class SPW_Project_Model extends CI_Model
                                     from spw_skill_project
                                     where project = ?) as skills, (select spw_user.id, skill
                                                                    from spw_user, spw_skill_user, spw_term
-                                                                   where (spw_user.id = user) and (spw_term.id = spw_user.graduation_term) and                                        (spw_term.closed_requests > NOW())
-                                                                         and (spw_term.id = ?) and (spw_term.closed_requests > NOW())) as user_skills
+                                                                   where (spw_user.id = user) and (spw_term.id = spw_user.graduation_term) and                                        (spw_term.closed_requests >= NOW())
+                                                                         and (spw_term.id = ?) and (spw_term.closed_requests >= NOW())) as user_skills
                     where (skills.skill=user_skills.skill) and (spw_user.id=user_skills.id)
                     group by spw_user.id
                     order by nSkillMatch DESC';
@@ -206,7 +206,7 @@ class SPW_Project_Model extends CI_Model
         if (isset($term))
             {
                 $currentDate = date('Y-m-d');
-                if ($term->closed_requests > $currentDate)
+                if ($term->closed_requests >= $currentDate)
                 {
                     return false;
                 }
@@ -446,7 +446,7 @@ class SPW_Project_Model extends CI_Model
                                     where project = ?) as skills, (select spw_user.id, skill
                                                                    from spw_user, spw_skill_user, spw_term
                                                                    where (spw_user.id = user) and (spw_user.graduation_term is null) and 
-                                                                         (spw_term.id = ?) and (spw_term.closed_requests > NOW())) as user_skills
+                                                                         (spw_term.id = ?) and (spw_term.closed_requests >= NOW())) as user_skills
                     where (skills.skill=user_skills.skill) and (spw_user.id=user_skills.id)
                     group by spw_user.id
                     order by nSkillMatch DESC';
