@@ -47,6 +47,39 @@ class SPW_User_Model extends CI_Model
         }
     }
 
+    public function get_project($user_id)
+    {
+       $query = $this->db
+                      ->where('id', $user_id)
+                      ->select('project')
+                      ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->project;
+        }
+        else
+        {
+            return null; 
+        }         
+    }
+
+    public function get_head_professor()
+    {
+        $query = $this->db
+                      ->where('role', 2)
+                      ->get('spw_role_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->user;
+        }
+        else
+        {
+            return null; 
+        }     
+    }
+
     public function change_pwd($spw_id, $new_pwd)
     {
         $data = array(

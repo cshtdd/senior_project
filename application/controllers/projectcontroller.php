@@ -200,7 +200,10 @@ class ProjectController extends CI_Controller
                         if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
                             $this->SPW_Project_Model->assignSkillsToProject($updated_skill_names_str, $new_project_id);
 
+                        $this->spw_notification_model->create_professor_approval_project($current_user_id, $new_project_id);
+
                         setFlashMessage($this, 'Your project was created');
+
                         $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
                         redirect($newPostBackUrl); 
                     }

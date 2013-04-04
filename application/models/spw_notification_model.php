@@ -184,8 +184,8 @@ class SPW_Notification_Model extends CI_Model
                     'from' => $approver_user,
                     'to_user' => $approved_user,
                     'to_project'  => $project_id,
-                    'body'    => "Congratulations! You have been accepted by ".$fullname." to join the project ".$project_title. "Please click \"Accept\" if you want to leave your current ptoject and join this one. \"Reject\" otherwise",
-                    'type'    => 'join_approved',
+                    'body'    => "Congratulations! You have been accepted by ".$fullname." to join the project ".$project_title. "<br/>Please click \"Accept\" if you want to leave your current ptoject and join this one. Click \"Reject\" otherwise",
+                    'type'    => 'change_project',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
@@ -194,12 +194,28 @@ class SPW_Notification_Model extends CI_Model
 
     public function create_change_project_accepted_notification_for_project($approver_user,$approved_user, $project_id)
     {
-        //
-        //Do it!
-        // $team_members = $this->spw_project_model->get_team_members($project_id);
-        // for($i = 0; $i < count($team_members); $i++) {
-        //     create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
-        // }
+         $team_members = $this->spw_project_model->get_team_members($project_id);
+         for($i = 0; $i < count($team_members); $i++) {
+            if($team_members[$i] != $approved_user)
+                $this->create_change_project_accepted_notification_for_user($approved_user, $team_members[$i], $project_id);
+         }
+    }
+
+    private function create_change_project_accepted_notification_for_user($approved_user, $to_user, $project_id)
+    {
+        $project_title = $this->spw_project_model->get_project_title($project_id);
+
+        $fullname = $this->spw_user_model->get_fullname($approved_user);
+        $data = array(
+                    'from' => $approved_user,
+                    'to_user' => $to_user,
+                    'to_project'  => $project_id,
+                    'body'    => $fullname."joined your project",
+                    'type'    => 'join_approved',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);
     }
 
     public function create_join_rejected_notification_for_user($from_user_id, $to_user_id, $project_id)
@@ -221,45 +237,56 @@ class SPW_Notification_Model extends CI_Model
 
     public function create_professor_approval_rejected_notification($project_id)
     {
+         $professor = $this->spw_user_model->get_head_professor();
+
          $team_members = $this->spw_project_model->get_team_members($project_id);
+
          for($i = 0; $i < count($team_members); $i++) {
-             create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
+            if($team_members[$i] != $professor)
+                $this->create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
          }
     }
 
 
     public function create_professor_approval_approved_notification($project_id)
     {
+        $professor = $this->spw_user_model->get_head_professor();
+
          $team_members = $this->spw_project_model->get_team_members($project_id);
          for($i = 0; $i < count($team_members); $i++) {
-             create_professor_approval_approved_notification_to_user( $team_members[$i], $project_id);
+             if($team_members[$i] != $professor)
+                $this->create_professor_approval_approved_notification_to_user( $team_members[$i], $project_id);
          }
     }
 
-    public function create_professor_approval_approved_notification_to_user($to_user_id, $project_id)
+    private function create_professor_approval_approved_notification_to_user($to_user_id, $project_id)
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
+        $professor_id = $this->spw_user_model->get_head_professor();
 
         $data = array(
+                    'from' => $professor_id,
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
-                    'body'    =>  "Your project ".$project_title. "has been approved by the professor",
-                    'type'    => 'professor_approval',
+                    'body'    =>  "Congratulations! Your project ".$project_title." has been approved by the professor",
+                    'type'    => 'professor_approval_approved',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
     }
 
-    public function create_professor_approval_rejected_notification_to_user($user_id, $project_id)
+    private function create_professor_approval_rejected_notification_to_user($user_id, $project_id)
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
+        $professor_id = $this->spw_user_model->get_head_professor();
 
         $data = array(
+                    'from' => $professor_id,
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
-                    'body'    =>  "Your project ".$project_title. "has been rejected by the professor",
-                    'type'    => 'professor_approval',
+                    'body'    =>  "Your project ".$project_title." has been rejected by the professor",
+                    'type'    => 'professor_approval_rejected',
                      'datetime' => date("Y-m-d H:i:s", time())
                     );
 
@@ -269,7 +296,6 @@ class SPW_Notification_Model extends CI_Model
     public function create_member_added_notification_for_project($approver_user, $approved_user, $project_id)
     {
          $team_members = $this->spw_project_model->get_team_members($project_id);
-
 
          for($i = 0; $i < count($team_members); $i++) {
             if($team_members[$i] != $approver_user && $team_members[$i] != $approved_user){
@@ -318,7 +344,7 @@ class SPW_Notification_Model extends CI_Model
                     'from'    => $approver_user,  
                     'to_user' => $user_id,
                     'to_project'  => $project_id,
-                    'body'    =>  $approved_user_fullname." was rejected by ".$approver_user_fullname."to join your project ". $project_title,
+                    'body'    =>  $approved_user_fullname." was rejected by ".$approver_user_fullname." to join your project ". $project_title,
                     'type'    => 'member_added',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
@@ -326,6 +352,22 @@ class SPW_Notification_Model extends CI_Model
         $this->db->insert('spw_notification',$data);
     }
 
+    public function create_professor_approval_project($from_user, $new_project_id)
+    {
+        $professor_id = $this->spw_user_model->get_head_professor($new_project_id);
+        $project_title = $this->spw_project_model->get_project_title($new_project_id);
+
+        $data = array(
+                    'from'    => $from_user,  
+                    'to_user' => $professor_id,
+                    'to_project'  => $new_project_id,
+                    'body'    =>  $project_title." needs your approval",
+                    'type'    => 'professor_approval',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
 
     public function get_active_notification_for_user($user_id)
     {
