@@ -49,8 +49,8 @@
                                         'class' => 'input-large',
                                         'placeholder' => 'http://example.com/img1.png',
                                         'value' => $userDetails->user->picture,
-                                        'title' => 'Profile Image',
-                                        'required' => ''
+                                        'title' => 'Profile Image' /*,
+                                        'required' => '' */
                                     ));
                                 ?>
                             </p>
@@ -213,6 +213,8 @@
                 <div class="spaced-top">
                     <?php $this->load->view('subviews/experience_list', array('lExperiences' => $userDetails->lExperiences)) ?>
                 </div>
+
+                <div class="clearfix"></div>
 
             </div>
 

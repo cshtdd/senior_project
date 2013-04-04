@@ -25,8 +25,10 @@
             </p>
 
             <p>
-                Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
+                Delivery Term: <?php echo strtoupper($projectDetails->term->name).'<br>' ?>
+                Status: <?php echo ucfirst($projectDetails->statusName) ?>
             </p>
+
             <p>
                 Maximum project capacity: <?php echo $projectDetails->project->max_students.' students' ?>
             </p>

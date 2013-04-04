@@ -247,7 +247,7 @@
         <div id="main-content">     
 
         <?php if (isFlashMessageAvailable($this)){ ?>
-            <div class="alert">
+            <div class="alert <?php echo getFlashMessageClass($this)?>">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
               <div id="alert-text"><?php echo getFlashMessage($this) ?></div>
             </div>

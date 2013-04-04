@@ -1,7 +1,8 @@
     </div>
     <hr>
     <div class="footer">
-        <p><a href="http://www.cash-productions.com"> © CASH Productions 2013 </a>
+        <p> <!-- <a href="http://www.cash-productions.com"> © CASH Productions 2013 </a> -->
+            <a href="http://www.fiu.edu">Florida International University </a>
 
             <span class="pull-right">Rendered in <strong>{elapsed_time}</strong> seconds</span>
         </p>

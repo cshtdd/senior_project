@@ -253,19 +253,13 @@ class ProjectController extends CI_Controller
             $projectId = $this->input->post('pid');
             $currentUserId = getCurrentUserId($this);
 
-            if($this->leaveProjectInternal($projectId, $currentUserId)){
-                $project_team = $this->spw_project_model->get_team_members($projectId);
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId){
-                        $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
-                    }
-                }
-                
-                setFlashMessage($this, 'You have left the project');    
-            }else{
-                 setFlashMessage($this, "Error: you can't leave this project");  
+            if($this->leaveProjectInternal($projectId, $currentUserId))
+            {
+                setFlashMessage($this, 'You have left the project');
+            }
+            else
+            {
+                setErrorFlashMessage($this, 'You cannot leave this project');
             }
             redirect($postBackUrl);
         }
@@ -280,31 +274,12 @@ class ProjectController extends CI_Controller
         else
         {
             $postBackUrl = $this->input->post('pbUrl');
-            if (strlen($postBackUrl) == 0) 
-                $postBackUrl = '/';
+            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
 
             $project_id = $this->input->post('pid');
-            $currentUserId = getCurrentUserId($this);
 
-            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
-            if(!$result)
-            {
-                $project_team = $this->spw_project_model->get_team_members($project_id);
-               
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId){
-                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
-                    }
-                }
+            $this->joinProjectInternal($project_id);
 
-                setFlashMessage($this, 'Your join request has been sent');
-            }else{
-                $project_title = $this->spw_project_model->get_project_title($project_id);
-                $msg = 'You already sent a notification for the project '.$project_title;
-                setFlashMessage($this, $msg);
-            }
             redirect($postBackUrl);
         }
     }
@@ -394,13 +369,15 @@ class ProjectController extends CI_Controller
         {
             if(isUserLoggedIn($this))
             {
+                $currentUserId = getCurrentUserId($this);
+                
+                $isUserStudent = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                
                 $tempTerm = new SPW_Term_Model();
 
-                $project_details = new SPW_Project_Details_View_Model();
+                $project_details = new SPW_Project_Details_View_Model();    
 
-                $currentUserId = getCurrentUserId($this);
-
-                $project_details->onlyShowUserTerm = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                $project_details->onlyShowUserTerm = $isUserStudent;
 
                 $project1 = new SPW_Project_Model();
                 $project1->id = -1;
@@ -1103,7 +1080,18 @@ class ProjectController extends CI_Controller
         }
         else
         {
-            return $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
+            $result = $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
+
+            $project_team = $this->spw_project_model->get_team_members($project_id);
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $user_id){
+                    $this->spw_notification_model->create_leave_notification_for_user($user_id, $member_id, $project_id);
+                }
+            }
+
+            return $result;
         }
     }
 
@@ -1165,4 +1153,44 @@ class ProjectController extends CI_Controller
 
         return $newPostBackUrl;
     }
+
+    private function joinProjectInternal($project_id)
+    {
+        if (is_test($this))
+        {
+            $this->joinProjectInternalTest($project_id);
+        }
+        else
+        {
+            $currentUserId = getCurrentUserId($this);
+
+            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
+            if(!$result)
+            {
+                $project_team = $this->spw_project_model->get_team_members($project_id);
+               
+                for($i = 0; $i < count($project_team); $i++)
+                {
+                    $member_id = $project_team[$i];
+                    if($member_id != $currentUserId)
+                    {
+                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
+                    }
+                }
+
+                setFlashMessage($this, 'Your join request has been sent');
+            }
+            else
+            {
+                $project_title = $this->spw_project_model->get_project_title($project_id);
+                $msg = 'You already sent a notification for the project '.$project_title;
+                setFlashMessage($this, $msg);
+            }
+        }
+    }
+    private function joinProjectInternalTest($project_id)
+    {
+        setFlashMessage($this, 'Your join request has been sent');
+    }
+
 }
