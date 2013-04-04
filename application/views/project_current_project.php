@@ -58,6 +58,7 @@
                 <p>
                     <?php echo $iProject->getShortDescription() ?>
                     <?php echo anchor('project/'.$iProject->project->id, 'More Info...') ?>
+                    <?php echo '<br>Status: '.ucfirst($iProject->statusName) ?>
                 </p>
             </li>
         <?php } ?>

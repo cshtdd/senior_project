@@ -5,6 +5,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
     //a SPW_Project_Model object
     public $project;
 
+    public $statusName;
+
     //a SPW_Term_Model object
     public $term;
 
@@ -53,6 +55,7 @@ class SPW_Project_Summary_View_Model extends CI_Model
     {
         $tempUser = new SPW_User_Model();
         $tempProject = new SPW_Project_Model();
+        $tempStatus = new SPW_Project_Status_Model();
 
         $length = count($lProjectIds);
 
@@ -73,6 +76,8 @@ class SPW_Project_Summary_View_Model extends CI_Model
                 $project_summ_vm->justList = true;
 
                 $term = $tempProject->getProjectTermInfo($project_id);
+
+                $project_summ_vm->statusName = $tempStatus->getStatusName($project->status);
 
                 if (isset($term))
                 {

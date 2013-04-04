@@ -255,11 +255,11 @@ class ProjectController extends CI_Controller
 
             if($this->leaveProjectInternal($projectId, $currentUserId))
             {
-                setFlashMessage($this, 'You have left the project');    
+                setFlashMessage($this, 'You have left the project');
             }
             else
             {
-                 setFlashMessage($this, "Error: you can't leave this project");  
+                setErrorFlashMessage($this, 'You cannot leave this project');
             }
             redirect($postBackUrl);
         }
@@ -1080,12 +1080,12 @@ class ProjectController extends CI_Controller
         {
             $result = $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
 
-            $project_team = $this->spw_project_model->get_team_members($projectId);
+            $project_team = $this->spw_project_model->get_team_members($project_id);
             for($i = 0; $i < count($project_team); $i++)
             {
                 $member_id = $project_team[$i];
-                if($member_id != $currentUserId){
-                    $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
+                if($member_id != $user_id){
+                    $this->spw_notification_model->create_leave_notification_for_user($user_id, $member_id, $project_id);
                 }
             }
 

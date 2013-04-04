@@ -71,8 +71,8 @@
                 <?php }?>
             </ul>
 
-            Delivery Term: <?php echo strtoupper($iProject->term->name) ?>
-            Status: <?php echo $iProject->project->status->name ?>
+            Delivery Term: <?php echo strtoupper($iProject->term->name).'<br>' ?>
+            Status: <?php echo ucfirst($iProject->statusName) ?>
         </li>
     <?php } ?>
 </ul>
