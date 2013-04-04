@@ -221,7 +221,7 @@ class NotificationsController extends CI_Controller
 
                 $this->spw_project_model->add_member_to_project($approved_user, $project_id);
 
-                $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title.'\n';
+                $reject_details_msg = $from_fullname.' has been automatically added to the project '.$project_title.'';
                 $reject_details_msg =  $reject_details_msg.$from_fullname." will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
             }
@@ -230,7 +230,7 @@ class NotificationsController extends CI_Controller
                 $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
                 $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
 
-                $reject_details_msg = $project_title." has been rejected\\n";
+                $reject_details_msg = $project_title.' has been rejected';
                 $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
             }  
@@ -275,13 +275,13 @@ class NotificationsController extends CI_Controller
                 $this->spw_notification_model->create_member_rejected_notification_for_project($approver_user,$approved_user, $project_id);
                 $this->spw_notification_model->create_join_rejected_notification_for_user($approver_user,$approved_user, $project_id);
 
-                $reject_details_msg = 'Request to join project '.$project_title.' has been denied\n';
+                $reject_details_msg = 'Request to join project '.$project_title.' has been denied';
                 $reject_details_msg = $reject_details_msg.$from_fullname." will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
             }
             else if($spw_notification_model->type == 'professor_approval')
             {
-                $reject_details_msg = $project_title.' has been rejected\n';
+                $reject_details_msg = $project_title.' has been rejected';
                 $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
 
