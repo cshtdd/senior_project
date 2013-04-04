@@ -133,7 +133,7 @@ class SPW_Notification_Model extends CI_Model
                     'to_user'  => $to_user_id,
                     'to_project'  => $project_id,
                     'body'      => $fullname." left your project ".$project_title,
-                    'type'    => 'leave'
+                    'type'    => 'leave',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
@@ -151,7 +151,7 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
                     'body'    => $fullname." wants to join your project ".$project_title,
-                    'type'    => 'join'
+                    'type'    => 'join',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
@@ -175,7 +175,7 @@ class SPW_Notification_Model extends CI_Model
         $this->db->insert('spw_notification',$data);
     }
 
-    public create_change_project_notification_for_user($approver_user, $approved_user, $project_id)
+    public function create_change_project_notification_for_user($approver_user, $approved_user, $project_id)
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
 
@@ -194,11 +194,12 @@ class SPW_Notification_Model extends CI_Model
 
     public function create_change_project_accepted_notification_for_project($approver_user,$approved_user, $project_id)
     {
-        Do it!
-         $team_members = $this->spw_project_model->get_team_members($project_id);
-         for($i = 0; $i < count($team_members); $i++) {
-             create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
-         }
+        //
+        //Do it!
+        // $team_members = $this->spw_project_model->get_team_members($project_id);
+        // for($i = 0; $i < count($team_members); $i++) {
+        //     create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
+        // }
     }
 
     public function create_join_rejected_notification_for_user($from_user_id, $to_user_id, $project_id)
