@@ -100,6 +100,26 @@ class SPW_Notification_Model extends CI_Model
         $this->db->update('spw_notification', $data);
     }
 
+    public function set_join_notification_to_read($from_user, $to_user, $to_project)
+    {
+        $query = $this->db
+                     ->where('from', $from_user)
+                     ->where('to_user', $to_user)
+                     ->where('to_project', $to_project)
+                     ->where('type', 'member_added')
+                     ->select('id')
+                     ->get('spw_notification'); 
+
+        if($query->num_rows() > 0)
+        {
+            $this->set_notification_to_read($query->row()->id);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function create_leave_notification_for_user($from_user_id, $to_user_id, $project_id)
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
@@ -209,6 +229,61 @@ class SPW_Notification_Model extends CI_Model
 
         $this->db->insert('spw_notification',$data);
     }
+
+    public function create_member_added_notification_for_project($approver_user, $approved_user, $project_id)
+    {
+         $team_members = $this->spw_project_model->get_team_members($project_id);
+         for($i = 0; $i < count($team_members); $i++) {
+            if($team_members[$i] != $approver_user)
+                $this->create_member_added_notification_for_user($approver_user, $approved_user, $team_members[$i], $project_id);
+         }
+    }
+
+    private function create_member_added_notification_for_user($approver_user, $approved_user, $user_id, $project_id)
+    {
+
+        $approver_user_fullname = $this->spw_user_model->get_fullname($approver_user);
+        $approved_user_fullname = $this->spw_user_model->get_fullname($approved_user);
+        $project_title = $this->spw_project_model->get_project_title($project_id);
+
+        $data = array(
+                    'from'    => $approver_user,  
+                    'to_user' => $user_id,
+                    'to_project'  => $project_id,
+                    'body'    =>  $approved_user_fullname." was approved by ".$approver_user_fullname." to join your project ". $project_title,
+                    'type'    => 'member_added'
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
+    public function create_member_rejected_notification_for_project($approver_user, $approved_user, $project_id)
+    {
+         $team_members = $this->spw_project_model->get_team_members($project_id);
+         for($i = 0; $i < count($team_members); $i++) {
+            if($team_members[$i] != $approver_user){
+                $this->create_member_rejected_notification_for_user($approver_user, $approved_user, $team_members[$i] , $project_id);
+            }
+        }
+    }
+
+    private function create_member_rejected_notification_for_user($approver_user, $approved_user, $user_id, $project_id)
+    {
+        $approver_user_fullname = $this->spw_user_model->get_fullname($approver_user);
+        $approved_user_fullname = $this->spw_user_model->get_fullname($approved_user);
+        $project_title = $this->spw_project_model->get_project_title($project_id);
+
+        $data = array(
+                    'from'    => $approver_user,  
+                    'to_user' => $user_id,
+                    'to_project'  => $project_id,
+                    'body'    =>  $approved_user_fullname." was rejected by ".$approver_user_fullname."to join your project ". $project_title,
+                    'type'    => 'member_added'
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
 
     public function get_active_notification_for_user($user_id)
     {

@@ -27,12 +27,16 @@
     <link href="<?php echo base_url() ?>css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="<?php echo base_url() ?>css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <!-- <link href="<?php echo base_url() ?>css/bootstrap-tagmanager.css" rel="stylesheet" media="screen"> -->
+    <link href="<?php echo base_url() ?>css/alertify.core.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/alertify.bootstrap.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url() ?>css/normalize.css" rel="stylesheet" media="screen">
 
     <link href="<?php echo base_url() ?>css/style.css" rel="stylesheet" media="screen">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>js/bootstrap.min.js"></script>
     <script src="<?php echo base_url() ?>js/bootstrap-tagmanager.js"></script>
+    <script src="<?php echo base_url() ?>js/alertify.min.js"></script>
 	<!--[if lt IE 9]>
 		<script src="<?php echo base_url() ?>js/html5shiv.js"></script>
 	<![endif]-->
@@ -197,9 +201,10 @@
 
 
 
-                            <?php echo form_open('searchcontroller/search', array( 
+                            <?php echo form_open('searchcontroller/search_string', array( 
                                 'class' => 'navbar-search pull-right visible-desktop', 
-                                'id' => 'search-form-top')) ?>
+                                'id' => 'search-form-top',
+                                'method' => 'GET')) ?>
                                 <div class="input-append">
                                     <?php
 
@@ -208,9 +213,7 @@
                                         $pos = stripos($uri, 'search/');
                                         if (isset($pos) && $pos === 0)
                                         {
-                                            $searchParam = substr($uri, strlen('search/'));
-
-
+                                            $searchParam = urldecode(substr($uri, strlen('search/')));
                                         }
 
                                         echo form_input(array(
@@ -244,7 +247,7 @@
         <div id="main-content">     
 
         <?php if (isFlashMessageAvailable($this)){ ?>
-            <div class="alert">
+            <div class="alert <?php echo getFlashMessageClass($this)?>">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
               <div id="alert-text"><?php echo getFlashMessage($this) ?></div>
             </div>

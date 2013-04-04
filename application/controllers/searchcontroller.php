@@ -16,53 +16,47 @@ class SearchController extends CI_Controller
     public function search_string()
     {
         $search_param = $this->input->get('q', TRUE);
-        $redirectUrl = base_url().'search/'.'keyword';
+        $redirectUrl = base_url().'search/'.$search_param;
         redirect($redirectUrl);
     }  
 
     public function search($search_param='')
     {
-        if (!is_POST_request($this))
-        {
-            redirect('/');
-        }
-        else
-        {
-            $search_param = $this->input->post('q');
+        //ARGHH I spent so much time trying to figure out why search_param was empty
+        //$search_param = $this->input->post('q');
 
-            $data['title'] = 'Search';
-            $data['no_results'] = true;
+        $data['title'] = 'Search';
+        $data['no_results'] = true;
 
-            if (isset($search_param) && strlen($search_param) > 0)
+        if (isset($search_param) && strlen($search_param) > 0)
+        {
+            $search_query = $this->removeUndesiredCharacters($search_param);
+
+            $search_query = strtolower($search_query);
+
+            $search_query = trim($search_query);
+
+            $results_search = $this->getResultsWithSearchParam($search_query);
+
+            //$lProjects = $this->getProjectsWithSearchParam($search_query);
+            //$lUsers = $this->getUsersWithSearchParam($search_query);
+
+            if (isset($results_search) && count($results_search) > 0)
             {
-                $search_query = $this->removeUndesiredCharacters($search_param);
+                $data['lProjects'] = $results_search[0];
+                $noProjectsFound = (count($results_search[0])==0);
 
-                $search_query = strtolower($search_query);
+                $data['lMentors'] = $results_search[1];
+                $noMentorsFound = (count($results_search[1])==0);
 
-                $search_query = trim($search_query);
+                $data['lStudents'] = $results_search[2];
+                $noStudentsFound = (count($results_search[2])==0);
 
-                $results_search = $this->getResultsWithSearchParam($search_query);
-
-                //$lProjects = $this->getProjectsWithSearchParam($search_query);
-                //$lUsers = $this->getUsersWithSearchParam($search_query);
-
-                if (isset($results_search) && count($results_search) > 0)
-                {
-                    $data['lProjects'] = $results_search[0];
-                    $foundProjects = (count($results_search[0])==0);
-
-                    $data['lMentors'] = $results_search[1];
-                    $foundMentors = (count($results_search[1])==0);
-
-                    $data['lStudents'] = $results_search[2];
-                    $foundStudents = (count($results_search[2])==0);
-
-                    $data['no_results'] = $foundProjects && $foundMentors && $foundStudents;
-                }
+                $data['no_results'] = $noProjectsFound && $noMentorsFound && $noStudentsFound;
             }
-
-            $this->load->view('search_search', $data);
         }
+
+       $this->load->view('search_search', $data);
     }
 
     public function display_mobile_search()
@@ -155,17 +149,17 @@ class SearchController extends CI_Controller
         return $results_search;
     }
 
-	private function searchKeywordDatabaseQueries($keyword)
-	{
-		$user_id = getCurrentUserId($this);
-		$listProjectsIds = array();
-		$lProjectsTmp = array();
+    private function searchKeywordDatabaseQueries($keyword)
+    {
+        $user_id = getCurrentUserId($this);
+        $listProjectsIds = array();
+        $lProjectsTmp = array();
         $listUsersIds = array();
         $lUsersTmp = array();
 
-		$listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword);
-		$lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword);
-		$listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
+        $listProjectsIds = $this->SPW_Project_Model->searchQueriesOnProjectsForProjects($keyword);
+        $lProjectsTmp = $this->SPW_Project_Model->searchQueriesOnSkillsForProjects($keyword);
+        $listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);
 
         $lProjectsTmp = $this->SPW_Term_Model->searchQueriesOnTermForUsers($keyword);
         $listProjectsIds = $this->combineListIds($listProjectsIds, $lProjectsTmp);

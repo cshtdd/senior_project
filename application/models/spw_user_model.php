@@ -30,6 +30,34 @@ class SPW_User_Model extends CI_Model
         parent::__construct();
     }
 
+    public function get_pwd($user_id)
+    {
+        $query = $this->db
+                      ->where('id', $user_id)
+                      ->select('hash_pwd')
+                      ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->hash_pwd;
+        }
+        else
+        {
+            return null; 
+        }
+    }
+
+    public function change_pwd($spw_id, $new_pwd)
+    {
+        $data = array(
+                    'hash_pwd' => sha1($new_pwd)
+                    );
+
+        $this->db->where('id',$spw_id);
+        $this->db->update('spw_user', $data);
+
+    }
+
     public function verify_user($email_address, $pwd)
     {
         $query = $this->db
@@ -317,30 +345,7 @@ class SPW_User_Model extends CI_Model
         }
     }
 
-    public function get_role($user_id)
-    {
-        $query = $this->db
-                       ->where('user',$user_id)
-                       ->select('role')
-                       ->get('spw_role');
 
-        if ($query->num_rows() > 0)
-        {
-            if($query->num_rows() > 1)
-            {
-                
-            }
-
-            foreach ($query->result() as $row) {
-                
-            }
-            return $query->row()->picture;
-        }
-        else
-        {
-            throw new Exception('User Id not found');
-        }
-    }
        
  
     //TODO validate the data against XSS and CSRF and SQL Injection
