@@ -102,16 +102,19 @@ class SPW_Notification_Model extends CI_Model
 
     public function set_join_notification_to_read($from_user, $to_user, $to_project)
     {
+
         $query = $this->db
                      ->where('from', $from_user)
                      ->where('to_user', $to_user)
                      ->where('to_project', $to_project)
-                     ->where('type', 'member_added')
+                     ->where('type', 'join')
                      ->select('id')
                      ->get('spw_notification'); 
 
+
         if($query->num_rows() > 0)
         {
+
             $this->set_notification_to_read($query->row()->id);
         }
         else
@@ -130,7 +133,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user'  => $to_user_id,
                     'to_project'  => $project_id,
                     'body'      => $fullname." left your project ".$project_title,
-                    'type'    => 'leave'
+                    'type'    => 'leave',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -147,7 +151,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
                     'body'    => $fullname." wants to join your project ".$project_title,
-                    'type'    => 'join'
+                    'type'    => 'join',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -162,11 +167,39 @@ class SPW_Notification_Model extends CI_Model
                     'from' => $from_user_id,
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
-                    'body'    => "You have been accepted by ".$fullname." to join the project ".$project_title,
-                    'type'    => 'join_approved'
+                    'body'    => "Congratulations! You have been accepted by ".$fullname." to join the project ".$project_title,
+                    'type'    => 'join_approved',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
+    }
+
+    public function create_change_project_notification_for_user($approver_user, $approved_user, $project_id)
+    {
+        $project_title = $this->spw_project_model->get_project_title($project_id);
+
+        $fullname = $this->spw_user_model->get_fullname($approver_user);
+        $data = array(
+                    'from' => $approver_user,
+                    'to_user' => $approved_user,
+                    'to_project'  => $project_id,
+                    'body'    => "Congratulations! You have been accepted by ".$fullname." to join the project ".$project_title. "Please click \"Accept\" if you want to leave your current ptoject and join this one. \"Reject\" otherwise",
+                    'type'    => 'join_approved',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
+    public function create_change_project_accepted_notification_for_project($approver_user,$approved_user, $project_id)
+    {
+        //
+        //Do it!
+        // $team_members = $this->spw_project_model->get_team_members($project_id);
+        // for($i = 0; $i < count($team_members); $i++) {
+        //     create_professor_approval_rejected_notification_to_user( $team_members[$i], $project_id);
+        // }
     }
 
     public function create_join_rejected_notification_for_user($from_user_id, $to_user_id, $project_id)
@@ -179,7 +212,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
                     'body'    =>  "Your request to join the project ".$project_title. "has been denied by".$fullname,
-                    'type'    => 'join_rejected'
+                    'type'    => 'join_rejected',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -210,7 +244,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
                     'body'    =>  "Your project ".$project_title. "has been approved by the professor",
-                    'type'    => 'professor_approval'
+                    'type'    => 'professor_approval',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -224,7 +259,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $to_user_id,
                     'to_project'  => $project_id,
                     'body'    =>  "Your project ".$project_title. "has been rejected by the professor",
-                    'type'    => 'professor_approval'
+                    'type'    => 'professor_approval',
+                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -233,9 +269,13 @@ class SPW_Notification_Model extends CI_Model
     public function create_member_added_notification_for_project($approver_user, $approved_user, $project_id)
     {
          $team_members = $this->spw_project_model->get_team_members($project_id);
+
+
          for($i = 0; $i < count($team_members); $i++) {
-            if($team_members[$i] != $approver_user)
+            if($team_members[$i] != $approver_user && $team_members[$i] != $approved_user){
                 $this->create_member_added_notification_for_user($approver_user, $approved_user, $team_members[$i], $project_id);
+            }
+                
          }
     }
 
@@ -251,7 +291,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $user_id,
                     'to_project'  => $project_id,
                     'body'    =>  $approved_user_fullname." was approved by ".$approver_user_fullname." to join your project ". $project_title,
-                    'type'    => 'member_added'
+                    'type'    => 'member_added',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -278,7 +319,8 @@ class SPW_Notification_Model extends CI_Model
                     'to_user' => $user_id,
                     'to_project'  => $project_id,
                     'body'    =>  $approved_user_fullname." was rejected by ".$approver_user_fullname."to join your project ". $project_title,
-                    'type'    => 'member_added'
+                    'type'    => 'member_added',
+                    'datetime' => date("Y-m-d H:i:s", time())
                     );
 
         $this->db->insert('spw_notification',$data);
@@ -290,6 +332,7 @@ class SPW_Notification_Model extends CI_Model
         $query = $this->db
                       ->where('to_user', $user_id)
                       ->where('is_read_flag', 0)
+                      ->order_by('id', "desc")
                       ->get('spw_notification');
 
         if($query->num_rows() > 0)
