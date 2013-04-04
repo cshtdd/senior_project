@@ -298,12 +298,12 @@ class UserController extends CI_Controller
                     'email'                 => $user->emailAddress,
                     'first_name'            => $user->firstName,
                     'last_name'             => $user->lastName,
-                    'picture'               => $user->pictureUrl,
-                    'headline_linkedIn'     => $user->headline,
-                    'summary_linkedIn'      => $user->summary,
-                    'positions_linkedIn'    => $this->parse_positions($user->positions),
-                    'skills'                => $this->parse_skills($user->skills),
-                    'languages'             => $this->parse_languages($user->languages),
+                    'picture'               => property_exists($user, 'picture')? $user->picture: null,
+                    'headline_linkedIn'     => property_exists($user, 'headline')? $user->headline: null,
+                    'summary_linkedIn'      => property_exists($user, 'summary')? $user->summary: null,
+                    'positions_linkedIn'    => property_exists($user, 'positions')? $this->parse_positions($user->positions): null,
+                    'skills'                => property_exists($user, 'skills')? $this->parse_skills($user->skills): null,
+                    'languages'             => property_exists($user, 'languages')? $this->parse_languages($user->languages): null,
                 );
 
             $spw_id = getCurrentUserId($this);
@@ -424,13 +424,22 @@ class UserController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            $user_id = getCurrentUserId($this);
+            $pwd = $this->spw_user_model->get_pwd($user_id);
+
+            if(isset($pwd) && $pwd == sha1($str))
+            {   
+                return true;
+            }else{
+                $this->form_validation->set_message('validateCurrentUserPassword', 'The entered current password does not match our records');
+                return false;
+            }
         }
     }
 
     private function changeUserPasswordInternal($currentUserId, $newPassword)
     {
-        throw new Exception('not implemented');
+         $this->spw_user_model->change_pwd($currentUserId, $newPassword);
     }
 
     private function inviteUserInternal($currentUserId, $invitedUserId, $invitedProject)

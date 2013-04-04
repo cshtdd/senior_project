@@ -1084,9 +1084,8 @@ class ProjectController extends CI_Controller
             for($i = 0; $i < count($project_team); $i++)
             {
                 $member_id = $project_team[$i];
-                if($member_id != $user_id)
-                {
-                    $this->spw_notification_model->create_leave_notification_for_user($user_id, $member_id, $projectId);
+                if($member_id != $currentUserId){
+                    $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
                 }
             }
 
@@ -1167,10 +1166,12 @@ class ProjectController extends CI_Controller
             if(!$result)
             {
                 $project_team = $this->spw_project_model->get_team_members($project_id);
+               
                 for($i = 0; $i < count($project_team); $i++)
                 {
                     $member_id = $project_team[$i];
-                    if($member_id != $currentUserId){
+                    if($member_id != $currentUserId)
+                    {
                         $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
                     }
                 }
@@ -1189,4 +1190,5 @@ class ProjectController extends CI_Controller
     {
         setFlashMessage($this, 'Your join request has been sent');
     }
+
 }
