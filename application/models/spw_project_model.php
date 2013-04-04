@@ -688,7 +688,7 @@ class SPW_Project_Model extends CI_Model
         {
             foreach ($query->result() as $row)
             {
-                array_push($team_members, $query->row()->id);
+                array_push($team_members, $row->id);
             }
         }
 
@@ -701,10 +701,9 @@ class SPW_Project_Model extends CI_Model
         {
             foreach ($query->result() as $row)
             {
-                array_push($team_members, $query->row()->mentor);
+                array_push($team_members, $row->mentor);
             }
         }
-
         return $team_members;    
     }
 

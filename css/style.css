@@ -176,6 +176,8 @@ textarea
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
+
+  margin-bottom: 10px;
 }
 
 

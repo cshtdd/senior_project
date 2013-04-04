@@ -49,8 +49,8 @@
                                         'class' => 'input-large',
                                         'placeholder' => 'http://example.com/img1.png',
                                         'value' => $userDetails->user->picture,
-                                        'title' => 'Profile Image',
-                                        'required' => ''
+                                        'title' => 'Profile Image' /*,
+                                        'required' => '' */
                                     ));
                                 ?>
                             </p>
@@ -214,6 +214,8 @@
                     <?php $this->load->view('subviews/experience_list', array('lExperiences' => $userDetails->lExperiences)) ?>
                 </div>
 
+                <div class="clearfix"></div>
+
             </div>
 
         <?php echo form_close() ?>
@@ -224,6 +226,7 @@
 
                 $('#link-change-image').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     $('#link-change-image-container').hide();
                     $('#text-img-url-container').show();
@@ -231,6 +234,7 @@
 
                 $('#link-change-image-cancel').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     $('#text-img-url-container').hide();
                     $('#link-change-image-container').show();
@@ -238,6 +242,7 @@
 
                 $('#link-change-image-ok').click(function(e){
                     e.preventDefault();
+                    e.stopPropagation();
 
                     var newImgSrc = $('#text-img-url').val();
 

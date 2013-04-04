@@ -54,6 +54,7 @@
     if (!isset($creating_new) || !$creating_new)
     {
         echo anchor('project/create', 'Create New Project', array(
+            'id' => 'btn-create-new-project',
             'class' => 'btn btn-primary btn-large pull-right hor-margin'
         ));
     }
@@ -297,7 +298,7 @@
         }
     }
 
-    //$(document).ready(function(){
+    $(document).ready(function(){
 
         $(".tagManager").tagsManager({
             //prefilled: ["Pisa", "Rome"],
@@ -314,11 +315,22 @@
         $('.myUserRemover').each(function(index){
             $(this).click(function(e){
                 e.preventDefault();
+                e.stopPropagation();
+
                 var idToRemove = $(this).attr("data-idtoremove");
                 var parentListId = $('#' + idToRemove).parent().attr('id');
 
-                $('#' + idToRemove).remove();
-                buildlUserIds(parentListId);
+                alertify.set({ labels: {
+                    ok     : "Yes",
+                    cancel : "No" }
+                });
+
+                alertify.confirm("Do you really want to expel this user from your project?", function (e) {
+                    if (e) {
+                        $('#' + idToRemove).remove();
+                        buildlUserIds(parentListId);
+                    }
+                });
             });
         });
 
@@ -351,9 +363,10 @@
                 });
         });
         */
-    //});
+    });
 </script>
 
 <?php $this->load->view("subviews/invite_capable") ?>
+<?php $this->load->view("subviews/create_project_btn_alert") ?>
 
 <?php $this->load->view("template_footer"); ?>
