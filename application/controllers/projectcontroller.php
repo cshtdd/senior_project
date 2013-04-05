@@ -36,6 +36,20 @@ class ProjectController extends CI_Controller
         $this->load->view('project_past_projects', $data);
     }
 
+    public function sent_for_approval($project_id)
+    {
+        $postBackUrl = current_url();
+        if (strlen($postBackUrl) == 0) 
+            $postBackUrl = '/';
+        else
+            $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
+
+        //notifications to head professor here
+
+        setFlashMessage($this, 'Your project was sent for approval');
+
+        redirect($postBackUrl); 
+    }
 
     public function current_project()
     {
@@ -204,7 +218,7 @@ class ProjectController extends CI_Controller
 
                         setFlashMessage($this, 'Your project was created');
 
-                        $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
+                        $newPostBackUrl = $this->transfromUrl($postBackUrl, $new_project_id, 'create');
                         redirect($newPostBackUrl); 
                     }
                     else
@@ -1150,9 +1164,9 @@ class ProjectController extends CI_Controller
         return $user_summ_vm1;
     }
 
-    private function transfromCreateToDetails($postBackUrl, $new_project_id)
+    private function transfromUrl($postBackUrl, $new_str, $old_str)
     {
-        $newPostBackUrl = str_replace('create', $new_project_id, $postBackUrl);
+        $newPostBackUrl = str_replace($old_str, $new_str, $postBackUrl);
 
         return $newPostBackUrl;
     }
