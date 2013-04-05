@@ -171,6 +171,19 @@
             echo 'Status: '.ucfirst($projectDetails->statusName)
          ?>
 
+        <div>
+            <?php 
+                if (!isset($creating_new) || !$creating_new)
+                    if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
+                    {
+                        echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
+                            'id' => 'btn-sent-for-approval-project',
+                            'class' => 'btn btn-primary btn-large pull-right hor-margin'
+                        ));
+                    }
+            ?>
+        </div>
+
         <?php if (!isset($creating_new)) { ?>
             <div class="row-fluid"> 
                 <div class="span2">
