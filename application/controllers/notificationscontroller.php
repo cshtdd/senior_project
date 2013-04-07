@@ -121,7 +121,7 @@ class NotificationsController extends CI_Controller
             $notifications = array();
             foreach ($result as $row)
             {
-                if($row->type == "join" || $row->type == "professor_approval"){
+                if($row->type == "join" || $row->type == "professor_approval" || $row->type == "change_project"){
                     $displayTwoButtons  = true;
                 }else{
                     $displayTwoButtons  = false;
@@ -199,41 +199,69 @@ class NotificationsController extends CI_Controller
             $approved_user = $spw_notification_model->from;
             $project_id = $spw_notification_model->to_project;
 
+            $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);  
             $project_title = $this->spw_project_model->get_project_title($project_id);
             
             if($spw_notification_model->type == 'join')
             {
-                $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);  
+                $approved_user_project = $this->spw_user_model->get_project($approved_user);
 
-                $this->spw_notification_model->create_join_approved_notification_for_user($approver_user, $approved_user, $project_id);
-                $this->spw_notification_model->create_member_added_notification_for_project($approver_user, $approved_user,  $project_id);
+                if(isset( $approved_user_project))
+                {
+                    $this->spw_notification_model->create_change_project_notification_for_user($approver_user, $approved_user, $project_id);  
+
+                    $reject_details_msg = $from_fullname." will be notified of your decision<br/>";
+                    $reject_details_msg =  $reject_details_msg."We will notify all project's members when ".$from_fullname." joins this project if he does";
+                    setFlashMessage($this, $reject_details_msg);
+                }else{
+
+                    $this->spw_project_model->add_member_to_project($approved_user, $project_id);
+
+                    $this->spw_notification_model->create_join_approved_notification_for_user($approver_user, $approved_user, $project_id);
+
+                    $reject_details_msg = $from_fullname." has been automatically added to the project ".$project_title.'<br/>';
+                    $reject_details_msg =  $reject_details_msg.$from_fullname." will be notified  of your decision";
+                    setFlashMessage($this, $reject_details_msg);
+                }
+
+                $this->spw_notification_model->create_member_added_notification_for_project($approver_user,$approved_user, $project_id);
 
                 $team_members = $this->spw_project_model->get_team_members($spw_notification_model->to_project);
                 for($i = 0; $i < count($team_members); $i++)
                 {
-                    if(!($team_members[$i] == $approver_user) && !($team_members[$i] == $approved_user))
+                    if( $team_members[$i] != $approver_user && $team_members[$i] != $approved_user)
                     {
                         $this->spw_notification_model->set_join_notification_to_read($approved_user, $team_members[$i], $project_id);
                     }
                 }
 
-                $this->spw_notification_model->create_member_added_notification_for_project($approver_user,$approved_user, $project_id);
+                return;
+                
+            }else if($spw_notification_model->type == 'change_project'){
+                
+                $approved_user = $spw_notification_model->to_user;
+                $approver_user = $spw_notification_model->from;
 
                 $this->spw_project_model->add_member_to_project($approved_user, $project_id);
 
-                $reject_details_msg = $from_fullname.' has been automatically added to the project '.$project_title.'';
-                $reject_details_msg =  $reject_details_msg.$from_fullname." will be notified promptly of your decision";
-                setFlashMessage($this, $reject_details_msg);
-            }
-            else if($spw_notification_model->type == 'professor_approval')
-            {
-                $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
-                $this->spw_project_model->add_member_to_project($spw_notification_model->from,$spw_notification_model->to_project);
+                $this->spw_notification_model->create_change_project_accepted_notification_for_project($approver_user,$approved_user, $project_id);
 
-                $reject_details_msg = $project_title.' has been rejected';
+                $reject_details_msg = "Congratulations! You just became part of the project ".$project_title.'<br\>';
+                $reject_details_msg = $reject_details_msg."All team members will be notified of your decision to join the project";
+                setFlashMessage($this, $reject_details_msg);
+
+            }else if($spw_notification_model->type == 'professor_approval'){
+
+                $this->spw_notification_model->create_professor_approval_approved_notification($spw_notification_model->to_project);
+
+                $this->spw_project_model->update_status($project_id, 'approved');
+
+                $reject_details_msg = $project_title." has been accepted<br/>";
                 $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
-            }  
+            } 
+
+            $this->spw_notification_model->set_notification_to_read($notification_id);
         }
     }
     private function acceptNotificationInternalTest($notification_id)
@@ -248,9 +276,8 @@ class NotificationsController extends CI_Controller
         {
             $this->rejectNotificationInternalTest($notification_id);
         }
-        else
-        {
-            $this->spw_notification_model->set_notification_to_read($notification_id);
+        else{
+             $this->spw_notification_model->set_notification_to_read($notification_id);
             
             $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
             $approver_user = $spw_notification_model->to_user;
@@ -276,19 +303,20 @@ class NotificationsController extends CI_Controller
                 $this->spw_notification_model->create_member_rejected_notification_for_project($approver_user,$approved_user, $project_id);
                 $this->spw_notification_model->create_join_rejected_notification_for_user($approver_user,$approved_user, $project_id);
 
-                $reject_details_msg = 'Request to join project '.$project_title.' has been denied';
+                $reject_details_msg = 'Request to join project '.$project_title.' has been denied<br/>';
                 $reject_details_msg = $reject_details_msg.$from_fullname." will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
-            }
-            else if($spw_notification_model->type == 'professor_approval')
+            }else if($spw_notification_model->type == 'professor_approval')
             {
-                $reject_details_msg = $project_title.' has been rejected';
+                $this->spw_notification_model->create_professor_approval_rejected_notification($spw_notification_model->to_project);
+
+                $this->spw_project_model->update_status($project_id, 'rejected');
+
+                $reject_details_msg = $project_title.' has been rejected<br/>';
                 $reject_details_msg =  $reject_details_msg."All team members will be notified promptly of your decision";
                 setFlashMessage($this, $reject_details_msg);
-
-                $this->spw_notification_model->create_professor_approval_rejected_notification($spw_notification_model->to_project);
             } 
-        }
+        }    
     }
     private function rejectNotificationInternalTest($notification_id)
     {

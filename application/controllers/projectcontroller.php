@@ -36,6 +36,20 @@ class ProjectController extends CI_Controller
         $this->load->view('project_past_projects', $data);
     }
 
+    public function sent_for_approval($project_id)
+    {
+        $postBackUrl = current_url();
+        if (strlen($postBackUrl) == 0) 
+            $postBackUrl = '/';
+        else
+            $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
+
+        //notifications to head professor here
+
+        setFlashMessage($this, 'Your project was sent for approval');
+
+        redirect($postBackUrl); 
+    }
 
     public function current_project()
     {
@@ -200,8 +214,11 @@ class ProjectController extends CI_Controller
                         if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
                             $this->SPW_Project_Model->assignSkillsToProject($updated_skill_names_str, $new_project_id);
 
+                        $this->spw_notification_model->create_professor_approval_project($current_user_id, $new_project_id);
+
                         setFlashMessage($this, 'Your project was created');
-                        $newPostBackUrl = $this->transfromCreateToDetails($postBackUrl, $new_project_id);
+
+                        $newPostBackUrl = $this->transfromUrl($postBackUrl, $new_project_id, 'create');
                         redirect($newPostBackUrl); 
                     }
                     else
@@ -255,11 +272,11 @@ class ProjectController extends CI_Controller
 
             if($this->leaveProjectInternal($projectId, $currentUserId))
             {
-                setFlashMessage($this, 'You have left the project');    
+                setFlashMessage($this, 'You have left the project');
             }
             else
             {
-                 setFlashMessage($this, "Error: you can't leave this project");  
+                setErrorFlashMessage($this, 'You cannot leave this project');
             }
             redirect($postBackUrl);
         }
@@ -369,13 +386,15 @@ class ProjectController extends CI_Controller
         {
             if(isUserLoggedIn($this))
             {
+                $currentUserId = getCurrentUserId($this);
+                
+                $isUserStudent = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                
                 $tempTerm = new SPW_Term_Model();
 
-                $project_details = new SPW_Project_Details_View_Model();
+                $project_details = new SPW_Project_Details_View_Model();    
 
-                $currentUserId = getCurrentUserId($this);
-
-                $project_details->onlyShowUserTerm = $this->SPW_User_Model->isUserAStudent($currentUserId);
+                $project_details->onlyShowUserTerm = $isUserStudent;
 
                 $project1 = new SPW_Project_Model();
                 $project1->id = -1;
@@ -1058,7 +1077,7 @@ class ProjectController extends CI_Controller
             if (isset($term))
             {
                 $currentDate = date('Y-m-d');
-                if ($term->closed_requests > $currentDate)
+                if ($term->closed_requests >= $currentDate)
                 {
                     return false;
                 }
@@ -1080,12 +1099,12 @@ class ProjectController extends CI_Controller
         {
             $result = $this->SPW_User_Model->leaveProjectOnDatabase($user_id, $project_id);
 
-            $project_team = $this->spw_project_model->get_team_members($projectId);
+            $project_team = $this->spw_project_model->get_team_members($project_id);
             for($i = 0; $i < count($project_team); $i++)
             {
                 $member_id = $project_team[$i];
-                if($member_id != $currentUserId){
-                    $this->spw_notification_model->create_leave_notification_for_user($currentUserId, $member_id, $projectId);
+                if($member_id != $user_id){
+                    $this->spw_notification_model->create_leave_notification_for_user($user_id, $member_id, $project_id);
                 }
             }
 
@@ -1145,9 +1164,9 @@ class ProjectController extends CI_Controller
         return $user_summ_vm1;
     }
 
-    private function transfromCreateToDetails($postBackUrl, $new_project_id)
+    private function transfromUrl($postBackUrl, $new_str, $old_str)
     {
-        $newPostBackUrl = str_replace('create', $new_project_id, $postBackUrl);
+        $newPostBackUrl = str_replace($old_str, $new_str, $postBackUrl);
 
         return $newPostBackUrl;
     }

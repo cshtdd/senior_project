@@ -4,6 +4,7 @@ if ( !function_exists('shouldPresentWarningOnCreateProject'))
 {
     function shouldPresentWarningOnCreateProject($sender_controller)
     {
+
         if (is_test($sender_controller))
         {
             return true;
@@ -12,7 +13,17 @@ if ( !function_exists('shouldPresentWarningOnCreateProject'))
         {
             $currentUserId = getCurrentUserId($sender_controller);
 
-            throw new Exception('not implemented');
+            $sender_controller->load->model('SPW_User_Model');
+
+            if ($sender_controller->SPW_User_Model->isUserAStudent($currentUserId))
+            {
+                $lBelongProjects = $sender_controller->SPW_User_Model->userHaveProjects($currentUserId);
+
+                if (isset($lBelongProjects) && count($lBelongProjects)>0)
+                    return true;
+            }
+            
+            return false;
         }
     }
 }

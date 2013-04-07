@@ -57,6 +57,8 @@ class SPW_Project_Details_View_Model extends SPW_Project_Summary_View_Model
 
             $projectDetails->project = $lProjectsSumm[0]->project;
 
+            $projectDetails->statusName = $lProjectsSumm[0]->statusName;
+
             $projectDetails->term = $lProjectsSumm[0]->term;
 
             $projectDetails->lSkills = $lProjectsSumm[0]->lSkills;

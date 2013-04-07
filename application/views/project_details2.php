@@ -25,8 +25,8 @@
             </p>
 
             <p>
-                Delivery Term: <?php echo strtoupper($projectDetails->term->name) ?>
-                Status: <?php echo $projectDetails->project->status->name ?>
+                Delivery Term: <?php echo strtoupper($projectDetails->term->name).'<br>' ?>
+                Status: <?php echo ucfirst($projectDetails->statusName) ?>
             </p>
 
             <p>
