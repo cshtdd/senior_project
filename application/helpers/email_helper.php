@@ -17,7 +17,7 @@ if ( !function_exists('send_email'))
 
         if (!$sender_controller->email->send())
         {
-            setFlashMessage($sender_controller, 'error sending email');
+            setErrorFlashMessage($sender_controller, 'error sending email');
         }
     }
 }
