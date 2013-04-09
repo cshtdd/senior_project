@@ -25,12 +25,15 @@
             </p>
 
             <p>
-                Delivery Term: <?php echo strtoupper($projectDetails->term->name).'<br>' ?>
-                Status: <?php echo ucfirst($projectDetails->statusName) ?>
+                <h4 class="muted inline">Delivery Term:</h4> <?php echo strtoupper($projectDetails->term->name) ?>
             </p>
 
             <p>
-                Maximum project capacity: <?php echo $projectDetails->project->max_students.' students' ?>
+                <h4 class="muted inline">Status:</h4> <?php echo ucfirst($projectDetails->statusName) ?>                 
+            </p>
+
+            <p>
+                <h4 class="muted inline">Maximum project capacity:</h4> <?php echo $projectDetails->project->max_students.' students' ?>
             </p>
 
             <?php $this->load->view('subviews/user_summaries_full_list', array(
