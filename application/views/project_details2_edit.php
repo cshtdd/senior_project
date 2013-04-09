@@ -121,6 +121,10 @@
 
         <div class="pull-right">
             <?php 
+                echo anchor('/', 'Cancel', array('class' => 'btn btn-large'))
+            ?>
+
+            <?php 
                 echo form_submit(array(
                     'id' => 'btn-submit',
                     'name' => 'btn-submit',
