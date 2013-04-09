@@ -42,7 +42,7 @@
                 'id' => 'btn-leave',
                 'name' => 'btn-submit',
                 'type' => 'Submit',
-                'class' => 'btn btn-warning btn-large pull-right hor-margin',
+                'class' => 'btn btn-danger btn-large pull-right hor-margin',
                 'value' => 'Leave Project'
             ));
 
@@ -55,7 +55,7 @@
     {
         echo anchor('project/create', 'Create New Project', array(
             'id' => 'btn-create-new-project',
-            'class' => 'btn btn-primary btn-large pull-right hor-margin'
+            'class' => 'btn btn-large pull-right hor-margin'
         ));
     }
 ?>
