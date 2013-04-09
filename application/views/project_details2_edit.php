@@ -119,19 +119,21 @@
             ));
         ?>
 
-        <?php 
-            echo form_submit(array(
-                'id' => 'btn-submit',
-                'name' => 'btn-submit',
-                'type' => 'Submit',
-                'class' => 'btn btn-large btn-primary pull-right',
-                'value' => 'Save Changes'
-            ));
-        ?>
+        <div class="pull-right">
+            <?php 
+                echo form_submit(array(
+                    'id' => 'btn-submit',
+                    'name' => 'btn-submit',
+                    'type' => 'Submit',
+                    'class' => 'btn btn-large btn-primary',
+                    'value' => 'Save Changes'
+                ));
+            ?>
+        </div>
 
         <div>
-            <span class="inline-block">
-                Delivery Term: 
+            <p>
+                <h4 class="muted inline">Delivery Term: </h4>
                 <?php 
                     if (isset($projectDetails->onlyShowUserTerm) && ($projectDetails->onlyShowUserTerm)) 
                     { 
@@ -150,10 +152,10 @@
                         echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);
                     } 
                 ?>
-            </span>
+            </p>
 
-            <span class="inline-block hor-margin">
-                Maximum project capacity: 
+            <p>
+                <h4 class="muted inline">Maximum project capacity: </h4>
                 <?php 
                     $arrTermsOptions = array();
 
@@ -164,12 +166,14 @@
 
                     echo form_dropdown('text-project-max-students', $arrTermsOptions, $projectDetails->project->max_students);
                 ?>
-            </span>
-        </div>
+            </p>
 
-        <?php if (!isset($creating_new) || !$creating_new) 
-            echo 'Status: '.ucfirst($projectDetails->statusName)
-         ?>
+            <?php if (!isset($creating_new) || !$creating_new) { ?>
+                <p>
+                    <h4 class="muted inline">Status:</h4> <?php echo ucfirst($projectDetails->statusName) ?>
+                </p>
+            <?php } ?>
+        </div>
 
         <div>
             <?php 
