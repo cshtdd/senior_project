@@ -592,7 +592,7 @@ class ProjectController extends CI_Controller
         $project1->id = 1;
         $project1->title = 'Cobol Free Music Sharing Platform';
         $project1->description = 'Poor students need an easy way to access all the music in the world for free.';
-        $project1->status = $projStatus;
+        $project1->status = $projStatus->id;
 
         $project_summ_vm1 = new SPW_Project_Summary_View_Model();
         $project_summ_vm1->project = $project1;
@@ -600,13 +600,14 @@ class ProjectController extends CI_Controller
         $project_summ_vm1->lSkills = $lSkills1;
         $project_summ_vm1->lMentorSummaries = array($user_summ_vm1);
         $project_summ_vm1->proposedBySummary = $user_summ_vm3;
+        $project_summ_vm1->statusName = $projStatus->name;
 
 
         $project2 = new SPW_Project_Model();
         $project2->id = 2;
         $project2->title = 'Dialup Moodle on Facebook';
         $project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
-        $project2->status = $projStatus;
+        $project2->status = $projStatus->id;
 
         $project_summ_vm2 = new SPW_Project_Summary_View_Model();
         $project_summ_vm2->project = $project2;
@@ -615,6 +616,7 @@ class ProjectController extends CI_Controller
         $project_summ_vm2->lMentorSummaries = array($user_summ_vm1);
         $project_summ_vm2->lTeamMemberSummaries = array($user_summ_vm4);
         $project_summ_vm2->proposedBySummary = $user_summ_vm2;
+        $project_summ_vm2->statusName = $projStatus->name;
 
         $lProjects = array(
             $project_summ_vm1,
@@ -802,7 +804,7 @@ class ProjectController extends CI_Controller
         $project1->id = 1;
         $project1->title = 'Free Music Sharing Platform';
         $project1->description = 'Poor students need an easy way to access all the music in the world for free.';
-        $project1->status = $projStatus;
+        $project1->status = $projStatus->id;
 
         $project_summ_vm1 = new SPW_Project_Summary_View_Model();
         $project_summ_vm1->project = $project1;
@@ -812,13 +814,14 @@ class ProjectController extends CI_Controller
         $project_summ_vm1->proposedBySummary = $user_summ_vm3;
         $project_summ_vm1->displayJoin = true;
         $project_summ_vm1->displayLeave = false;
+        $project_summ_vm1->statusName = $projStatus->name;
 
 
         $project2 = new SPW_Project_Model();
         $project2->id = 2;
         $project2->title = 'Moodle on Facebook';
         $project2->description = 'Poor students need an easy way to access all the music in the world for free. This Project will make every student really happy.';
-        $project2->status = $projStatus;
+        $project2->status = $projStatus->id;
 
         $project_summ_vm2 = new SPW_Project_Summary_View_Model();
         $project_summ_vm2->project = $project2;
@@ -829,6 +832,7 @@ class ProjectController extends CI_Controller
         $project_summ_vm2->proposedBySummary = $user_summ_vm2;
         $project_summ_vm2->displayJoin = true;
         $project_summ_vm2->displayLeave = false;
+        $project_summ_vm2->statusName = $projStatus->name;
 
         $lProjects = array(
             $project_summ_vm1,
