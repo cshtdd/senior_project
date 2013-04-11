@@ -401,7 +401,7 @@ class ProjectController extends CI_Controller
                 $project1->title = '';
                 $project1->proposed_by = $currentUserId;
                 $project1->description = '';
-                $project1->status = 1;
+                $project1->status = 2;
                 $project1->max_students = 5;
 
                 $currentTerm = $tempTerm->getCurrentTermInfo();
