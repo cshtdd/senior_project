@@ -5,7 +5,7 @@
     {
         echo anchor('project/create', 'Create New Project', array(
             'id' => 'btn-create-new-project',
-            'class' => 'btn btn-primary btn-large pull-right'));
+            'class' => 'btn btn-large pull-right'));
     }
 ?>
 
