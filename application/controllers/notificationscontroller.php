@@ -267,6 +267,7 @@ class NotificationsController extends CI_Controller
     private function acceptNotificationInternalTest($notification_id)
     {
         setFlashMessage($this, 'Team members will be notified of your decision');
+        send_email($this, 'csanc055@fiu.edu', 'Notification Accepted', 'We are very glad you have accepted the notification');
     }
 
     private function rejectNotificationInternal($notification_id)

@@ -34,6 +34,11 @@ ul {
 }
 */
 
+h4.inline
+{
+  display: inline;
+}
+
 .project_list > li > /*.project_summary > */ ul > lh
 {
   font-weight: bold;
@@ -312,7 +317,9 @@ form.inline
     display: none;
 }
 
+/*
 .inline-block
 {
     display: inline-block;
 }
+*/
