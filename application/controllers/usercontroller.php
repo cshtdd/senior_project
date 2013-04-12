@@ -24,6 +24,7 @@ class UserController extends CI_Controller
         $this->load->model('spw_experience_model');
         $this->load->model('spw_role_model');
         $this->load->model('spw_role_user_model');
+        $this->load->model('spw_notification_model');
 
         $this->load->model('SPW_User_Details_View_Model');
     }
@@ -145,6 +146,7 @@ class UserController extends CI_Controller
     public function parse_positions($positions)
     {
 
+
         $positions = $positions->values; 
         $result =  array();
 
@@ -162,14 +164,43 @@ class UserController extends CI_Controller
                 $end_date =  $current_position->endDate->year.'-'.$current_position->endDate->month;
             }
 
-            $result[$i] = (object) array( 
-                                        'company_name'      => $current_position->company->name,
-                                        'company_industry'  => $current_position->company->industry,
-                                        'start_date'        => $start_date,
-                                        'end_date'          => $end_date,
-                                        'title'             => $current_position->title,
-                                        'summary'           => $current_position->summary,
-                                        );
+
+            $company =      array( 
+                                'start_date'        => $start_date,
+                                'end_date'          => $end_date,
+                            );
+            
+
+            if(property_exists($current_position, 'title') )
+            {
+                 $company['title'] = $current_position->title;
+            }else{
+                 $company['title'] = "";
+            }   
+
+            if(property_exists($current_position, 'summary'))
+            {
+                 $company['summary'] = $current_position->summary;
+            }else{
+                 $company['summary'] = "";
+            }
+
+            if(property_exists($current_position->company, 'name'))
+            {
+                 $company['company_name'] = $current_position->company->name;
+            }else{
+                 $company['company_name'] = "";
+            }
+
+             if(property_exists($current_position->company, 'industry'))
+            {
+                 $company['company_industry'] = $current_position->company->industry;
+            }else{
+                 $company['company_industry'] = "";
+            }
+
+             $result[$i] = (object)$company;
+
         }
 
         return $result;
@@ -454,7 +485,7 @@ class UserController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            
         }
     }
 
