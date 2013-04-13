@@ -40,7 +40,7 @@
         //<button id='btn-leave' type="button" class="btn btn-warning btn-large pull-right">Leave Project</button>
         echo form_submit(array(
                 'id' => 'btn-leave',
-                'name' => 'btn-submit',
+                'name' => 'btn-leave',
                 'type' => 'Submit',
                 'class' => 'btn btn-danger pull-right hor-margin',
                 'value' => 'Leave Project'
@@ -55,10 +55,30 @@
     {
         if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
         {
-            echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
-                'id' => 'btn-sent-for-approval-project',
-                'class' => 'btn pull-right hor-margin'
+            // echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
+            //     'id' => 'btn-sent-for-approval-project',
+            //     'class' => 'btn pull-right hor-margin'
+            // ));
+
+
+            echo form_open('projectcontroller/sent_for_approval', array(
+                'id' => 'form-sent-for-approval'
             ));
+
+            echo form_hidden(array(
+                    'pid' => $projectDetails->project->id,
+                    'pbUrl' => current_url()
+                ));
+
+            echo form_submit(array(
+                    'id' => 'btn-sent-for-approval',
+                    'name' => 'btn-sent-for-approval',
+                    'type' => 'Submit',
+                    'class' => 'btn pull-right hor-margin',
+                    'value' => 'Send for Approval'
+                ));
+
+            echo form_close();
         }
 
         echo anchor('project/create', 'Create New Project', array(
@@ -134,8 +154,8 @@
 
             <?php 
                 echo form_submit(array(
-                    'id' => 'btn-submit',
-                    'name' => 'btn-submit',
+                    'id' => 'btn-save-changes',
+                    'name' => 'btn-save-changes',
                     'type' => 'Submit',
                     'class' => 'btn btn-large btn-primary',
                     'value' => 'Save Changes'

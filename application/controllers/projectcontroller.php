@@ -36,24 +36,35 @@ class ProjectController extends CI_Controller
         $this->load->view('project_past_projects', $data);
     }
 
-    public function sent_for_approval($project_id)
+    public function sent_for_approval()
     {
-        $postBackUrl = current_url();
-        if (strlen($postBackUrl) == 0) 
-            $postBackUrl = '/';
-        else
-            $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
-
-        $current_user_id = getCurrentUserId($this);
-
-        if (!is_test($this))
+        if (!is_POST_request($this))
         {
-            $this->spw_notification_model->create_professor_approval_project($current_user_id, $project_id);
+            redirect('/');
         }
-        
-        setFlashMessage($this, 'Your project has been sent for approval');
+        else
+        {
+            $project_id = $this->input->post('pid');
+            $postBackUrl = $this->input->post('pbUrl');
+            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
 
-        redirect($postBackUrl); 
+            // $postBackUrl = current_url();
+            // if (strlen($postBackUrl) == 0) 
+            //     $postBackUrl = '/';
+            // else
+            //     $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
+
+            $current_user_id = getCurrentUserId($this);
+
+            if (!is_test($this))
+            {
+                $this->spw_notification_model->create_professor_approval_project($current_user_id, $project_id);
+            }
+
+            setFlashMessage($this, 'Your project has been sent for approval');
+
+            redirect($postBackUrl); 
+        }
     }
 
     public function current_project()
