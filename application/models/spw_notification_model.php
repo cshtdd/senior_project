@@ -248,7 +248,7 @@ class SPW_Notification_Model extends CI_Model
                     'type'    => 'professor_approval',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
-       
+
         $this->db->insert('spw_notification',$data);
     }
 
@@ -297,12 +297,13 @@ class SPW_Notification_Model extends CI_Model
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
         $professor_id = $this->spw_user_model->get_head_professor();
+        $professor_fullname = $this->spw_user_model->get_fullname($professor_id);
 
         $data = array(
                     'from' => $professor_id,
-                    'to_user' => $to_user_id,
+                    'to_user' => $user_id,
                     'to_project'  => $project_id,
-                    'body'    =>  "Your project ".$project_title." has been rejected by the professor",
+                    'body'    =>  "Your project ".$project_title." has been rejected by professor ".$professor_fullname,
                     'type'    => 'professor_approval_rejected',
                      'datetime' => date("Y-m-d H:i:s", time())
                     );

@@ -44,9 +44,10 @@ class ProjectController extends CI_Controller
         else
             $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
 
-        //notifications to head professor here
+        $current_user_id = getCurrentUserId($this);
+        $this->spw_notification_model->create_professor_approval_project($current_user_id, $project_id);
 
-        setFlashMessage($this, 'Your project was sent for approval');
+        setFlashMessage($this, 'Your project has been sent for approval');
 
         redirect($postBackUrl); 
     }

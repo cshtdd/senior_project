@@ -280,14 +280,16 @@ class NotificationsController extends CI_Controller
              $this->spw_notification_model->set_notification_to_read($notification_id);
             
             $spw_notification_model = $this->spw_notification_model->get_notification_by_id($notification_id);
+            
             $approver_user = $spw_notification_model->to_user;
             $approved_user = $spw_notification_model->from;
             $project_id = $spw_notification_model->to_project;
 
+            $project_title = $this->spw_project_model->get_project_title($project_id);
+
             if($spw_notification_model->type == 'join')
             {
                 $from_fullname = $this->spw_user_model->get_fullname($spw_notification_model->from);
-                $project_title = $this->spw_project_model->get_project_title($project_id);
 
                 $this->spw_notification_model->create_member_added_notification_for_project($approver_user,$approved_user, $project_id);
 
