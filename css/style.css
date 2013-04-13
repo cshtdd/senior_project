@@ -34,10 +34,12 @@ ul {
 }
 */
 
+/*
 h4.inline
 {
   display: inline;
 }
+*/
 
 .project_list > li > /*.project_summary > */ ul > lh
 {
@@ -307,7 +309,9 @@ a:visited.myUserRemover
     border: 1px solid #e3e3e3;
 }
 
-form.inline
+form.inline,
+h4.inline,
+span.inline
 {
     display: inline;
 }

@@ -6,15 +6,12 @@
 
 <?php } else { ?>
 
-
-        <div class="pull-right right-text">
-            <p>
-                <?php $this->load->view('subviews/skills_list', array('lSkills' => $projectDetails->lSkills) )?>
-            </p>
-
-            <p>
+        <div class="pull-right hor-margin">
                 <?php $this->load->view('subviews/join_leave_buttons', array('projectDetails' => $projectDetails)) ?>
-            </p>
+        </div>
+
+        <div class="pull-right">
+            <?php $this->load->view('subviews/skills_list', array('lSkills' => $projectDetails->lSkills) )?>
         </div>
 
         <h2><?php echo $projectDetails->project->title ?></h2>
