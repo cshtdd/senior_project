@@ -210,7 +210,7 @@ class SPW_Notification_Model extends CI_Model
                     'from' => $approved_user,
                     'to_user' => $to_user,
                     'to_project'  => $project_id,
-                    'body'    => $fullname."joined your project",
+                    'body'    => $fullname." joined your project",
                     'type'    => 'join_approved',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
@@ -229,6 +229,23 @@ class SPW_Notification_Model extends CI_Model
                     'to_project'  => $project_id,
                     'body'    =>  "Your request to join the project ".$project_title. "has been denied by".$fullname,
                     'type'    => 'join_rejected',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
+    public function create_professor_approval_project($from_user, $new_project_id)
+    {
+        $professor_id = $this->spw_user_model->get_head_professor();
+        $project_title = $this->spw_project_model->get_project_title($new_project_id);
+
+        $data = array(
+                    'from'    => $from_user,  
+                    'to_user' => $professor_id,
+                    'to_project'  => $new_project_id,
+                    'body'    =>  $project_title." needs your approval",
+                    'type'    => 'professor_approval',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 
@@ -280,12 +297,13 @@ class SPW_Notification_Model extends CI_Model
     {
         $project_title = $this->spw_project_model->get_project_title($project_id);
         $professor_id = $this->spw_user_model->get_head_professor();
+        $professor_fullname = $this->spw_user_model->get_fullname($professor_id);
 
         $data = array(
                     'from' => $professor_id,
-                    'to_user' => $to_user_id,
+                    'to_user' => $user_id,
                     'to_project'  => $project_id,
-                    'body'    =>  "Your project ".$project_title." has been rejected by the professor",
+                    'body'    =>  "Your project ".$project_title." has been rejected by professor ".$professor_fullname,
                     'type'    => 'professor_approval_rejected',
                      'datetime' => date("Y-m-d H:i:s", time())
                     );
@@ -352,23 +370,6 @@ class SPW_Notification_Model extends CI_Model
         $this->db->insert('spw_notification',$data);
     }
 
-    public function create_professor_approval_project($from_user, $new_project_id)
-    {
-        $professor_id = $this->spw_user_model->get_head_professor($new_project_id);
-        $project_title = $this->spw_project_model->get_project_title($new_project_id);
-
-        $data = array(
-                    'from'    => $from_user,  
-                    'to_user' => $professor_id,
-                    'to_project'  => $new_project_id,
-                    'body'    =>  $project_title." needs your approval",
-                    'type'    => 'professor_approval',
-                    'datetime' => date("Y-m-d H:i:s", time())
-                    );
-
-        $this->db->insert('spw_notification',$data);
-    }
-
     public function get_active_notification_for_user($user_id)
     {
         $query = $this->db
@@ -385,6 +386,44 @@ class SPW_Notification_Model extends CI_Model
         {
             return null;
         }
+    }
+
+    public function create_invite_project_notification($currentUserId, $invitedUserId, $member_id, $invitedProjectId)
+    {
+        $project_title = $this->spw_project_model->get_project_title($invitedProject);
+        $current_user_fullname  = $this->spw_user_model->get_fullname($currentUserId);
+        $invited_user_fullname  = $this->spw_user_model->get_fullname($invitedUserId);
+
+
+        $data = array(
+                    'from'    => $currentUserId,  
+                    'to_user' => $member_id,
+                    'to_project'  => $invitedProject,
+                    'body'    =>  $invited_user_fullname." has been invited by ".$current_user_fullname." to join your project".$project_title,
+                    'type'    => 'invite_project',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);   
+    }
+
+    public function create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject)
+    {
+        $project_title = $this->spw_project_model->get_project_title($invitedProject);
+        $current_user_fullname  = $this->spw_user_model->get_fullname($currentUserId);
+        $invited_user_fullname  = $this->spw_user_model->get_fullname($invitedUserId);
+
+
+        $data = array(
+                    'from'    => $currentUserId,  
+                    'to_user' => $invitedUserId,
+                    'to_project'  => $invitedProject,
+                    'body'    =>  "You have been invited by ". $current_user_fullname ." to join the ".$project_title." project",
+                    'type'    => 'invite_user',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);   
     }
 }
     

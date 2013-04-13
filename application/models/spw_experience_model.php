@@ -35,6 +35,7 @@ class SPW_Experience_Model extends CI_Model
 
     public function insert($spw_id,$position_obj)
     {
+        
         $data = array(
                         'user'              => $spw_id, 
                         'company_name'      => $position_obj->company_name,

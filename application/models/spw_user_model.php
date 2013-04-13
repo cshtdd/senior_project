@@ -68,6 +68,7 @@ class SPW_User_Model extends CI_Model
     {
         $query = $this->db
                       ->where('role', 2)
+                      ->select('user')
                       ->get('spw_role_user');
 
         if($query->num_rows() > 0)
@@ -78,6 +79,24 @@ class SPW_User_Model extends CI_Model
         {
             return null; 
         }     
+    }
+
+
+    public function get_proposed_project($spw_id)
+    {
+        $query = $this->db
+                      ->where('proposed_by', $spw_id)
+                      ->select('proposed_by')
+                      ->get('spw_project');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false; 
+        }
     }
 
     public function change_pwd($spw_id, $new_pwd)
@@ -93,6 +112,7 @@ class SPW_User_Model extends CI_Model
 
     public function verify_user($email_address, $pwd)
     {
+        
         $query = $this->db
                       ->where('email', $email_address)
                       ->where('hash_pwd', sha1( $pwd))

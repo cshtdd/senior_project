@@ -44,9 +44,10 @@ class ProjectController extends CI_Controller
         else
             $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
 
-        //notifications to head professor here
+        $current_user_id = getCurrentUserId($this);
+        $this->spw_notification_model->create_professor_approval_project($current_user_id, $project_id);
 
-        setFlashMessage($this, 'Your project was sent for approval');
+        setFlashMessage($this, 'Your project has been sent for approval');
 
         redirect($postBackUrl); 
     }
@@ -1111,28 +1112,37 @@ class ProjectController extends CI_Controller
         {
             $currentUserId = getCurrentUserId($this);
 
-            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
-            if(!$result)
-            {
-                $project_team = $this->spw_project_model->get_team_members($project_id);
-               
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId)
-                    {
-                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
-                    }
-                }
+            $result = $this->spw_user_model->get_proposed_project($currentUserId); 
 
-                setFlashMessage($this, 'Your join request has been sent');
+            if($result)
+            {
+                $msg = 'You can not leave your project because you proposed it. <br/>Please delete your project begore joining another one';
+                setFlashMessage($this, $msg);
+                return;
             }
-            else
+
+            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
+            if($result)
             {
                 $project_title = $this->spw_project_model->get_project_title($project_id);
                 $msg = 'You already sent a notification for the project '.$project_title;
                 setFlashMessage($this, $msg);
+                return;
             }
+
+            $project_team = $this->spw_project_model->get_team_members($project_id);
+           
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $currentUserId)
+                {
+                    $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
+                }
+            }
+
+            setFlashMessage($this, 'Your join request has been sent');
+            
         }
     }
     private function joinProjectInternalTest($project_id)
