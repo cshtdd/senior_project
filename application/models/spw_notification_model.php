@@ -11,6 +11,7 @@ class SPW_Notification_Model extends CI_Model
     public $body; 
     public $type;
     public $is_read_flag;
+    public $datetime;
 
     public function __construct()
     {
