@@ -42,7 +42,7 @@
                 'id' => 'btn-leave',
                 'name' => 'btn-submit',
                 'type' => 'Submit',
-                'class' => 'btn btn-danger btn-large pull-right hor-margin',
+                'class' => 'btn btn-danger pull-right hor-margin',
                 'value' => 'Leave Project'
             ));
 
@@ -53,9 +53,17 @@
 <?php 
     if (!isset($creating_new) || !$creating_new)
     {
+        if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
+        {
+            echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
+                'id' => 'btn-sent-for-approval-project',
+                'class' => 'btn pull-right hor-margin'
+            ));
+        }
+
         echo anchor('project/create', 'Create New Project', array(
             'id' => 'btn-create-new-project',
-            'class' => 'btn btn-large pull-right hor-margin'
+            'class' => 'btn pull-right hor-margin'
         ));
     }
 ?>
@@ -177,19 +185,6 @@
                     <h4 class="muted inline">Status:</h4> <?php echo ucfirst($projectDetails->statusName) ?>
                 </p>
             <?php } ?>
-        </div>
-
-        <div>
-            <?php 
-                if (!isset($creating_new) || !$creating_new)
-                    if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
-                    {
-                        echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
-                            'id' => 'btn-sent-for-approval-project',
-                            'class' => 'btn btn-primary btn-large pull-right hor-margin'
-                        ));
-                    }
-            ?>
         </div>
 
         <?php if (!isset($creating_new)) { ?>
