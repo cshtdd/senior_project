@@ -134,7 +134,6 @@ class UserController extends CI_Controller
                 }
 
                 inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
-                setFlashMessage('Invitation successfully sent');
             }
             else
             {
@@ -485,10 +484,22 @@ class UserController extends CI_Controller
         }
         else
         {
+            $this->spw_notification_model->create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject);
             
+            $project_team = $this->spw_project_model->get_team_members($project_id);
+           
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $currentUserId && $member_id != $invitedUserId)
+                {
+                    $this->spw_notification_model->create_invite_project_notification($currentUserId, $invitedUserId, $member_id, $invitedProjectId);
+                }
+            }
+
+            setFlashMessage($this, 'Your invitation has been sent');
         }
     }
-
     
     private function getUserDetailsInternal($user_id)
     {

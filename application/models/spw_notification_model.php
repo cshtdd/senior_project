@@ -210,7 +210,7 @@ class SPW_Notification_Model extends CI_Model
                     'from' => $approved_user,
                     'to_user' => $to_user,
                     'to_project'  => $project_id,
-                    'body'    => $fullname."joined your project",
+                    'body'    => $fullname." joined your project",
                     'type'    => 'join_approved',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
@@ -385,6 +385,44 @@ class SPW_Notification_Model extends CI_Model
         {
             return null;
         }
+    }
+
+    public function create_invite_project_notification($currentUserId, $invitedUserId, $member_id, $invitedProjectId)
+    {
+        $project_title = $this->spw_project_model->get_project_title($invitedProject);
+        $current_user_fullname  = $this->spw_user_model->get_fullname($currentUserId);
+        $invited_user_fullname  = $this->spw_user_model->get_fullname($invitedUserId);
+
+
+        $data = array(
+                    'from'    => $currentUserId,  
+                    'to_user' => $member_id,
+                    'to_project'  => $invitedProject,
+                    'body'    =>  $invited_user_fullname." has been invited by ".$current_user_fullname." to join your project".$project_title,
+                    'type'    => 'invite_project',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);   
+    }
+
+    public function create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject)
+    {
+        $project_title = $this->spw_project_model->get_project_title($invitedProject);
+        $current_user_fullname  = $this->spw_user_model->get_fullname($currentUserId);
+        $invited_user_fullname  = $this->spw_user_model->get_fullname($invitedUserId);
+
+
+        $data = array(
+                    'from'    => $currentUserId,  
+                    'to_user' => $invitedUserId,
+                    'to_project'  => $invitedProject,
+                    'body'    =>  "You have been invited by ". $current_user_fullname ." to join the ".$project_title." project",
+                    'type'    => 'invite_user',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);   
     }
 }
     
