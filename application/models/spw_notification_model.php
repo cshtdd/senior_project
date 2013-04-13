@@ -248,7 +248,7 @@ class SPW_Notification_Model extends CI_Model
                     'type'    => 'professor_approval',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
-
+       
         $this->db->insert('spw_notification',$data);
     }
 
