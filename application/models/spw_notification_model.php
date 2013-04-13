@@ -235,6 +235,23 @@ class SPW_Notification_Model extends CI_Model
         $this->db->insert('spw_notification',$data);
     }
 
+    public function create_professor_approval_project($from_user, $new_project_id)
+    {
+        $professor_id = $this->spw_user_model->get_head_professor();
+        $project_title = $this->spw_project_model->get_project_title($new_project_id);
+
+        $data = array(
+                    'from'    => $from_user,  
+                    'to_user' => $professor_id,
+                    'to_project'  => $new_project_id,
+                    'body'    =>  $project_title." needs your approval",
+                    'type'    => 'professor_approval',
+                    'datetime' => date("Y-m-d H:i:s", time())
+                    );
+
+        $this->db->insert('spw_notification',$data);
+    }
+
     public function create_professor_approval_rejected_notification($project_id)
     {
          $professor = $this->spw_user_model->get_head_professor();
@@ -346,23 +363,6 @@ class SPW_Notification_Model extends CI_Model
                     'to_project'  => $project_id,
                     'body'    =>  $approved_user_fullname." was rejected by ".$approver_user_fullname." to join your project ". $project_title,
                     'type'    => 'member_added',
-                    'datetime' => date("Y-m-d H:i:s", time())
-                    );
-
-        $this->db->insert('spw_notification',$data);
-    }
-
-    public function create_professor_approval_project($from_user, $new_project_id)
-    {
-        $professor_id = $this->spw_user_model->get_head_professor($new_project_id);
-        $project_title = $this->spw_project_model->get_project_title($new_project_id);
-
-        $data = array(
-                    'from'    => $from_user,  
-                    'to_user' => $professor_id,
-                    'to_project'  => $new_project_id,
-                    'body'    =>  $project_title." needs your approval",
-                    'type'    => 'professor_approval',
                     'datetime' => date("Y-m-d H:i:s", time())
                     );
 

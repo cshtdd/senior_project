@@ -68,11 +68,12 @@ class SPW_User_Model extends CI_Model
     {
         $query = $this->db
                       ->where('role', 2)
+                      ->select('user')
                       ->get('spw_role_user');
 
         if($query->num_rows() > 0)
         {
-            return $query->row()->user;
+            return $query->row();
         }
         else
         {
