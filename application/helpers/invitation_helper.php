@@ -13,7 +13,7 @@ if ( !function_exists('currentUserHasMultipleProjects'))
             $sender_controller->load->model('SPW_User_Model');
 
             $currentUserId = getCurrentUserId($sender_controller);
-            $lProjectIds = $SPW_User_Model->userHaveProjects($currentUserId);
+            $lProjectIds = $sender_controller->SPW_User_Model->userHaveProjects($currentUserId);
             return isset($lProjectIds) && count($lProjectIds) > 1;
         }
     }
@@ -32,7 +32,7 @@ if ( !function_exists('getAnyProjectIdForCurrentUser'))
             $sender_controller->load->model('SPW_User_Model');
 
             $currentUserId = getCurrentUserId($sender_controller);
-            $lProjectIds = $SPW_User_Model->userHaveProjects($currentUserId);
+            $lProjectIds = $sender_controller->SPW_User_Model->userHaveProjects($currentUserId);
             if (isset($lProjectIds) && count($lProjectIds) > 0)
             {
                 return $lProjectIds[0];

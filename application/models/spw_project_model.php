@@ -406,6 +406,7 @@ class SPW_Project_Model extends CI_Model
         $param[0] = $user_id;
         $param[1] = $project_id;
 
+        $sql = ""; 
         if ($this->SPW_User_Model->isUserAStudent($user_id))
         {
             $sql = 'select id

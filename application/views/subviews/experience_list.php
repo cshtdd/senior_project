@@ -6,11 +6,11 @@
                 <h5>
 
                     <?php 
-                        if (isset($iExperience->company_industry) && 
-                            strlen($iExperience->company_industry) > 0)
-                        {
-                            echo $iExperience->company_industry.' '; 
-                        }
+                        //if (isset($iExperience->company_industry) && 
+                        //    strlen($iExperience->company_industry) > 0)
+                        //{
+                        //    echo $iExperience->company_industry.' '; 
+                        //}
 
                         $hasTitle = isset($iExperience->title) && 
                             strlen($iExperience->title) > 0;

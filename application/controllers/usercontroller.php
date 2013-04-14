@@ -24,6 +24,7 @@ class UserController extends CI_Controller
         $this->load->model('spw_experience_model');
         $this->load->model('spw_role_model');
         $this->load->model('spw_role_user_model');
+        $this->load->model('spw_notification_model');
 
         $this->load->model('SPW_User_Details_View_Model');
     }
@@ -133,7 +134,6 @@ class UserController extends CI_Controller
                 }
 
                 inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
-                setFlashMessage('Invitation successfully sent');
             }
             else
             {
@@ -144,6 +144,7 @@ class UserController extends CI_Controller
 
     public function parse_positions($positions)
     {
+
 
         $positions = $positions->values; 
         $result =  array();
@@ -162,14 +163,43 @@ class UserController extends CI_Controller
                 $end_date =  $current_position->endDate->year.'-'.$current_position->endDate->month;
             }
 
-            $result[$i] = (object) array( 
-                                        'company_name'      => $current_position->company->name,
-                                        'company_industry'  => $current_position->company->industry,
-                                        'start_date'        => $start_date,
-                                        'end_date'          => $end_date,
-                                        'title'             => $current_position->title,
-                                        'summary'           => $current_position->summary,
-                                        );
+
+            $company =      array( 
+                                'start_date'        => $start_date,
+                                'end_date'          => $end_date,
+                            );
+            
+
+            if(property_exists($current_position, 'title') )
+            {
+                 $company['title'] = $current_position->title;
+            }else{
+                 $company['title'] = "";
+            }   
+
+            if(property_exists($current_position, 'summary'))
+            {
+                 $company['summary'] = $current_position->summary;
+            }else{
+                 $company['summary'] = "";
+            }
+
+            if(property_exists($current_position->company, 'name'))
+            {
+                 $company['company_name'] = $current_position->company->name;
+            }else{
+                 $company['company_name'] = "";
+            }
+
+             if(property_exists($current_position->company, 'industry'))
+            {
+                 $company['company_industry'] = $current_position->company->industry;
+            }else{
+                 $company['company_industry'] = "";
+            }
+
+             $result[$i] = (object)$company;
+
         }
 
         return $result;
@@ -298,7 +328,7 @@ class UserController extends CI_Controller
                     'email'                 => $user->emailAddress,
                     'first_name'            => $user->firstName,
                     'last_name'             => $user->lastName,
-                    'picture'               => property_exists($user, 'picture')? $user->picture: null,
+                    'picture'               => property_exists($user, 'pictureUrl')? $user->pictureUrl: null,
                     'headline_linkedIn'     => property_exists($user, 'headline')? $user->headline: null,
                     'summary_linkedIn'      => property_exists($user, 'summary')? $user->summary: null,
                     'positions_linkedIn'    => property_exists($user, 'positions')? $this->parse_positions($user->positions): null,
@@ -339,7 +369,7 @@ class UserController extends CI_Controller
                 //TODO: Update LinkedIn Profile for Logged In student
                  $this->spw_user_model->update_linkedin_profile($spw_id, $user_profile);
                  $this->profile($spw_id);
-
+                 setFlashMessage($this,"Updated profile");
             }
         }else{
             echo "Bad Request";
@@ -454,10 +484,22 @@ class UserController extends CI_Controller
         }
         else
         {
-            throw new Exception('not implemented');
+            $this->spw_notification_model->create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject);
+            
+            $project_team = $this->spw_project_model->get_team_members($project_id);
+           
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $currentUserId && $member_id != $invitedUserId)
+                {
+                    $this->spw_notification_model->create_invite_project_notification($currentUserId, $invitedUserId, $member_id, $invitedProjectId);
+                }
+            }
+
+            setFlashMessage($this, 'Your invitation has been sent');
         }
     }
-
     
     private function getUserDetailsInternal($user_id)
     {

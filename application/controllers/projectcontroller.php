@@ -36,19 +36,35 @@ class ProjectController extends CI_Controller
         $this->load->view('project_past_projects', $data);
     }
 
-    public function sent_for_approval($project_id)
+    public function sent_for_approval()
     {
-        $postBackUrl = current_url();
-        if (strlen($postBackUrl) == 0) 
-            $postBackUrl = '/';
+        if (!is_POST_request($this))
+        {
+            redirect('/');
+        }
         else
-            $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
+        {
+            $project_id = $this->input->post('pid');
+            $postBackUrl = $this->input->post('pbUrl');
+            if (strlen($postBackUrl) == 0) $postBackUrl = '/';
 
-        //notifications to head professor here
+            // $postBackUrl = current_url();
+            // if (strlen($postBackUrl) == 0) 
+            //     $postBackUrl = '/';
+            // else
+            //     $postBackUrl = $this->transfromUrl($postBackUrl, '', 'approval/');
 
-        setFlashMessage($this, 'Your project was sent for approval');
+            $current_user_id = getCurrentUserId($this);
 
-        redirect($postBackUrl); 
+            if (!is_test($this))
+            {
+                $this->spw_notification_model->create_professor_approval_project($current_user_id, $project_id);
+            }
+
+            setFlashMessage($this, 'Your project has been sent for approval');
+
+            redirect($postBackUrl); 
+        }
     }
 
     public function current_project()
@@ -891,8 +907,8 @@ class ProjectController extends CI_Controller
 
         $project1 = new SPW_Project_Model();
         $project1->id = $project_id;
-        $project1->title = 'Free Music Sharing Platform';
-        $project1->description = 'Poor students need an easy way to access all the music in the world for free.';
+        $project1->title = 'Online Judge';
+        $project1->description = 'This project develops a mobile application that can be quickly and easily installed on most popular mobile devices such as iPhones, Android cell phones, iPads, and other handheld devices that Senior Project judges may carry in their pockets, briefcase, etc. The judges should be able to download and install the software when they sign in at the registration desk at the Senior Projects Demo Event. They should be able to register online, login, and get their assignments. The software should allow an admin user to define how many students will be evaluated by each judge. The list of ongoing projects and the students and mentors working on the projects should be retrieved from the Senior Project Web Site project. The software should randomly make the assignments and should provide an easy way for the judges to find the individuals and enter their evaluations online.';
         $project1->status = $projStatus->id;
 
         $project_summ_vm1 = new SPW_Project_Details_View_Model();
@@ -1111,28 +1127,37 @@ class ProjectController extends CI_Controller
         {
             $currentUserId = getCurrentUserId($this);
 
-            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
-            if(!$result)
-            {
-                $project_team = $this->spw_project_model->get_team_members($project_id);
-               
-                for($i = 0; $i < count($project_team); $i++)
-                {
-                    $member_id = $project_team[$i];
-                    if($member_id != $currentUserId)
-                    {
-                        $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
-                    }
-                }
+            $result = $this->spw_user_model->get_proposed_project($currentUserId); 
 
-                setFlashMessage($this, 'Your join request has been sent');
+            if($result)
+            {
+                $msg = 'You can not leave your project because you proposed it. <br/>Please delete your project begore joining another one';
+                setFlashMessage($this, $msg);
+                return;
             }
-            else
+
+            $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
+            if($result)
             {
                 $project_title = $this->spw_project_model->get_project_title($project_id);
                 $msg = 'You already sent a notification for the project '.$project_title;
                 setFlashMessage($this, $msg);
+                return;
             }
+
+            $project_team = $this->spw_project_model->get_team_members($project_id);
+           
+            for($i = 0; $i < count($project_team); $i++)
+            {
+                $member_id = $project_team[$i];
+                if($member_id != $currentUserId)
+                {
+                    $this->spw_notification_model->create_join_notification_for_user($currentUserId,$member_id, $project_id);
+                }
+            }
+
+            setFlashMessage($this, 'Your join request has been sent');
+            
         }
     }
     private function joinProjectInternalTest($project_id)
