@@ -64,6 +64,58 @@ class SPW_User_Model extends CI_Model
         }         
     }
 
+    public function get_first_name($spw_id)
+    {
+        $query = $this->db
+                      ->where('id', $spw_id)
+                      ->select('first_name')
+                      ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->first_name;
+        }
+        else
+        {
+            return null; 
+        }    
+    }
+
+    public function get_last_name($spw_id)
+    {
+        $query = $this->db
+                      ->where('id', $spw_id)
+                      ->select('last_name')
+                      ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->last_name;
+        }
+        else
+        {
+            return null; 
+        }    
+    }
+
+    
+    public function get_pic($spw_id)
+    {
+        $query = $this->db
+                      ->where('id', $spw_id)
+                      ->select('picture')
+                      ->get('spw_user');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->picture;
+        }
+        else
+        {
+            return null; 
+        }    
+    }
+
     public function get_head_professor()
     {
         $query = $this->db
@@ -301,11 +353,19 @@ class SPW_User_Model extends CI_Model
             $this->spw_experience_model->insert($spw_id,$value);
         }
 
+        $first_name = $this->get_first_name($spw_id);
+        $last_name = $this->get_last_name($spw_id);
+        $pic = $this->get_pic($spw_id);
+
         $data = array(
-            'picture' => $user_profile->picture,
+            'first_name' => (trim($first_name) != "") ? $first_name: $user_profile->first_name,
+            'last_name' => (trim($last_name) != "") ? $last_name: $user_profile->last_name,
+            'picture' => (trim($pic) != "" )? $pic: $user_profile->picture,
             'headline_linkedIn'=> $user_profile->headline_linkedIn,
             'summary_linkedIn' => $user_profile->summary_linkedIn,
         );
+
+
 
         $this->db->where('id',$spw_id);
         $this->db->update('spw_user', $data);
@@ -346,22 +406,6 @@ class SPW_User_Model extends CI_Model
         }
     }
 
-    public function get_first_name($user_id)
-    {
-        $query = $this->db
-                       ->where('id',$user_id)
-                       ->select('first_name')
-                       ->get('spw_user');
-
-        if ($query->num_rows() > 0)
-        {
-            return $query->row()->first_name;
-        }
-        else
-        {
-            throw new Exception('User Id not found');
-        }
-    }
 
     public function get_fullname($user_id)
     {

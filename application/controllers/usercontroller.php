@@ -328,7 +328,7 @@ class UserController extends CI_Controller
                     'email'                 => $user->emailAddress,
                     'first_name'            => $user->firstName,
                     'last_name'             => $user->lastName,
-                    'picture'               => property_exists($user, 'picture')? $user->picture: null,
+                    'picture'               => property_exists($user, 'pictureUrl')? $user->pictureUrl: null,
                     'headline_linkedIn'     => property_exists($user, 'headline')? $user->headline: null,
                     'summary_linkedIn'      => property_exists($user, 'summary')? $user->summary: null,
                     'positions_linkedIn'    => property_exists($user, 'positions')? $this->parse_positions($user->positions): null,
@@ -369,7 +369,7 @@ class UserController extends CI_Controller
                 //TODO: Update LinkedIn Profile for Logged In student
                  $this->spw_user_model->update_linkedin_profile($spw_id, $user_profile);
                  $this->profile($spw_id);
-
+                 setFlashMessage($this,"Updated profile");
             }
         }else{
             echo "Bad Request";
