@@ -40,9 +40,9 @@
         //<button id='btn-leave' type="button" class="btn btn-warning btn-large pull-right">Leave Project</button>
         echo form_submit(array(
                 'id' => 'btn-leave',
-                'name' => 'btn-submit',
+                'name' => 'btn-leave',
                 'type' => 'Submit',
-                'class' => 'btn btn-danger btn-large pull-right hor-margin',
+                'class' => 'btn btn-danger pull-right hor-margin',
                 'value' => 'Leave Project'
             ));
 
@@ -53,9 +53,37 @@
 <?php 
     if (!isset($creating_new) || !$creating_new)
     {
+        if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
+        {
+            // echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
+            //     'id' => 'btn-sent-for-approval-project',
+            //     'class' => 'btn pull-right hor-margin'
+            // ));
+
+
+            echo form_open('projectcontroller/sent_for_approval', array(
+                'id' => 'form-sent-for-approval'
+            ));
+
+            echo form_hidden(array(
+                    'pid' => $projectDetails->project->id,
+                    'pbUrl' => current_url()
+                ));
+
+            echo form_submit(array(
+                    'id' => 'btn-sent-for-approval',
+                    'name' => 'btn-sent-for-approval',
+                    'type' => 'Submit',
+                    'class' => 'btn pull-right hor-margin',
+                    'value' => 'Send for Approval'
+                ));
+
+            echo form_close();
+        }
+
         echo anchor('project/create', 'Create New Project', array(
             'id' => 'btn-create-new-project',
-            'class' => 'btn btn-large pull-right hor-margin'
+            'class' => 'btn pull-right hor-margin'
         ));
     }
 ?>
@@ -126,8 +154,8 @@
 
             <?php 
                 echo form_submit(array(
-                    'id' => 'btn-submit',
-                    'name' => 'btn-submit',
+                    'id' => 'btn-save-changes',
+                    'name' => 'btn-save-changes',
                     'type' => 'Submit',
                     'class' => 'btn btn-large btn-primary',
                     'value' => 'Save Changes'
@@ -150,7 +178,7 @@
                         foreach ($projectDetails->lTerms as $iTerm) 
                         {
                             //echo $iTerm->id.' '.$iTerm->name;
-                            $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                            $arrTermsOptions[$iTerm->id] = ucwords($iTerm->name);
                         }
 
                         echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);
@@ -177,19 +205,6 @@
                     <h4 class="muted inline">Status:</h4> <?php echo ucfirst($projectDetails->statusName) ?>
                 </p>
             <?php } ?>
-        </div>
-
-        <div>
-            <?php 
-                if (!isset($creating_new) || !$creating_new)
-                    if (isset($projectDetails->project->status) && $projectDetails->project->status == 4)
-                    {
-                        echo anchor('project/approval/'.$projectDetails->project->id, 'Send for Approval', array(
-                            'id' => 'btn-sent-for-approval-project',
-                            'class' => 'btn btn-primary btn-large pull-right hor-margin'
-                        ));
-                    }
-            ?>
         </div>
 
         <?php if (!isset($creating_new)) { ?>

@@ -60,7 +60,7 @@ $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
 $route['(?i)(past-projects)'] = 'projectcontroller/past_projects';
 $route['(?i)(project)/(create)'] = 'projectcontroller/create_new_project';
 
-$route['(?i)(project)/(approval)/(:num)'] = 'projectcontroller/sent_for_approval/$3';
+//$route['(?i)(project)/(approval)/(:num)'] = 'projectcontroller/sent_for_approval/$3';
 
 $route['(?i)(project)'] = 'projectcontroller/current_project';
 $route['(?i)(project)/(:any)'] = 'projectcontroller/details/$2';
