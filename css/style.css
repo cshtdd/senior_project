@@ -135,10 +135,12 @@ h4 a:visited
   margin-left: 2em;
 }
 
+/*
 .skill
 {
     padding: 5px;
 }
+*/
 
 .user-summary-full img,
 .user-summary-full a
@@ -167,10 +169,15 @@ h4 a:visited
     color: gray;  
 }
 
+.skill,
 .myTag
 {
     padding: 5px;
     line-height: 18px;
+}
+
+.myTag
+{
     margin-right: 5px;
 }
 
