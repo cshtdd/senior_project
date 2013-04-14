@@ -178,7 +178,7 @@
                         foreach ($projectDetails->lTerms as $iTerm) 
                         {
                             //echo $iTerm->id.' '.$iTerm->name;
-                            $arrTermsOptions[$iTerm->id] = $iTerm->name;
+                            $arrTermsOptions[$iTerm->id] = ucwords($iTerm->name);
                         }
 
                         echo form_dropdown('dropdown-term', $arrTermsOptions, $projectDetails->term->id);

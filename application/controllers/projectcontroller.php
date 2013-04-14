@@ -907,8 +907,8 @@ class ProjectController extends CI_Controller
 
         $project1 = new SPW_Project_Model();
         $project1->id = $project_id;
-        $project1->title = 'Free Music Sharing Platform';
-        $project1->description = 'Poor students need an easy way to access all the music in the world for free.';
+        $project1->title = 'Online Judge';
+        $project1->description = 'This project develops a mobile application that can be quickly and easily installed on most popular mobile devices such as iPhones, Android cell phones, iPads, and other handheld devices that Senior Project judges may carry in their pockets, briefcase, etc. The judges should be able to download and install the software when they sign in at the registration desk at the Senior Projects Demo Event. They should be able to register online, login, and get their assignments. The software should allow an admin user to define how many students will be evaluated by each judge. The list of ongoing projects and the students and mentors working on the projects should be retrieved from the Senior Project Web Site project. The software should randomly make the assignments and should provide an easy way for the judges to find the individuals and enter their evaluations online.';
         $project1->status = $projStatus->id;
 
         $project_summ_vm1 = new SPW_Project_Details_View_Model();
