@@ -34,10 +34,12 @@ ul {
 }
 */
 
+/*
 h4.inline
 {
   display: inline;
 }
+*/
 
 .project_list > li > /*.project_summary > */ ul > lh
 {
@@ -133,10 +135,12 @@ h4 a:visited
   margin-left: 2em;
 }
 
+/*
 .skill
 {
     padding: 5px;
 }
+*/
 
 .user-summary-full img,
 .user-summary-full a
@@ -165,10 +169,16 @@ h4 a:visited
     color: gray;  
 }
 
+.skill,
 .myTag
 {
     padding: 5px;
     line-height: 18px;
+    margin-bottom: 5px;
+}
+
+.myTag
+{
     margin-right: 5px;
 }
 
@@ -307,7 +317,9 @@ a:visited.myUserRemover
     border: 1px solid #e3e3e3;
 }
 
-form.inline
+form.inline,
+h4.inline,
+span.inline
 {
     display: inline;
 }
