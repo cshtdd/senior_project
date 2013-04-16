@@ -133,7 +133,7 @@ class UserController extends CI_Controller
                     $invitedProjectId = getAnyProjectIdForCurrentUser($this);
                 }
 
-                inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
+                $this->inviteUserInternal($currentUserId, $invitedUserId, $invitedProjectId);
             }
             else
             {
