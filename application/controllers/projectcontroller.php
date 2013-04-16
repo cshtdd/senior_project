@@ -254,12 +254,14 @@ class ProjectController extends CI_Controller
                         $project->max_students = $updated_project->max_students;
                         $project->delivery_term = $updated_project->delivery_term;
 
-                        $this->SPW_Project_Model->update($project); 
+                        $this->SPW_Project_Model->update($project);
 
-                        if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
+                        //if (isset($updated_skill_names_str) && ($updated_skill_names_str != ''))
                             $this->SPW_Project_Model->updateProjectSkills($updated_skill_names_str, $project->id);
 
                         $this->SPW_Project_Model->updateProjectUsers($update_mentor_ids_str, $update_team_members_ids_str, $project->id);
+
+                        setFlashMessage($this, 'Your project was updated');
                     }
                     else
                     {
@@ -342,7 +344,7 @@ class ProjectController extends CI_Controller
                 $project1->title = '';
                 $project1->proposed_by = $currentUserId;
                 $project1->description = '';
-                $project1->status = 1;
+                $project1->status = 2;
                 $project1->max_students = 5;
 
                 $currentTerm = $tempTerm->getCurrentTermInfo();

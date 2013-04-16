@@ -605,17 +605,32 @@ class SPW_Project_Model extends CI_Model
     {
         $tempSkill = new SPW_Skill_Model();
 
+        $lSkillsToPull = array();
+        $lSkillsToPush = array();
+
         $currentLSkillNames = $tempSkill->getListSkillNamesOfProject($project_id);
 
         $updatedLSkillNames = $this->explodeCommaSeparatedSkillNamesStr($updated_skill_names_str);
         
-        $lSkillsToPull = array_diff($currentLSkillNames, $updatedLSkillNames);
+        if (!isset($currentLSkillNames) && isset($updatedLSkillNames))
+        {
+            $lSkillsToPush = $updatedLSkillNames;
+        }
+        elseif (isset($currentLSkillNames) && !isset($updatedLSkillNames))
+        {
+            $lSkillsToPull = $currentLSkillNames;
+        }
+        elseif (isset($currentLSkillNames) && isset($updatedLSkillNames))
+        {
+            $lSkillsToPull = array_diff($currentLSkillNames, $updatedLSkillNames);
+            $lSkillsToPush = array_diff($updatedLSkillNames, $currentLSkillNames);
+        }
 
-        $lSkillsToPull = array_values($lSkillsToPull);
+        if (isset($lSkillsToPull))
+            $lSkillsToPull = array_values($lSkillsToPull);
 
-        $lSkillsToPush = array_diff($updatedLSkillNames, $currentLSkillNames);
-
-        $lSkillsToPush = array_values($lSkillsToPush);
+        if (isset($lSkillsToPush))
+            $lSkillsToPush = array_values($lSkillsToPush);
 
         $lSkillsToPushStr = $this->joinListCommaSeparatedToStr($lSkillsToPush);
 
