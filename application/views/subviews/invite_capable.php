@@ -51,7 +51,7 @@
                 {
                     $.ajax({
                         type: 'POST',
-                        url: '<?php echo base_url()?>' + '/usercontroller/invite',
+                        url: '<?php echo base_url()?>' + 'usercontroller/invite',
                         data: 'uid='+userIdToInvite+'&pid='+projectIdToInvite
                     }).always(function(){
                         $('#alert-js-text').text('Your invitation was sent');
