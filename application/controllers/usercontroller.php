@@ -289,7 +289,7 @@ class UserController extends CI_Controller
 
     public  function linkedIn_cancel() {
     
-        redirect('/');            
+      redirect('/me');       
     }
 
     public  function linkedIn_callback() {
