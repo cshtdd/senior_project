@@ -52,6 +52,7 @@ $route['(?i)(user)'] = 'usercontroller/current_user';
 $route['(?i)(user)/linkedIn_initiate'] = 'usercontroller/linkedIn_initiate';
 $route['(?i)(user)/linkedIn_callback'] = 'usercontroller/linkedIn_callback';
 $route['(?i)(user)/linkedIn_sync'] = 'usercontroller/linkedIn_sync';
+$route['(?i)(user)/linkedIn_cancel'] = 'usercontroller/linkedIn_cancel';
 $route['(?i)(user)/update'] = 'usercontroller/update';
 $route['(?i)(user)/(:any)'] = 'usercontroller/profile/$2';
 
