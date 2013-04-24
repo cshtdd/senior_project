@@ -144,8 +144,6 @@ class UserController extends CI_Controller
 
     public function parse_positions($positions)
     {
-
-
         $positions = $positions->values; 
         $result =  array();
 
@@ -289,7 +287,7 @@ class UserController extends CI_Controller
 
     public  function linkedIn_cancel() {
     
-        redirect('/');            
+      redirect('/me');       
     }
 
     public  function linkedIn_callback() {
@@ -323,6 +321,9 @@ class UserController extends CI_Controller
 
             $user = json_decode($profile['linkedin']);
 
+            //var_dump($user);
+            //die();
+
             $user_profile = (object)array(
                     'id'                    => $user->id,
                     'email'                 => $user->emailAddress,
@@ -331,9 +332,9 @@ class UserController extends CI_Controller
                     'picture'               => property_exists($user, 'pictureUrl')? $user->pictureUrl: null,
                     'headline_linkedIn'     => property_exists($user, 'headline')? $user->headline: null,
                     'summary_linkedIn'      => property_exists($user, 'summary')? $user->summary: null,
-                    'positions_linkedIn'    => property_exists($user, 'positions')? $this->parse_positions($user->positions): null,
-                    'skills'                => property_exists($user, 'skills')? $this->parse_skills($user->skills): null,
-                    'languages'             => property_exists($user, 'languages')? $this->parse_languages($user->languages): null,
+                    'positions_linkedIn'    => $user->positions->_total != 0 ?$this->parse_positions($user->positions): null,
+                    'skills'                => $user->skills->_total != 0 ? $this->parse_skills($user->skills): null,
+                    'languages'             => $user->languages->_total !=0 ? $this->parse_languages($user->languages): null,
                 );
 
             $spw_id = getCurrentUserId($this);

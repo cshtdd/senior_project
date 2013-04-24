@@ -333,25 +333,33 @@ class SPW_User_Model extends CI_Model
         
         $this->load->model('spw_skill_model');
         $this->load->model('spw_skill_user_model');
-        foreach ($user_profile->skills as $key => $value) {
-            $skill_id = $this->spw_skill_model->get_skill_by_name($value->name);
-            $this->spw_skill_user_model->insert($spw_id,$skill_id);
-        }
-        
-        
-        $this->load->model('spw_language_model');
-        $this->load->model('spw_language_user_model');
-        foreach ($user_profile->languages as $key => $value) {
-            $language_id = $this->spw_language_model->get_language_by_name($value->name);
-            if($language_id != -1)
-                $this->spw_language_user_model->insert($spw_id,$language_id);
-            
+
+        if(isset($user_profile->skills)){
+            foreach ($user_profile->skills as $key => $value) {
+                $skill_id = $this->spw_skill_model->get_skill_by_name($value->name);
+                $this->spw_skill_user_model->insert($spw_id,$skill_id);
+            }
         }
 
-        $this->load->model('spw_experience_model');
-        foreach ($user_profile->positions_linkedIn as $key => $value) {
-            $this->spw_experience_model->insert($spw_id,$value);
+        
+        if(isset($user_profile->languages)){
+            $this->load->model('spw_language_model');
+            $this->load->model('spw_language_user_model');
+            foreach ($user_profile->languages as $key => $value) {
+                $language_id = $this->spw_language_model->get_language_by_name($value->name);
+                if($language_id != -1)
+                    $this->spw_language_user_model->insert($spw_id,$language_id);
+                
+            }
         }
+
+        if(isset($user_profile->positions_linkedIn)){
+            $this->load->model('spw_experience_model');
+            foreach ($user_profile->positions_linkedIn as $key => $value) {
+                $this->spw_experience_model->insert($spw_id,$value);
+            }    
+        }
+        
 
         $first_name = $this->get_first_name($spw_id);
         $last_name = $this->get_last_name($spw_id);
