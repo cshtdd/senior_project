@@ -1131,12 +1131,13 @@ class ProjectController extends CI_Controller
 
             $result = $this->spw_user_model->get_proposed_project($currentUserId); 
 
-            if($result)
-            {
-                $msg = 'You can not leave your project because you proposed it. <br/>Please delete your project begore joining another one';
-                setFlashMessage($this, $msg);
-                return;
-            }
+            if ($this->spw_user_model->isUserAStudent($currentUserId))
+                if($result)
+                {
+                    $msg = 'You can not leave your project because you proposed it. <br/>Please delete your project before joining another one';
+                    setFlashMessage($this, $msg);
+                    return;
+                }
 
             $result = $this->spw_notification_model->get_active_join_notification_for_project_from_user($currentUserId, $project_id);
             if($result)
