@@ -250,10 +250,11 @@ class UserController extends CI_Controller
         $this->load->library('linkedin', $linkedin_config);
         $this->linkedin->setResponseFormat(LINKEDIN::_RESPONSE_JSON);
         $token = $this->linkedin->retrieveTokenRequest();
-        
+       
+
         $this->session->set_flashdata('oauth_request_token_secret',$token['linkedin']['oauth_token_secret']);
         $this->session->set_flashdata('oauth_request_token',$token['linkedin']['oauth_token']);
-        
+
         $link = "https://api.linkedin.com/uas/oauth/authorize?oauth_token=". $token['linkedin']['oauth_token']; 
 
         $this->session->set_flashdata('linkedIn_sync', 'false'); 
@@ -287,7 +288,13 @@ class UserController extends CI_Controller
 
     public  function linkedIn_cancel() {
     
-      redirect('/me');       
+       $current_user_id = getCurrentUserId($this);
+       if($current_user_id == -1){
+            redirect('/');         
+       }else{
+            redirect('/me');         
+       }
+      
     }
 
     public  function linkedIn_callback() {
@@ -487,7 +494,7 @@ class UserController extends CI_Controller
         {
             $this->spw_notification_model->create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject);
             
-            $project_team = $this->spw_project_model->get_team_members($project_id);
+            $project_team = $this->spw_project_model->get_team_members($invitedProject);
            
             for($i = 0; $i < count($project_team); $i++)
             {
