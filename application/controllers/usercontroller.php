@@ -494,7 +494,7 @@ class UserController extends CI_Controller
         {
             $this->spw_notification_model->create_invite_user_notification($currentUserId, $invitedUserId, $invitedProject);
             
-            $project_team = $this->spw_project_model->get_team_members($project_id);
+            $project_team = $this->spw_project_model->get_team_members($invitedProject);
            
             for($i = 0; $i < count($project_team); $i++)
             {
